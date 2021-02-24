@@ -18,7 +18,7 @@ const weapon = {
     sourceKey: "Rainslasher",
     maxStack: 1,
     stats: (refineIndex) => ({
-      all_dmg_bonus: refinementVals[refineIndex]
+      dmg_: refinementVals[refineIndex]
     })
   }
 }

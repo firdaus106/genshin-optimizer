@@ -17,9 +17,9 @@ export default class Character {
     let { characterKey, levelKey } = character
     if (statKey === "specializedStatKey") return this.getSpecializedStatKey(characterKey);
     if (statKey === "specializedStatVal") return this.getSpeicalizedStatVal(characterKey, levelKey)
-    if (statKey === "atk_weapon") return Weapon.getWeaponMainStatValWithOverride(character?.weapon)
-    if (statKey === "char_level" || statKey === "enemy_level") return this.getLevel(levelKey)
-    if (statKey === "enemy_phy_res" || statKey.includes("enemy_ele_res")) return 10
+    if (statKey === "weapon_atk") return Weapon.getWeaponMainStatValWithOverride(character?.weapon)
+    if (statKey === "character_level" || statKey === "enemy_level") return this.getLevel(levelKey)
+    if (statKey === "enemy_phy_ele_res_" || statKey.includes("enemy_ele_res_")) return 10
     if (statKey in characterStatBase) return characterStatBase[statKey]
     let characterObj = this.getCDataObj(characterKey)
     if (characterObj && statKey in characterObj.baseStat) return characterObj.baseStat[statKey][this.getIndexFromlevelkey(levelKey)]
@@ -154,21 +154,21 @@ export default class Character {
     if (!characterKey) return defVal
     let eleKey = Character.getElementalKey(characterKey)
     if (!eleKey) return defVal //usually means the character has not been lazy loaded yet
-    let keys = ["hp_final", "atk_final", "def_final", "ele_mas", "crit_rate", "crit_dmg", "heal_bonu", "ener_rech", `${eleKey}_ele_dmg_bonus`]
+    let keys = ["final_hp", "final_atk", "final_def", "ele_mas", "crit_rate_", "crit_dmg_", "heal_", "ener_rech_", `${eleKey}_ele_dmg_`]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
     let isAutoElemental = Character.isAutoElemental(characterKey)
     let isAutoInfusable = Character.isAutoInfusable(characterKey)
     let atkKeys = []
     if (!isAutoElemental)
-      atkKeys.push("phy_dmg_bonus")
+      atkKeys.push("phy_ele_dmg_")
 
     if (!isAutoElemental) //add phy auto + charged + physical 
-      atkKeys.push("norm_atk_avg_dmg", "char_atk_avg_dmg")
+      atkKeys.push("normal_avg_dmg", "charged_avg_dmg")
 
     if (isAutoElemental || isAutoInfusable) //add elemental auto + charged
-      atkKeys.push(`${eleKey}_norm_atk_avg_dmg`, `${eleKey}_char_atk_avg_dmg`)
+      atkKeys.push(`${eleKey}_normal_avg_dmg`, `${eleKey}_charged_avg_dmg`)
     else if (Character.getWeaponTypeKey(characterKey) === "bow") {//bow charged atk does elemental dmg on charge
-      atkKeys.push(`${eleKey}_char_atk_avg_dmg`)
+      atkKeys.push(`${eleKey}_charged_avg_dmg`)
     }
     //show skill/burst 
     atkKeys.push(`${eleKey}_skill_avg_dmg`, `${eleKey}_burst_avg_dmg`)
@@ -189,12 +189,12 @@ export default class Character {
   }
 
   static hasOverride = (character, statKey) => {
-    if (statKey === "hp_final")
-      return Character.hasOverride(character, "hp") || Character.hasOverride(character, "hp_") || Character.hasOverride(character, "hp_base") || false
-    else if (statKey === "def_final")
-      return Character.hasOverride(character, "def") || Character.hasOverride(character, "def_") || Character.hasOverride(character, "def_base") || false
-    else if (statKey === "atk_final")
-      return Character.hasOverride(character, "atk") || Character.hasOverride(character, "atk_") || Character.hasOverride(character, "atk_character_base") || false
+    if (statKey === "final_hp")
+      return Character.hasOverride(character, "hp") || Character.hasOverride(character, "hp_") || Character.hasOverride(character, "base_hp") || false
+    else if (statKey === "final_def")
+      return Character.hasOverride(character, "def") || Character.hasOverride(character, "def_") || Character.hasOverride(character, "base_def") || false
+    else if (statKey === "final_atk")
+      return Character.hasOverride(character, "atk") || Character.hasOverride(character, "atk_") || Character.hasOverride(character, "character_atk") || false
     return character?.baseStatOverrides ? (statKey in character.baseStatOverrides) : false;
   }
 
@@ -287,14 +287,14 @@ export default class Character {
   })
 
   static calculateCharacterWithWeaponStats = (character) => {
-    let statKeys = ["hp_base", "atk_character_base", "def_base", "atk_weapon", "char_level", "enemy_level", "enemy_phy_res", "enemy_phy_immunity", ...Object.keys(characterStatBase)]
+    let statKeys = ["base_hp", "character_atk", "base_def", "weapon_atk", "character_level", "enemy_level", "enemy_phy_ele_res_", "enemy_phy_immunity", ...Object.keys(characterStatBase)]
     let initialStats = Object.fromEntries(statKeys.map(key => [key, this.getStatValueWithOverride(character, key)]))
     //add element
-    initialStats.char_ele_key = this.getElementalKey(character.characterKey);
+    initialStats.character_ele = this.getElementalKey(character.characterKey);
 
     //enemy stuff
     Character.getElementalKeys().forEach(eleKey => {
-      let statKey = `${eleKey}_enemy_ele_res`
+      let statKey = `${eleKey}_enemy_ele_res_`
       initialStats[statKey] = this.getStatValueWithOverride(character, statKey);
       statKey = `${eleKey}_enemy_ele_immunity`
       initialStats[statKey] = this.getStatValueWithOverride(character, statKey);

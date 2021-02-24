@@ -18,7 +18,7 @@ const weapon = {
     sourceKey: "RoyalGreatsword",
     maxStack: 5,
     stats: (refineIndex) => ({
-      crit_rate: refinementVals[refineIndex]
+      crit_rate_: refinementVals[refineIndex]
     })
   }
 }

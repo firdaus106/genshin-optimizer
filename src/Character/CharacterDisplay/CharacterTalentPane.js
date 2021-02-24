@@ -41,18 +41,18 @@ export default function CharacterTalentPane(props) {
     );
   }
   const statsDisplayKeys = () => {
-    let keys = ["hp_final", "atk_final", "def_final"]
+    let keys = ["final_hp", "final_atk", "final_def"]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
     let isAutoElemental = Character.isAutoElemental(characterKey)
     let isAutoInfusable = Character.isAutoInfusable(characterKey)
-    let autoKeys = ["norm_atk", "char_atk", "plunge"];
+    let autoKeys = ["normal", "charged", "plunging"];
     let talKeys = ["ele", "skill", "burst"];
     if (!isAutoElemental)  //add physical variants of the formulas
       autoKeys.forEach(key => keys.push(Character.getTalentStatKey(key, character)))
     if (isAutoElemental || (isAutoInfusable && character.autoInfused))
       autoKeys.forEach(key => keys.push(Character.getTalentStatKey(key, character, true)))
     else if (Character.getWeaponTypeKey(characterKey) === "bow")//bow charged atk does elemental dmg on charge
-      keys.push(Character.getTalentStatKey("char_atk", character, true))
+      keys.push(Character.getTalentStatKey("charged", character, true))
     //add talents/skills
     talKeys.forEach(key => keys.push(Character.getTalentStatKey(key, character)))
     //show elemental interactions
@@ -77,7 +77,7 @@ export default function CharacterTalentPane(props) {
                 <ToggleButtonGroup type="radio" value={dmgMode} name="dmgOptions" onChange={(dmgMode) => setState({ dmgMode })}>
                   <ToggleButton value="avg_dmg">Avg. DMG</ToggleButton>
                   <ToggleButton value="dmg">Normal Hit, No Crit</ToggleButton>
-                  <ToggleButton value="crit_dmg">Crit Hit DMG</ToggleButton>
+                  <ToggleButton value="crit_dmg_">Crit Hit DMG</ToggleButton>
                 </ToggleButtonGroup>
               </Col>
               <Col xs="auto">
@@ -105,7 +105,7 @@ export default function CharacterTalentPane(props) {
                   />
                 </Col>
                 {["physical", ...Character.getElementalKeys()].map(eleKey => {
-                  let statKey = eleKey === "physical" ? "enemy_phy_res" : `${eleKey}_enemy_ele_res`
+                  let statKey = eleKey === "physical" ? "enemy_phy_ele_res_" : `${eleKey}_enemy_ele_res_`
                   let immunityStatKey = eleKey === "physical" ? "enemy_phy_immunity" : `${eleKey}_enemy_ele_immunity`
                   let elementImmunity = Character.getStatValueWithOverride(character, immunityStatKey)
                   return <Col xs={12} xl={6} key={eleKey} className="mb-2">

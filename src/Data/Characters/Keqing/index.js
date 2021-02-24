@@ -28,9 +28,9 @@ const hitPercent = [
 
 const charged_1 = [76.8, 83.05, 89.3, 98.23, 104.48, 111.63, 121.45, 131.27, 141.09, 151.81, 162.53, 173.24, 183.96, 194.67, 205.39]
 const charged_2 = [86, 93, 100, 110, 117, 125, 136, 147, 158, 170, 182, 194, 206, 218, 230]
-const plunge_dmg = [63.93, 69.14, 74.34, 81.77, 86.98, 92.93, 101.1, 109.28, 117.46, 126.38, 135.3, 144.22, 153.14, 162.06, 170.98]
-const plunge_dmg_low = [127.84, 138.24, 148.65, 163.51, 173.92, 185.81, 202.16, 218.51, 234.86, 252.7, 270.54, 288.38, 306.22, 324.05, 341.89]
-const plunge_dmg_high = [159.68, 172.67, 185.67, 204.24, 217.23, 232.09, 252.51, 272.93, 293.36, 315.64, 337.92, 360.2, 382.48, 404.76, 427.04]
+const plunging_dmg = [63.93, 69.14, 74.34, 81.77, 86.98, 92.93, 101.1, 109.28, 117.46, 126.38, 135.3, 144.22, 153.14, 162.06, 170.98]
+const plunging_dmg_low = [127.84, 138.24, 148.65, 163.51, 173.92, 185.81, 202.16, 218.51, 234.86, 252.7, 270.54, 288.38, 306.22, 324.05, 341.89]
+const plunging_dmg_high = [159.68, 172.67, 185.67, 204.24, 217.23, 232.09, 252.51, 272.93, 293.36, 315.64, 337.92, 360.2, 382.48, 404.76, 427.04]
 
 //SKILL
 const stellar = {
@@ -99,19 +99,19 @@ let char = {
         text: <span><strong>Plunging Attack</strong> Plunges from mid-air to strike the ground below, damaging enemies along the path and dealing AoE DMG upon impact.</span>,
         fields: [{
           text: `Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c),
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `Low Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c),
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `High Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c),
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }]
       }],
     },

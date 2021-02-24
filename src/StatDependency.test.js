@@ -39,45 +39,45 @@ describe('Testing StatDependency', () => {
   })
   describe('GetDependencies()', () => {
     test('should get dependencies from database', () => {
-      expect(GetDependencies({}, ["def_final"])).toBeDependent({ def_final: ["def_base", "def_", "def"] })
+      expect(GetDependencies({}, ["final_def"])).toBeDependent({ final_def: ["base_def", "def_", "def"] })
     })
     test('should recursively get dependencies from database', () => {
-      const expected = expect(GetDependencies({}, ["phy_dmg"]))
+      const expected = expect(GetDependencies({}, ["phy_ele_dmg"]))
       expected.toBeDependent({
-        phy_dmg: ["atk_final", "phy_bonus_multi", "enemy_level_multi", "enemy_phy_res_multi"],
-        atk_final: ["atk_base", "atk_", "atk"],
-        phy_bonus_multi: ["phy_dmg_bonus", "all_dmg_bonus"],
-        enemy_level_multi: ["char_level", "enemy_level"],
-        enemy_phy_res_multi: ["enemy_phy_immunity", "enemy_phy_res"],
-        atk_base: ["atk_character_base", "atk_weapon"],
+        phy_ele_dmg: ["final_atk", "phy_bonus_multi", "enemy_level_multi", "enemy_phy_ele_res_multi"],
+        final_atk: ["base_atk", "atk_", "atk"],
+        phy_bonus_multi: ["phy_ele_dmg_", "dmg_"],
+        enemy_level_multi: ["character_level", "enemy_level"],
+        enemy_phy_ele_res_multi: ["enemy_phy_immunity", "enemy_phy_ele_res_"],
+        base_atk: ["character_atk", "weapon_atk"],
       })
     })
     test('should add all dependencies from keys', () => {
-      const expected = expect(GetDependencies({}, ["def_final", "ener_rech"]))
+      const expected = expect(GetDependencies({}, ["final_def", "ener_rech_"]))
       expected.toBeDependent({
-        def_final: ["def_base", "def_", "def"],
-        ener_rech: []
+        final_def: ["base_def", "def_", "def"],
+        ener_rech_: []
       })
     })
     test(`should add all formulas' dependencies by default`, () => {
       expect(GetDependencies()).toEqual(expect.arrayContaining(Object.keys(StatData)))
     })
     test('should add modifiers if keys exists', () => {
-      const keys = ["ener_rech"]
-      let modifiers = { ener_rech: { crit_rate: 10 } }
-      //should add crit_rate to dependency
-      expect(GetDependencies(modifiers, keys)).toBeDependent({ ener_rech: ["crit_rate"] })
-      modifiers = { atk: { crit_rate: 10 } }
-      //should not add crit_rate to dependency, since its not part of the original dependency
+      const keys = ["ener_rech_"]
+      let modifiers = { ener_rech_: { crit_rate_: 10 } }
+      //should add crit_rate_ to dependency
+      expect(GetDependencies(modifiers, keys)).toBeDependent({ ener_rech_: ["crit_rate_"] })
+      modifiers = { atk: { crit_rate_: 10 } }
+      //should not add crit_rate_ to dependency, since its not part of the original dependency
       expect(GetDependencies(modifiers, keys)).toEqual(expect.not.arrayContaining(["atk"]))
     })
     test('should respect modifiers for chained dependencies', () => {
-      const modifiers = { hp: { def: 10 }, def: { ener_rech: 0 }, atk_final: { hp: 10 } }
-      const expected = expect(GetDependencies(modifiers, ["atk_final"]))
+      const modifiers = { hp: { def: 10 }, def: { ener_rech_: 0 }, final_atk: { hp: 10 } }
+      const expected = expect(GetDependencies(modifiers, ["final_atk"]))
       expected.toBeDependent({
-        atk_final: ["hp"],
+        final_atk: ["hp"],
         hp: ["def"],
-        def: ["ener_rech"],
+        def: ["ener_rech_"],
       })
     })
     test('should contains unique dependencies', () => {
@@ -85,30 +85,30 @@ describe('Testing StatDependency', () => {
       expect([...new Set(received)]).toEqual(received)
     })
     test('should handle non-algebraic dependencies', () => {
-      expect(GetDependencies({}, ["norm_atk_crit_multi"])).toBeDependent({
-        norm_atk_crit_multi: ["crit_rate", "norm_atk_crit_rate", "crit_dmg"]
+      expect(GetDependencies({}, ["normal_crit_multi"])).toBeDependent({
+        normal_crit_multi: ["crit_rate_", "normal_crit_rate_", "crit_dmg_"]
       })
-      expect(GetDependencies({}, ["char_atk_crit_multi"])).toBeDependent({
-        char_atk_crit_multi: ["crit_rate", "char_atk_crit_rate", "crit_dmg"]
+      expect(GetDependencies({}, ["charged_crit_multi"])).toBeDependent({
+        charged_crit_multi: ["crit_rate_", "charged_crit_rate_", "crit_dmg_"]
       })
       expect(GetDependencies({}, ["crit_multi"])).toBeDependent({
-        crit_multi: ["crit_rate", "crit_dmg"]
+        crit_multi: ["crit_rate_", "crit_dmg_"]
       })
       expect(GetDependencies({}, ["skill_crit_multi"])).toBeDependent({
-        skill_crit_multi: ["crit_rate", "skill_crit_rate", "crit_dmg"]
+        skill_crit_multi: ["crit_rate_", "skill_crit_rate_", "crit_dmg_"]
       })
       expect(GetDependencies({}, ["burst_crit_multi"])).toBeDependent({
-        burst_crit_multi: ["crit_rate", "burst_crit_rate", "crit_dmg"]
+        burst_crit_multi: ["crit_rate_", "burst_crit_rate_", "crit_dmg_"]
       })
-      expect(GetDependencies({}, ["enemy_phy_res_multi"])).toBeDependent({
-        enemy_phy_res_multi: ["enemy_phy_immunity", "enemy_phy_res"]
+      expect(GetDependencies({}, ["enemy_phy_ele_res_multi"])).toBeDependent({
+        enemy_phy_ele_res_multi: ["enemy_phy_immunity", "enemy_phy_ele_res_"]
       })
       expect(GetDependencies({}, ["amp_reaction_base_multi"])).toBeDependent({
         amp_reaction_base_multi: ["ele_mas"]
       })
 
       const test_multi = (s) => {
-        expect(GetDependencies({}, [s])).toBeDependent(Object.fromEntries([[s, ["char_level"]]]))
+        expect(GetDependencies({}, [s])).toBeDependent(Object.fromEntries([[s, ["character_level"]]]))
       }
       test_multi("overloaded_multi")
       test_multi("electrocharged_multi")

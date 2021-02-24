@@ -24,10 +24,10 @@ const hitPercent = [
 ]
 
 const charged_atk_spinnning = [68.8, 74.4, 80, 88, 93.6, 100, 108.8, 117.6, 126.4, 136, 147, 159.94, 172.87, 185.81, 199.92]
-const charged_atk_final = [124.7, 134.85, 145, 159.5, 169.65, 181.25, 197.2, 213.15, 229.1, 246.5, 266.44, 289.88, 313.33, 336.78, 362.36]
-const plunge_dmg = [89.51, 96.79, 104.08, 114.48, 121.77, 130.1, 141.54, 152.99, 164.44, 176.93, 189.42, 201.91, 214.4, 226.89, 239.37]
-const plunge_dmg_low = [178.97, 193.54, 208.11, 228.92, 243.49, 260.13, 283.03, 305.92, 328.81, 353.78, 378.76, 403.73, 428.7, 453.68, 478.65]
-const plunge_dmg_high = [223.55, 241.74, 259.94, 285.93, 304.13, 324.92, 353.52, 382.11, 410.7, 441.89, 473.09, 504.28, 535.47, 566.66, 597.86]
+const charged_final_atk = [124.7, 134.85, 145, 159.5, 169.65, 181.25, 197.2, 213.15, 229.1, 246.5, 266.44, 289.88, 313.33, 336.78, 362.36]
+const plunging_dmg = [89.51, 96.79, 104.08, 114.48, 121.77, 130.1, 141.54, 152.99, 164.44, 176.93, 189.42, 201.91, 214.4, 226.89, 239.37]
+const plunging_dmg_low = [178.97, 193.54, 208.11, 228.92, 243.49, 260.13, 283.03, 305.92, 328.81, 353.78, 378.76, 403.73, 428.7, 453.68, 478.65]
+const plunging_dmg_high = [223.55, 241.74, 259.94, 285.93, 304.13, 324.92, 353.52, 382.11, 410.7, 441.89, 473.09, 504.28, 535.47, 566.66, 597.86]
 
 //SKILL
 const searing = {
@@ -54,12 +54,12 @@ let char = {
   constellationName: "Noctua",
   titles: ["The Dark Side of Dawn", "Darknight Hero", "The Uncrowned King of Mondstadt"],
   baseStat: {
-    hp_base: [1011, 2621, 3488, 5219, 5834, 6712, 7533, 8421, 9036, 9932, 10547, 11453, 12068, 12981],
-    atk_character_base: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
-    def_base: [61, 158, 211, 315, 352, 405, 455, 509, 546, 600, 637, 692, 729, 784]
+    base_hp: [1011, 2621, 3488, 5219, 5834, 6712, 7533, 8421, 9036, 9932, 10547, 11453, 12068, 12981],
+    character_atk: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
+    base_def: [61, 158, 211, 315, 352, 405, 455, 509, 546, 600, 637, 692, 729, 784]
   },
   specializeStat: {
-    key: "crit_rate",
+    key: "crit_rate_",
     value: [0, 0, 0, 0, 4.8, 4.8, 9.6, 9.6, 9.6, 9.6, 14.4, 14.4, 19.2, 19.2]
   },
   talent: {
@@ -72,22 +72,22 @@ let char = {
         fields: hitPercent.map((percentArr, i) =>
         ({
           text: `${i + 1}-Hit DMG`,
-          basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("norm_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("norm_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("norm_atk", c)
+          basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("normal", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("normal", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("normal", c)
         }))
       }, {
         text: <span><strong>Charged Attack</strong> Drains Stamina over time to perform continuous slashes. At the end of the sequence, perform a more powerful slash.</span>,
         fields: [{
           text: `Spinning DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_atk_spinnning[tlvl]}% {Stat.printStat(Character.getTalentStatKey("char_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_atk_spinnning[tlvl] / 100) * stats[Character.getTalentStatKey("char_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("char_atk", c)
+          basicVal: (tlvl, stats, c) => <span>{charged_atk_spinnning[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_atk_spinnning[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c)
         }, {
           text: `Spinning Final DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_atk_final[tlvl]}% {Stat.printStat(Character.getTalentStatKey("char_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_atk_final[tlvl] / 100) * stats[Character.getTalentStatKey("char_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("char_atk", c)
+          basicVal: (tlvl, stats, c) => <span>{charged_final_atk[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_final_atk[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c)
         }, (c, a) => ({
           text: `Stamina Cost`,
           value: "40/s" + (a >= 1 ? " - 20/s" : ""),
@@ -99,19 +99,19 @@ let char = {
         text: <span><strong>Plunging Attack</strong> Plunges from mid-air to strike the ground, damaging enemies along the path and dealing AoE DMG upon impact.</span>,
         fields: [{
           text: `Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c)
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c)
         }, {
           text: `Low Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c)
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c)
         }, {
           text: `High Plunge DMG`,
-          basicVal: (tlvl, stats, c) => <span>{plunge_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunge", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (plunge_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunge", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunge", c)
+          basicVal: (tlvl, stats, c) => <span>{plunging_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (plunging_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c)
         }]
       }],
     },
@@ -166,8 +166,8 @@ let char = {
           sourceKey: "diluc",
           maxStack: 1,
           stats: {
-            norm_atk_dmg_bonus: 30,
-            atk_spd: 30,
+            normal_dmg_: 30,
+            atk_spd_: 30,
           },
           fields: [{
             text: "Next 2 Normal Attack within",
@@ -217,7 +217,7 @@ let char = {
           sourceKey: "diluc",
           maxStack: 1,
           stats: {
-            pyro_ele_dmg_bonus: 20,
+            pyro_ele_dmg_: 20,
           },
         }
       }],
@@ -248,7 +248,7 @@ let char = {
           sourceKey: "diluc",
           maxStack: 1,
           stats: {
-            all_dmg_bonus: 15,
+            dmg_: 15,
           },
         }
       }],
@@ -270,7 +270,7 @@ let char = {
           maxStack: 3,
           stats: {
             atk_: 10,
-            atk_spd: 5
+            atk_spd_: 5
           },
           fields: [{
             text: "Duration",

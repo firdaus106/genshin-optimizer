@@ -71,12 +71,12 @@ function DatabaseInitAndVerify() {
       }
       //key names were changed. convert old DB
       if (art?.mainStatKey?.endsWith?.("ele_dmg")) {
-        art.mainStatKey = art.mainStatKey.replace("ele_dmg", "ele_dmg_bonus")
+        art.mainStatKey = art.mainStatKey.replace("ele_dmg", "ele_dmg_")
         valid = false
       }
       //key names were changed. convert old DB
-      if (art?.mainStatKey === "phy_dmg") {
-        art.mainStatKey = "phy_dmg_bonus"
+      if (art?.mainStatKey === "phy_ele_dmg") {
+        art.mainStatKey = "phy_ele_dmg_"
         valid = false
       }
     }

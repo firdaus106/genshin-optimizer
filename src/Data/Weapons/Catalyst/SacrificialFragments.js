@@ -19,7 +19,7 @@ const weapon = {
     sourceKey: "SacrificialFragments",
     maxStack: 1,
     stats: () => ({
-      red_cd: 100
+      cd_red_: 100
     })
   }
 }

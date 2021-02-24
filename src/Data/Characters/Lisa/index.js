@@ -24,10 +24,10 @@ const hitPercent = [
 ]
 
 const charged_atk_spinnning = []
-const charged_atk_final = []
-const plunge_dmg = []
-const plunge_dmg_low = []
-const plunge_dmg_high = []
+const charged_final_atk = []
+const plunging_dmg = []
+const plunging_dmg_low = []
+const plunging_dmg_high = []
 
 //SKILL
 const breastplateStats = {
@@ -57,9 +57,9 @@ let char = {
   constellationName: "Tempus Fugit",
   titles: ["Witch of Purple Rose", "The Librarian"],
   baseStat: {
-    hp_base: [802, 2061, 2661, 3985, 4411, 5074, 5642, 6305, 6731, 7393, 7818, 8481, 8907, 9570],
-    atk_character_base: [19, 50, 64, 96, 107, 123, 136, 153, 163, 179, 189, 205, 215, 232],
-    def_base: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
+    base_hp: [802, 2061, 2661, 3985, 4411, 5074, 5642, 6305, 6731, 7393, 7818, 8481, 8907, 9570],
+    character_atk: [19, 50, 64, 96, 107, 123, 136, 153, 163, 179, 189, 205, 215, 232],
+    base_def: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
   },
   specializeStat: {
     key: "ele_mas",
@@ -75,7 +75,7 @@ let char = {
         ({
           text: `${i + 1}-Hit DMG`,
           basicVal: (tlvl) => percentArr[tlvl] + "%",
-          finalVal: (tlvl, stats) => (percentArr[tlvl] / 100) * stats.norm_atk_avg_dmg
+          finalVal: (tlvl, stats) => (percentArr[tlvl] / 100) * stats.normal_avg_dmg
         }))
       },
       charged: {
@@ -83,11 +83,11 @@ let char = {
         fields: [{
           text: `Spinning DMG`,
           basicVal: (tlvl) => charged_atk_spinnning[tlvl] + "%",
-          finalVal: (tlvl, stats) => (charged_atk_spinnning[tlvl] / 100) * stats.char_atk_avg_dmg
+          finalVal: (tlvl, stats) => (charged_atk_spinnning[tlvl] / 100) * stats.charged_avg_dmg
         }, {
           text: `Spinning Final DMG`,
-          basicVal: (tlvl) => charged_atk_final[tlvl] + "%",
-          finalVal: (tlvl, stats) => (charged_atk_final[tlvl] / 100) * stats.char_atk_avg_dmg
+          basicVal: (tlvl) => charged_final_atk[tlvl] + "%",
+          finalVal: (tlvl, stats) => (charged_final_atk[tlvl] / 100) * stats.charged_avg_dmg
         }, {
           text: `Stamina Cost`,
           value: `40/s`,
@@ -96,20 +96,20 @@ let char = {
           value: `5s`,
         }]
       },
-      plunge: {
+      plunging: {
         text: <span>TEMPLATE</span>,
         fields: [{
           text: `Plunge DMG`,
-          basicVal: (tlvl) => plunge_dmg[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunge_dmg[tlvl] / 100) * stats.plunge_avg_dmg
+          basicVal: (tlvl) => plunging_dmg[tlvl] + "%",
+          finalVal: (tlvl, stats) => (plunging_dmg[tlvl] / 100) * stats.plunging_avg_dmg
         }, {
           text: `Low Plunge DMG`,
-          basicVal: (tlvl) => plunge_dmg_low[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunge_dmg_low[tlvl] / 100) * stats.plunge_avg_dmg
+          basicVal: (tlvl) => plunging_dmg_low[tlvl] + "%",
+          finalVal: (tlvl, stats) => (plunging_dmg_low[tlvl] / 100) * stats.plunging_avg_dmg
         }, {
           text: `High Plunge DMG`,
-          basicVal: (tlvl) => plunge_dmg_high[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunge_dmg_high[tlvl] / 100) * stats.plunge_avg_dmg
+          basicVal: (tlvl) => plunging_dmg_high[tlvl] + "%",
+          finalVal: (tlvl, stats) => (plunging_dmg_high[tlvl] / 100) * stats.plunging_avg_dmg
         }]
       }
     },

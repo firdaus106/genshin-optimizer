@@ -18,7 +18,7 @@ const weapon = {
     sourceKey: "PrototypeCrescent",
     maxStack: 1,
     stats: (refineIndex) => ({
-      move_spd: 10,
+      move_spd_: 10,
       atk_: refinementVals[refineIndex]
     })
   }

@@ -39,7 +39,7 @@ export default function CharacterCard(props) {
   let weaponSubVal = Weapon.getWeaponSubStatValWithOverride(weapon)
   let weaponLevelName = Weapon.getLevelName(weapon.levelKey)
   let weaponPassiveName = Weapon.getWeaponPassiveName(weapon.key)
-  const statkeys = ["hp_final", "atk_final", "def_final", "ele_mas", "crit_rate", "crit_dmg", "ener_rech",]
+  const statkeys = ["final_hp", "final_atk", "final_def", "ele_mas", "crit_rate_", "crit_dmg_", "ener_rech_",]
   return (<Card className={props.cardClassName} bg={props.bg ? props.bg : "darkcontent"} text="lightfont">
     <Card.Header className="pr-2">
       <Row className="no-gutters">
@@ -68,7 +68,7 @@ export default function CharacterCard(props) {
         <Col>
           <h4>{Character.getName(characterKey)} <Image src={Assets.elements[elementKey]} className="inline-icon" /> <Image src={Assets.weaponTypes?.[weaponTypeKey]} className="inline-icon" /></h4>
           <h6><Stars stars={Character.getStar(characterKey)} colored /></h6>
-          <span>{`Lvl. ${Character.getStatValueWithOverride(character, "char_level")} C${constellation}`}</span>
+          <span>{`Lvl. ${Character.getStatValueWithOverride(character, "character_level")} C${constellation}`}</span>
         </Col>
       </Row>
       <Row className="mb-2">

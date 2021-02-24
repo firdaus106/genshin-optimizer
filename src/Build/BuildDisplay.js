@@ -57,7 +57,7 @@ export default class BuildDisplay extends React.Component {
     statFilters: {},
     artifactConditionals: [],//{ setKey: "", setNumKey: "", conditionalNum: 0 }
     mainStat: ["", "", ""],
-    buildFilterKey: "atk_final",
+    buildFilterKey: "final_atk",
     artifactsAssumeFull: false,
     useLockedArts: false,
     ascending: false,
