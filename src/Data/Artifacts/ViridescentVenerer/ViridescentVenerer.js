@@ -27,7 +27,7 @@ let artifact = {
     4: {
       text: "Increases Swirl DMG by 60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s.",
       stats: { swirl_dmg_: 60 },
-      conditional: Object.entries(ElementalData).filter(([key]) => key !== "anemo" && key !== "geo").map(([key, { name }]) => ({
+      conditional: Object.entries(ElementalData).filter(([key]) => key !== "anemo" && key !== "geo" && key !== "physical").map(([key, { name }]) => ({
         type: "artifact",
         condition: <span>Swirl <span className={`text-${key}`}>{name}</span></span>,
         sourceKey: "ViridescentVenerer_4",

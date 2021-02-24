@@ -75,8 +75,8 @@ function DatabaseInitAndVerify() {
         valid = false
       }
       //key names were changed. convert old DB
-      if (art?.mainStatKey === "phy_ele_dmg") {
-        art.mainStatKey = "phy_ele_dmg_"
+      if (art?.mainStatKey === "physical_ele_dmg") {
+        art.mainStatKey = "physical_ele_dmg_"
         valid = false
       }
     }

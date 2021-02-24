@@ -177,7 +177,7 @@ let char = {
           maxStack: 1,
           stats: {
             anemo_enemy_ele_res_: -24,
-            enemy_phy_ele_res_: -12
+            physical_enemy_ele_res_: -12
           },
         }]
       }],

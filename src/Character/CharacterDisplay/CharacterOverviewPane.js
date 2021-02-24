@@ -255,7 +255,7 @@ function MainStatsCards(props) {
   displayStatKeys.push(...additionalKeys)
   const editStatKeys = ["base_hp", "hp", "hp_", "character_atk", "atk", "atk_", "base_def", "def", "def_"]
   editStatKeys.push(...additionalKeys)
-  const otherStatKeys = ["stam", "inc_heal_", "pow_shield_", "cd_red_", "phy_ele_dmg_", "phy_ele_res_"]
+  const otherStatKeys = ["stam", "inc_heal_", "pow_shield_", "cd_red_"]
 
   Character.getElementalKeys().forEach(ele => {
     otherStatKeys.push(`${ele}_ele_dmg_`)

@@ -42,13 +42,13 @@ describe('Testing StatDependency', () => {
       expect(GetDependencies({}, ["final_def"])).toBeDependent({ final_def: ["base_def", "def_", "def"] })
     })
     test('should recursively get dependencies from database', () => {
-      const expected = expect(GetDependencies({}, ["phy_ele_dmg"]))
+      const expected = expect(GetDependencies({}, ["physical_ele_dmg"]))
       expected.toBeDependent({
-        phy_ele_dmg: ["final_atk", "phy_bonus_multi", "enemy_level_multi", "enemy_phy_ele_res_multi"],
+        physical_ele_dmg: ["final_atk", "physical_ele_bonus_multi", "enemy_level_multi", "physical_enemy_ele_res_multi"],
         final_atk: ["base_atk", "atk_", "atk"],
-        phy_bonus_multi: ["phy_ele_dmg_", "dmg_"],
+        physical_ele_bonus_multi: ["physical_ele_dmg_", "dmg_"],
         enemy_level_multi: ["character_level", "enemy_level"],
-        enemy_phy_ele_res_multi: ["enemy_phy_immunity", "enemy_phy_ele_res_"],
+        physical_enemy_ele_res_multi: ["physical_enemy_ele_immunity", "physical_enemy_ele_res_"],
         base_atk: ["character_atk", "weapon_atk"],
       })
     })
@@ -100,8 +100,8 @@ describe('Testing StatDependency', () => {
       expect(GetDependencies({}, ["burst_crit_multi"])).toBeDependent({
         burst_crit_multi: ["crit_rate_", "burst_crit_rate_", "crit_dmg_"]
       })
-      expect(GetDependencies({}, ["enemy_phy_ele_res_multi"])).toBeDependent({
-        enemy_phy_ele_res_multi: ["enemy_phy_immunity", "enemy_phy_ele_res_"]
+      expect(GetDependencies({}, ["physical_enemy_ele_res_multi"])).toBeDependent({
+        physical_enemy_ele_res_multi: ["physical_enemy_ele_immunity", "physical_enemy_ele_res_"]
       })
       expect(GetDependencies({}, ["amp_reaction_base_multi"])).toBeDependent({
         amp_reaction_base_multi: ["ele_mas"]

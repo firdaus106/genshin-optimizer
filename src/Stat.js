@@ -71,31 +71,6 @@ const FormulaText = {
   //DEF
   final_def: (o) => <span>{f(o, "base_def")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
 
-  //NORMAL
-  normal_dmg: (o) => <span>{f(o, "final_atk")} * {f(o, "normal_bonus_multi")} * {f(o, "enemy_level_multi")} * {f(o, "enemy_phy_ele_res_multi")}</span>,
-  normal_crit_dmg: (o) => <span>{f(o, "normal_dmg")} * {f(o, "crit_dmg_multi")}</span>,
-  normal_avg_dmg: (o) => <span>{f(o, "normal_dmg")} * {f(o, "normal_crit_multi")}</span>,
-  normal_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "normal_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
-  normal_bonus_multi: (o) => <span>( 1 + {f(o, "phy_ele_dmg_")} + {f(o, "normal_dmg_")} + {f(o, "dmg_")} )</span>,
-
-  //CHARGED
-  charged_dmg: (o) => <span>{f(o, "final_atk")} * {f(o, "charged_bonus_multi")} * {f(o, "enemy_level_multi")} * {f(o, "enemy_phy_ele_res_multi")}</span>,
-  charged_crit_dmg: (o) => <span>{f(o, "charged_dmg")} * {f(o, "crit_dmg_multi")}</span>,
-  charged_avg_dmg: (o) => <span>{f(o, "charged_dmg")} * {f(o, "charged_crit_multi")}</span>,
-  charged_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "charged_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
-  charged_bonus_multi: (o) => <span>( 1 + {f(o, "phy_ele_dmg_")} + {f(o, "charged_dmg_")} + {f(o, "dmg_")} )</span>,
-
-  //PLUNGE
-  plunging_dmg: (o) => <span>{f(o, "final_atk")} * {f(o, "plunging_bonus_multi")} * {f(o, "enemy_level_multi")} * {f(o, "enemy_phy_ele_res_multi")}</span>,
-  plunging_crit_dmg: (o) => <span>{f(o, "plunging_dmg")} * {f(o, "crit_dmg_multi")}</span>,
-  plunging_avg_dmg: (o) => <span>{f(o, "plunging_dmg")} * {f(o, "crit_multi")}</span>,
-  plunging_bonus_multi: (o) => <span>( 1 + {f(o, "phy_ele_dmg_")} + {f(o, "plunging_dmg_")} + {f(o, "dmg_")} )</span>,
-
-  phy_ele_dmg: (o) => <span>{f(o, "final_atk")} * {f(o, "phy_bonus_multi")} * {f(o, "enemy_level_multi")} * {f(o, "enemy_phy_ele_res_multi")}</span>,
-  phy_ele_crit_dmg: (o) => <span>{f(o, "phy_ele_dmg")} * {f(o, "crit_dmg_multi")}</span>,
-  phy_ele_avg_dmg: (o) => <span>{f(o, "phy_ele_dmg")} * {f(o, "crit_multi")}</span>,
-  phy_bonus_multi: (o) => <span>( 1 + {f(o, "phy_ele_dmg_")} + {f(o, "dmg_")} )</span>,
-
   crit_dmg_multi: (o) => <span>( 1 + {f(o, "crit_dmg_")} )</span>,
   crit_multi: (o) => <span>( 1 + Min[ {f(o, "crit_rate_")} , 100%] * {f(o, "crit_dmg_")} )</span>,
 
@@ -103,15 +78,15 @@ const FormulaText = {
   burst_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "burst_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
 
   enemy_level_multi: (o) => <span>( 100 + {f(o, "character_level")}) / ( 100 + {f(o, "enemy_level")} + 100 + {f(o, "character_level")})</span>,
-  // enemy_phy_ele_res_multi: (s) => s.enemy_phy_immunity ? 0 : resMultiplier(s.enemy_phy_ele_res_)
-  enemy_phy_ele_res_multi: (o) => {
-    let im = o.stats.enemy_phy_immunity
+  // physical_enemy_ele_res_multi: (s) => s.physical_enemy_ele_immunity ? 0 : resMultiplier(s.physical_enemy_ele_res_)
+  physical_enemy_ele_res_multi: (o) => {
+    let im = o.stats.physical_enemy_ele_immunity
     if (im)
       return <span>0 due to immunity</span>
-    let res = (o.stats.enemy_phy_ele_res_ || 0) / 100
-    if (res < 0) return <span> 1 - {f(o, "enemy_phy_ele_res_")} / 2</span>
-    else if (res >= 0.75) return <span> 1 / ( {f(o, "enemy_phy_ele_res_")} * 4 + 1)</span>
-    return <span> 1 - {f(o, "enemy_phy_ele_res_")} </span>
+    let res = (o.stats.physical_enemy_ele_res_ || 0) / 100
+    if (res < 0) return <span> 1 - {f(o, "physical_enemy_ele_res_")} / 2</span>
+    else if (res >= 0.75) return <span> 1 / ( {f(o, "physical_enemy_ele_res_")} * 4 + 1)</span>
+    return <span> 1 - {f(o, "physical_enemy_ele_res_")} </span>
   },
 
   //Elemental Reactions
@@ -124,7 +99,7 @@ const FormulaText = {
   // burning_dmg:
   swirl_dmg: (o) => <span>( 1 + {f(o, "swirl_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "swirl_multi")} * {f(o, "anemo_enemy_ele_res_multi")}</span>,
   swirl_multi: (o) => ReactionMatrix.swirl.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
-  shatter_dmg: (o) => <span>( 1 + {f(o, "shatter_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "shatter_multi")} * {f(o, "enemy_phy_ele_res_multi")}</span>,
+  shatter_dmg: (o) => <span>( 1 + {f(o, "shatter_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "shatter_multi")} * {f(o, "physical_enemy_ele_res_multi")}</span>,
   shatter_multi: (o) => ReactionMatrix.shattered.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
   crystalize_dmg: (o) => <span>( 1 + {f(o, "crystalize_dmg_")} ) * {f(o, "ele_mas_z")} * {f(o, "crystalize_multi")}</span>,
   crystalize_multi: (o) => ReactionMatrix.crystalize.map((val, i) => reactionMatrixElementRenderer(o, val, i)),

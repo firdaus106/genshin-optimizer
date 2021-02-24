@@ -20,10 +20,6 @@ const StatData = {
   def_: { name: "DEF", unit: "%", pretty: "DEF Percent" },
   final_def: { name: "DEF", pretty: "DEF Final" },
 
-  phy_ele_dmg_: { name: "Physical DMG Bonus", unit: "%" },
-  phy_ele_res_: { name: "Physical RES", unit: "%" },
-  ele_dmg_: { name: "DMG Bonus", unit: "%" },//will expand to "Anemo DMG Bonus" DONT CHANGE needed for screenshot parsing
-  ele_res_: { name: "DMG RES", unit: "%" },//will expand to "Anemo DMG RES"
   ele_mas: { name: "Elemental Mastery", },
   ener_rech_: { name: "Energy Recharge", unit: "%" },
   crit_rate_: { name: "CRIT Rate", unit: "%" },
@@ -33,30 +29,6 @@ const StatData = {
   inc_heal_: { name: "Incoming Healing Bonus", unit: "%" },
   pow_shield_: { name: "Powerful Shield", unit: "%" },
 
-  // DMG
-  normal_dmg: { name: "Normal Attack DMG" },
-  charged_dmg: { name: "Charged Attack DMG" },
-  plunging_dmg: { name: "Plunging Attack DMG" },
-  skill_dmg: { name: "Ele. Skill DMG" },
-  burst_dmg: { name: "Ele. Burst DMG" },
-  phy_ele_dmg: { name: "Physical Attack DMG" },
-  ele_dmg: { name: "Elemental Attack DMG" },
-  // Crit DMG
-  normal_crit_dmg: { name: "Normal Attack CRIT Hit DMG" },
-  charged_crit_dmg: { name: "Charged Attack CRIT Hit DMG" },
-  plunging_crit_dmg: { name: "Plunging Attack CRIT Hit DMG" },
-  skill_crit_dmg: { name: "Ele. Skill CRIT Hit DMG" },
-  burst_crit_dmg: { name: "Ele. Burst CRIT Hit DMG" },
-  phy_ele_crit_dmg: { name: "Physical Attack CRIT Hit DMG" },
-  ele_crit_dmg: { name: "Elemental Attack CRIT Hit DMG" },
-  // Avg DMG
-  normal_avg_dmg: { name: "Normal Attack Avg. DMG" },
-  charged_avg_dmg: { name: "Charged Attack Avg. DMG" },
-  plunging_avg_dmg: { name: "Plunging Attack Avg. DMG" },
-  skill_avg_dmg: { name: "Ele. Skill Avg. DMG" },
-  burst_avg_dmg: { name: "Ele. Burst Avg. DMG" },
-  phy_ele_avg_dmg: { name: "Physical Attack Avg. DMG" },
-  ele_avg_dmg: { name: "Elemental Attack Avg. DMG" },
   // % DMG Bonus
   normal_dmg_: { name: "Normal Attack DMG Bonus", unit: "%" },
   charged_dmg_: { name: "Charged Attack DMG Bonus", unit: "%" },
@@ -73,14 +45,6 @@ const StatData = {
   charged_crit_multi: { name: "Charged Attack Crit Multiplier", unit: "multi" },
   skill_crit_multi: { name: "Ele. Skill Crit Multiplier", unit: "multi" },
   burst_crit_multi: { name: "Ele. Burst Crit Multiplier", unit: "multi" },
-  normal_bonus_multi: { name: "Normal Attack Bonus DMG Multiplier", unit: "multi" },
-  charged_bonus_multi: { name: "Charged Attack Bonus DMG Multiplier", unit: "multi" },
-  plunging_bonus_multi: { name: "Plunging Attack Bonus DMG Multiplier", unit: "multi" },
-  skill_bonus_multi: { name: "Ele. Skill Bonus DMG Multiplier", unit: "multi" },
-  burst_bonus_multi: { name: "Ele. Burst Bonus DMG Multiplier", unit: "multi" },
-  phy_bonus_multi: { name: "Physical Attack Bonus DMG Multiplier", unit: "multi" },
-  ele_bonus_multi: { name: "Elemental Attack Bonus DMG Multiplier", unit: "multi" },
-  
   crit_dmg_multi: { name: "Crit Hit Multiplier", unit: "multi" },
   crit_multi: { name: "Crit Multiplier", unit: "multi" },
   amp_reaction_base_multi: { name: "Amplifying Reaction Base Multiplier", unit: "multi" },
@@ -112,13 +76,46 @@ const StatData = {
   // Enemy
   enemy_level: { name: "Enemy Level" },
   enemy_level_multi: { name: "Enemy Level Multiplier", unit: "multi" },
-  enemy_phy_ele_res_: { name: "Enemy Physical RES", unit: "%", default: 10 },
-  enemy_phy_ele_res_multi: { name: "Enemy Physical RES Multiplier", unit: "multi" },
-  enemy_phy_immunity: { name: "Enemy Physical Immunity", default: false },
+}
+const eleStatData = {
+  // DMG
+  normal_dmg: { name: "Normal Attack DMG" },
+  charged_dmg: { name: "Charged Attack DMG" },
+  plunging_dmg: { name: "Plunging Attack DMG" },
+  skill_dmg: { name: "Ele. Skill DMG" },
+  burst_dmg: { name: "Ele. Burst DMG" },
+  phy_ele_dmg: { name: "Physical Attack DMG" },
+  ele_dmg: { name: "Elemental Attack DMG" },
+  // Crit DMG
+  normal_crit_dmg: { name: "Normal Attack CRIT Hit DMG" },
+  charged_crit_dmg: { name: "Charged Attack CRIT Hit DMG" },
+  plunging_crit_dmg: { name: "Plunging Attack CRIT Hit DMG" },
+  skill_crit_dmg: { name: "Ele. Skill CRIT Hit DMG" },
+  burst_crit_dmg: { name: "Ele. Burst CRIT Hit DMG" },
+  phy_ele_crit_dmg: { name: "Physical Attack CRIT Hit DMG" },
+  ele_crit_dmg: { name: "Elemental Attack CRIT Hit DMG" },
+  // Avg DMG
+  normal_avg_dmg: { name: "Normal Attack Avg. DMG" },
+  charged_avg_dmg: { name: "Charged Attack Avg. DMG" },
+  plunging_avg_dmg: { name: "Plunging Attack Avg. DMG" },
+  skill_avg_dmg: { name: "Ele. Skill Avg. DMG" },
+  burst_avg_dmg: { name: "Ele. Burst Avg. DMG" },
+  phy_ele_avg_dmg: { name: "Physical Attack Avg. DMG" },
+  ele_avg_dmg: { name: "Elemental Attack Avg. DMG" },
+  // Bonus Multi
+  normal_bonus_multi: { name: "Normal Attack Bonus DMG Multiplier", unit: "multi" },
+  charged_bonus_multi: { name: "Charged Attack Bonus DMG Multiplier", unit: "multi" },
+  plunging_bonus_multi: { name: "Plunging Attack Bonus DMG Multiplier", unit: "multi" },
+  skill_bonus_multi: { name: "Ele. Skill Bonus DMG Multiplier", unit: "multi" },
+  burst_bonus_multi: { name: "Ele. Burst Bonus DMG Multiplier", unit: "multi" },
+  
+  ele_dmg_: { name: "DMG Bonus", unit: "%" },//will expand to "Anemo DMG Bonus" DONT CHANGE needed for screenshot parsing
+  ele_res_: { name: "DMG RES", unit: "%" },//will expand to "Anemo DMG RES"
+  ele_bonus_multi: { name: "Elemental Attack Bonus DMG Multiplier", unit: "multi" },
   enemy_ele_res_: { name: "Enemy Elemental RES", unit: "%", default: 10 },
   enemy_ele_res_multi: { name: "Enemy Elemental RES Multiplier", unit: "multi" },
-  enemy_ele_immunity: { name: "Enemy Elemental Immunity", default: false },
-};
+  enemy_ele_immunity: { name: "Enemy Elemental Immunity", default: false },  
+}
 function resMultiplier(res) {
   res = res / 100
   if (res < 0) return 1 - res / 2
@@ -126,6 +123,7 @@ function resMultiplier(res) {
   return 1 - res
 }
 const ElementToReactionKeys = {
+  physical: [],
   anemo: ["swirl_dmg"],
   geo: ["crystalize_dmg", "shatter_dmg"],
   electro: ["overloaded_dmg", "electrocharged_dmg", "superconduct_dmg"],
@@ -155,39 +153,16 @@ const Formulas = {
   //DEF
   final_def: (s) => s.base_def * (1 + s.def_ / 100) + s.def,
 
-  //NORMAL
-  normal_dmg: (s) => s.final_atk * s.normal_bonus_multi * s.enemy_level_multi * s.enemy_phy_ele_res_multi,
-  normal_crit_dmg: (s) => s.normal_dmg * s.crit_dmg_multi,
-  normal_avg_dmg: (s) => s.normal_dmg * s.normal_crit_multi,
+  // Multi
   normal_crit_multi: (s) => (1 + (clamp(s.crit_rate_ + s.normal_crit_rate_, 0, 100) / 100) * s.crit_dmg_ / 100),
-  normal_bonus_multi: (s) => (1 + (s.phy_ele_dmg_ + s.normal_dmg_ + s.dmg_) / 100),
-
-  //CHARGED
-  charged_dmg: (s) => s.final_atk * s.charged_bonus_multi * s.enemy_level_multi * s.enemy_phy_ele_res_multi,
-  charged_crit_dmg: (s) => s.charged_dmg * s.crit_dmg_multi,
-  charged_avg_dmg: (s) => s.charged_dmg * s.charged_crit_multi,
   charged_crit_multi: (s) => (1 + (clamp(s.crit_rate_ + s.charged_crit_rate_, 0, 100) / 100) * s.crit_dmg_ / 100),
-  charged_bonus_multi: (s) => (1 + (s.phy_ele_dmg_ + s.charged_dmg_ + s.dmg_) / 100),
-
-  //PLUNGE
-  plunging_dmg: (s) => s.final_atk * s.plunging_bonus_multi * s.enemy_level_multi * s.enemy_phy_ele_res_multi,
-  plunging_crit_dmg: (s) => s.plunging_dmg * s.crit_dmg_multi,
-  plunging_avg_dmg: (s) => s.plunging_dmg * s.crit_multi,
-  plunging_bonus_multi: (s) => (1 + (s.phy_ele_dmg_ + s.plunging_dmg_ + s.dmg_) / 100),
-
-  phy_ele_dmg: (s) => s.final_atk * s.phy_bonus_multi * s.enemy_level_multi * s.enemy_phy_ele_res_multi,
-  phy_ele_crit_dmg: (s) => s.phy_ele_dmg * s.crit_dmg_multi,
-  phy_ele_avg_dmg: (s) => s.phy_ele_dmg * s.crit_multi,
-  phy_bonus_multi: (s) => (1 + (s.phy_ele_dmg_ + s.dmg_) / 100),
-
-  crit_dmg_multi: (s) => (1 + s.crit_dmg_ / 100),
-  crit_multi: (s) => (1 + (clamp(s.crit_rate_, 0, 100) / 100) * (s.crit_dmg_ / 100)),
-
   skill_crit_multi: (s) => (1 + (clamp(s.crit_rate_ + s.skill_crit_rate_, 0, 100) / 100) * s.crit_dmg_ / 100),
   burst_crit_multi: (s) => (1 + (clamp(s.crit_rate_ + s.burst_crit_rate_, 0, 100) / 100) * s.crit_dmg_ / 100),
+  crit_multi: (s) => (1 + (clamp(s.crit_rate_, 0, 100) / 100) * (s.crit_dmg_ / 100)),
+  crit_dmg_multi: (s) => (1 + s.crit_dmg_ / 100),
 
   enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),
-  enemy_phy_ele_res_multi: (s) => s.enemy_phy_immunity ? 0 : resMultiplier(s.enemy_phy_ele_res_),
+  physical_enemy_ele_res_multi: (s) => s.physical_enemy_ele_immunity ? 0 : resMultiplier(s.physical_enemy_ele_res_),
 
   //Elemental Reactions
   overloaded_dmg: (s) => (1 + s.overloaded_dmg_ / 100) * s.ele_mas_y * s.overloaded_multi * s.pyro_enemy_ele_res_multi,
@@ -200,7 +175,7 @@ const Formulas = {
   // burning_dmg: (s) => "NO_FORMULA",//(1 + s.burning_dmg_ / 100)
   swirl_dmg: (s) => (1 + s.swirl_dmg_ / 100) * s.ele_mas_y * s.swirl_multi * s.anemo_enemy_ele_res_multi,
   swirl_multi: (s) => ReactionMatrix.swirl.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
-  shatter_dmg: (s) => (1 + s.shatter_dmg_ / 100) * s.ele_mas_y * s.shatter_multi * s.enemy_phy_ele_res_multi,
+  shatter_dmg: (s) => (1 + s.shatter_dmg_ / 100) * s.ele_mas_y * s.shatter_multi * s.physical_enemy_ele_res_multi,
   shatter_multi: (s) => ReactionMatrix.shattered.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
   crystalize_dmg: (s) => (1 + s.crystalize_dmg_ / 100) * s.ele_mas_z * s.crystalize_multi,
   crystalize_multi: (s) => ReactionMatrix.crystalize.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
@@ -261,14 +236,6 @@ const eleFormulas = {
     };
   }));
 
-//add variant to physical related stats.
-[
-  "phy_ele_dmg_", "phy_ele_res_", "enemy_phy_ele_res_", "enemy_phy_immunity", "phy_ele_dmg", "phy_ele_crit_dmg", "phy_ele_avg_dmg", "phy_bonus_multi",
-  ...Object.keys(StatData).filter(key => ["normal", "charged", "plunging"].some(str => key.includes(str))),
-].forEach(key => {
-  StatData[key].variant = "physical"
-});
-
 //Add Vaporize and Melt stats
 [["pyro_vaporize", "Vaporize(Pyro)", "vaporize", "pyro"], ["hydro_vaporize", "Vaporize(Hydro)", "vaporize", "hydro"], ["pyro_melt", "Melt(Pyro)", "melt", "pyro"], ["cryo_melt", "Melt(Cryo)", "melt", "cryo"]].forEach(([reactionKey, reactionName, variant, baseEle]) => {
   [["multi", "Multiplier", { unit: "multi" }]].forEach(([dmgKey, dmgName, props = {}]) => {
@@ -289,7 +256,7 @@ const eleFormulas = {
 
 //add Elemental entries to stats. we use the keys from eleFormulas before it gets expanded to elementals
 ["ele_dmg_", "ele_res_", "enemy_ele_res_", "enemy_ele_immunity", ...Object.keys(eleFormulas)].forEach(key => {
-  let obj = StatData[key]
+  let obj = eleStatData[key]
   Object.keys(ElementalData).forEach(eleKey => {
     let ele_key = `${eleKey}_${key}`
     StatData[ele_key] = deepClone(obj)
