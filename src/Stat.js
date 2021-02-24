@@ -71,11 +71,12 @@ const FormulaText = {
   //DEF
   final_def: (o) => <span>{f(o, "base_def")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
 
-  crit_dmg_multi: (o) => <span>( 1 + {f(o, "crit_dmg_")} )</span>,
-  crit_multi: (o) => <span>( 1 + Min[ {f(o, "crit_rate_")} , 100%] * {f(o, "crit_dmg_")} )</span>,
-
+  normal_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "normal_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
+  charged_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "charged_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
   skill_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "skill_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
   burst_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "burst_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
+  crit_dmg_multi: (o) => <span>( 1 + {f(o, "crit_dmg_")} )</span>,
+  crit_multi: (o) => <span>( 1 + Min[ {f(o, "crit_rate_")} , 100%] * {f(o, "crit_dmg_")} )</span>,
 
   enemy_level_multi: (o) => <span>( 100 + {f(o, "character_level")}) / ( 100 + {f(o, "enemy_level")} + 100 + {f(o, "character_level")})</span>,
   // physical_enemy_ele_res_multi: (s) => s.physical_enemy_ele_immunity ? 0 : resMultiplier(s.physical_enemy_ele_res_)

@@ -84,7 +84,6 @@ const eleStatData = {
   plunging_dmg: { name: "Plunging Attack DMG" },
   skill_dmg: { name: "Ele. Skill DMG" },
   burst_dmg: { name: "Ele. Burst DMG" },
-  phy_ele_dmg: { name: "Physical Attack DMG" },
   ele_dmg: { name: "Elemental Attack DMG" },
   // Crit DMG
   normal_crit_dmg: { name: "Normal Attack CRIT Hit DMG" },
@@ -92,7 +91,6 @@ const eleStatData = {
   plunging_crit_dmg: { name: "Plunging Attack CRIT Hit DMG" },
   skill_crit_dmg: { name: "Ele. Skill CRIT Hit DMG" },
   burst_crit_dmg: { name: "Ele. Burst CRIT Hit DMG" },
-  phy_ele_crit_dmg: { name: "Physical Attack CRIT Hit DMG" },
   ele_crit_dmg: { name: "Elemental Attack CRIT Hit DMG" },
   // Avg DMG
   normal_avg_dmg: { name: "Normal Attack Avg. DMG" },
@@ -100,7 +98,6 @@ const eleStatData = {
   plunging_avg_dmg: { name: "Plunging Attack Avg. DMG" },
   skill_avg_dmg: { name: "Ele. Skill Avg. DMG" },
   burst_avg_dmg: { name: "Ele. Burst Avg. DMG" },
-  phy_ele_avg_dmg: { name: "Physical Attack Avg. DMG" },
   ele_avg_dmg: { name: "Elemental Attack Avg. DMG" },
   // Bonus Multi
   normal_bonus_multi: { name: "Normal Attack Bonus DMG Multiplier", unit: "multi" },
@@ -162,7 +159,6 @@ const Formulas = {
   crit_dmg_multi: (s) => (1 + s.crit_dmg_ / 100),
 
   enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),
-  physical_enemy_ele_res_multi: (s) => s.physical_enemy_ele_immunity ? 0 : resMultiplier(s.physical_enemy_ele_res_),
 
   //Elemental Reactions
   overloaded_dmg: (s) => (1 + s.overloaded_dmg_ / 100) * s.ele_mas_y * s.overloaded_multi * s.pyro_enemy_ele_res_multi,
