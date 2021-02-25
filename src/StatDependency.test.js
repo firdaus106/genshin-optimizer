@@ -114,7 +114,7 @@ describe('Testing StatDependency', () => {
       test_multi("electrocharged_multi")
       test_multi("superconduct_multi")
       test_multi("swirl_multi")
-      test_multi("shatter_multi")
+      test_multi("shattered_multi")
       test_multi("crystalize_multi")
     })
   })

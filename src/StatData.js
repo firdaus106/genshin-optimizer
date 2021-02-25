@@ -122,11 +122,11 @@ function resMultiplier(res) {
 const ElementToReactionKeys = {
   physical: [],
   anemo: ["swirl_dmg"],
-  geo: ["crystalize_dmg", "shatter_dmg"],
+  geo: ["crystalize_dmg", "shattered_dmg"],
   electro: ["overloaded_dmg", "electrocharged_dmg", "superconduct_dmg"],
-  hydro: ["electrocharged_dmg", "shatter_dmg"],//"hydro_vaporize_multi",
+  hydro: ["electrocharged_dmg", "shattered_dmg"],//"hydro_vaporize_multi",
   pyro: ["overloaded_dmg"],// "burning_dmg","pyro_vaporize_multi", "pyro_melt_multi", 
-  cryo: ["shatter_dmg", "superconduct_dmg"],//"cryo_melt_multi", 
+  cryo: ["shattered_dmg", "superconduct_dmg"],//"cryo_melt_multi", 
   // dendro: { name: "Dendro" }
 }
 const ReactionMatrix = {
@@ -171,8 +171,8 @@ const Formulas = {
   // burning_dmg: (s) => "NO_FORMULA",//(1 + s.burning_dmg_ / 100)
   swirl_dmg: (s) => (1 + s.swirl_dmg_ / 100) * s.ele_mas_y * s.swirl_multi * s.anemo_enemy_ele_res_multi,
   swirl_multi: (s) => ReactionMatrix.swirl.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
-  shatter_dmg: (s) => (1 + s.shatter_dmg_ / 100) * s.ele_mas_y * s.shatter_multi * s.physical_enemy_ele_res_multi,
-  shatter_multi: (s) => ReactionMatrix.shattered.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
+  shattered_dmg: (s) => (1 + s.shattered_dmg_ / 100) * s.ele_mas_y * s.shattered_multi * s.physical_enemy_ele_res_multi,
+  shattered_multi: (s) => ReactionMatrix.shattered.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
   crystalize_dmg: (s) => (1 + s.crystalize_dmg_ / 100) * s.ele_mas_z * s.crystalize_multi,
   crystalize_multi: (s) => ReactionMatrix.crystalize.reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0),
 
@@ -223,7 +223,7 @@ const eleFormulas = {
   enemy_ele_res_multi: (s, ele) => s[`${ele}_enemy_ele_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_ele_res_`]),
 };
 //nontransformation reactions  
-[["overloaded", "Overloaded"], ["electrocharged", "Electro-Charged"], ["superconduct", "Superconduct"], ["burning", "Burning"], ["swirl", "Swirl"], ["shatter", "Shattered"], ["crystalize", "Crystalize"]].forEach(([reactionKey, reactionName]) =>
+[["overloaded", "Overloaded"], ["electrocharged", "Electro-Charged"], ["superconduct", "Superconduct"], ["burning", "Burning"], ["swirl", "Swirl"], ["shattered", "Shattered"], ["crystalize", "Crystalize"]].forEach(([reactionKey, reactionName]) =>
   [["dmg", "DMG"], ["dmg_", "DMG Bonus", { unit: "%" }], ["multi", "Multiplier", { unit: "multi" }]].forEach(([dmgKey, dmgName, props = {}]) => {
     StatData[`${reactionKey}_${dmgKey}`] = {
       name: `${reactionName} ${dmgName}`,

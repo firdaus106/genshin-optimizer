@@ -100,8 +100,8 @@ const FormulaText = {
   // burning_dmg:
   swirl_dmg: (o) => <span>( 1 + {f(o, "swirl_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "swirl_multi")} * {f(o, "anemo_enemy_ele_res_multi")}</span>,
   swirl_multi: (o) => ReactionMatrix.swirl.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
-  shatter_dmg: (o) => <span>( 1 + {f(o, "shatter_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "shatter_multi")} * {f(o, "physical_enemy_ele_res_multi")}</span>,
-  shatter_multi: (o) => ReactionMatrix.shattered.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
+  shattered_dmg: (o) => <span>( 1 + {f(o, "shattered_dmg_")} ) * {f(o, "ele_mas_y")} * {f(o, "shattered_multi")} * {f(o, "physical_enemy_ele_res_multi")}</span>,
+  shattered_multi: (o) => ReactionMatrix.shattered.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
   crystalize_dmg: (o) => <span>( 1 + {f(o, "crystalize_dmg_")} ) * {f(o, "ele_mas_z")} * {f(o, "crystalize_multi")}</span>,
   crystalize_multi: (o) => ReactionMatrix.crystalize.map((val, i) => reactionMatrixElementRenderer(o, val, i)),
 

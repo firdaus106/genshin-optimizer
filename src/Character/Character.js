@@ -184,7 +184,7 @@ export default class Character {
     //show elemental interactions
     keys.push(...ElementToReactionKeys[eleKey])
     let weaponTypeKey = this.getWeaponTypeKey(characterKey)
-    if (!keys.includes("shatter_dmg") && weaponTypeKey === "claymore") keys.push("shatter_dmg")
+    if (!keys.includes("shattered_dmg") && weaponTypeKey === "claymore") keys.push("shattered_dmg")
     return keys
   }
 

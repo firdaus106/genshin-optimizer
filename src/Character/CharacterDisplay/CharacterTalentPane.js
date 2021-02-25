@@ -58,7 +58,7 @@ export default function CharacterTalentPane(props) {
     //show elemental interactions
     keys.push(...(ElementToReactionKeys[Character.getElementalKey(characterKey)] || []))
     let weaponTypeKey = Character.getWeaponTypeKey(characterKey)
-    if (!keys.includes("shatter_dmg") && weaponTypeKey === "claymore") keys.push("shatter_dmg")
+    if (!keys.includes("shattered_dmg") && weaponTypeKey === "claymore") keys.push("shattered_dmg")
 
     //search for dependency
     return Stat.getPrintableFormulaStatKeyList(GetDependencies(build?.finalStats?.modifiers, keys), build?.finalStats?.modifiers)
@@ -218,14 +218,14 @@ const ReactionComponents = {
   electrocharged_dmg: ElectroChargedCard,
   overloaded_dmg: OverloadedCard,
   swirl_dmg: SwirlCard,
-  shatter_dmg: ShatteredCard,
+  shattered_dmg: ShatteredCard,
   crystalize_dmg: CrystalizeCard,
 }
 function ReactionDisplay({ character: { characterKey, reactionMode = "none" }, newBuild, equippedBuild, setState }) {
   let build = newBuild ? newBuild : equippedBuild
   let charEleKey = Character.getElementalKey(characterKey)
   let eleInterArr = [...(ElementToReactionKeys[charEleKey] || [])]
-  if (!eleInterArr.includes("shatter_dmg") && Character.getWeaponTypeKey(characterKey) === "claymore") eleInterArr.push("shatter_dmg")
+  if (!eleInterArr.includes("shattered_dmg") && Character.getWeaponTypeKey(characterKey) === "claymore") eleInterArr.push("shattered_dmg")
   return <Card bg="lightcontent" text="lightfont" className="mb-2">
     <Card.Body className="px-3 py-2">
       <Row>
@@ -313,8 +313,8 @@ function ShatteredCard({ value }) {
     <FontAwesomeIcon icon={faQuestionCircle} className="ml-2" style={{ cursor: "help" }} />
   </OverlayTrigger>
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("shatter_dmg")}</h5>
-    <h4 className="text-shatter mb-0">
+    <h5>{Stat.getStatName("shattered_dmg")}</h5>
+    <h4 className="text-shattered mb-0">
       <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" />+ <small className="text-physical">Heavy Attack{information} </small> {value}
     </h4>
   </Card.Body></Card>
