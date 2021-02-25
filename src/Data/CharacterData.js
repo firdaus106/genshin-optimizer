@@ -87,7 +87,7 @@ const characterStatBase = {
   ener_rech_: 100,
   stam: 100
 }
-const CharacterSpecializedStatKey = ["hp_", "atk_", "def_", "ele_mas", "ener_rech_", "heal_", "crit_rate_", "crit_dmg_", "physical_ele_dmg_", "anemo_ele_dmg_", "geo_ele_dmg_", "electro_ele_dmg_", "hydro_ele_dmg_", "pyro_ele_dmg_", "cryo_ele_dmg_"]
+const CharacterSpecializedStatKey = ["hp_", "atk_", "def_", "ele_mas", "ener_rech_", "heal_", "crit_rate_", "crit_dmg_", "physical_dmg_", "anemo_dmg_", "geo_dmg_", "electro_dmg_", "hydro_dmg_", "pyro_dmg_", "cryo_dmg_"]
 
 export {
   LevelsData,

@@ -62,7 +62,7 @@ let char = {
     base_def: [54, 140, 180, 270, 299, 344, 382, 427, 456, 501, 530, 575, 603, 648]
   },
   specializeStat: {
-    key: "electro_ele_dmg_",
+    key: "electro_dmg_",
     value: [0, 0, 0, 0, 6, 6, 12, 12, 12, 12, 18, 18, 24, 24]
   },
   talent: {
@@ -228,7 +228,7 @@ let char = {
           sourceKey: "beidou",
           maxStack: 1,
           stats: {
-            electro_enemy_ele_res_: -15,
+            electro_enemy_res_: -15,
           }
         }
       }],

@@ -22,7 +22,7 @@ let artifact = {
   setEffects: {
     2: {
       text: <span><span className="text-physical">Physical DMG</span> +25%</span>,
-      stats: { physical_ele_dmg_: 25 }
+      stats: { physical_dmg_: 25 }
     },
     4: {
       text: "After defeating an opponent, increases Charged Attack DMG by 50%, and reduces its Stamina cost to 0 for 10s.",

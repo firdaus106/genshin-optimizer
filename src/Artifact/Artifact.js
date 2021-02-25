@@ -89,6 +89,7 @@ export default class Artifact {
 
   static getMainStatValue = (key, numStars, level, defVal = 0) => {
     let main = this.getMainStatValues(numStars, key)[level]
+    // TODO We removed _ele_ from the naming
     if (main) return main
     else if (key?.includes("_ele_dmg_")) //because in the database its still stored as ele_dmg_
       return this.getMainStatValue("ele_dmg_", numStars, level, defVal)

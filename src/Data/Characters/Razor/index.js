@@ -62,7 +62,7 @@ let char = {
     base_def: [63, 162, 209, 313, 346, 398, 443, 495, 528, 580, 613, 665, 699, 751]
   },
   specializeStat: {
-    key: "physical_ele_dmg_",
+    key: "physical_dmg_",
     value: [0, 0, 0, 0, 7.5, 7.5, 15, 15, 15, 15, 22.5, 22.5, 30, 30]
   },
   talent: {

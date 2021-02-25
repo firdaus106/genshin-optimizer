@@ -19,7 +19,7 @@ export default class Character {
     if (statKey === "specializedStatVal") return this.getSpeicalizedStatVal(characterKey, levelKey)
     if (statKey === "weapon_atk") return Weapon.getWeaponMainStatValWithOverride(character?.weapon)
     if (statKey === "character_level" || statKey === "enemy_level") return this.getLevel(levelKey)
-    if (statKey === "physical_enemy_ele_res_" || statKey.includes("enemy_ele_res_")) return 10
+    if (statKey.includes("enemy_res_")) return 10
     if (statKey in characterStatBase) return characterStatBase[statKey]
     let characterObj = this.getCDataObj(characterKey)
     if (characterObj && statKey in characterObj.baseStat) return characterObj.baseStat[statKey][this.getIndexFromlevelkey(levelKey)]
@@ -154,13 +154,13 @@ export default class Character {
     if (!characterKey) return defVal
     let eleKey = Character.getElementalKey(characterKey)
     if (!eleKey) return defVal //usually means the character has not been lazy loaded yet
-    let keys = ["final_hp", "final_atk", "final_def", "ele_mas", "crit_rate_", "crit_dmg_", "heal_", "ener_rech_", `${eleKey}_ele_dmg_`]
+    let keys = ["final_hp", "final_atk", "final_def", "ele_mas", "crit_rate_", "crit_dmg_", "heal_", "ener_rech_", `${eleKey}_dmg_`]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
     let isAutoElemental = Character.isAutoElemental(characterKey)
     let isAutoInfusable = Character.isAutoInfusable(characterKey)
     let atkKeys = []
     if (!isAutoElemental)
-      atkKeys.push("physical_ele_dmg_")
+      atkKeys.push("physical_dmg_")
 
     if (!isAutoElemental) //add phy auto + charged + physical 
       atkKeys.push("physical_normal_avg_dmg", "physical_charged_avg_dmg")
@@ -287,16 +287,16 @@ export default class Character {
   })
 
   static calculateCharacterWithWeaponStats = (character) => {
-    let statKeys = ["base_hp", "character_atk", "base_def", "weapon_atk", "character_level", "enemy_level", "physical_enemy_ele_res_", "physical_enemy_ele_immunity", ...Object.keys(characterStatBase)]
+    let statKeys = ["base_hp", "character_atk", "base_def", "weapon_atk", "character_level", "enemy_level", "physical_enemy_res_", "physical_enemy_immunity", ...Object.keys(characterStatBase)]
     let initialStats = Object.fromEntries(statKeys.map(key => [key, this.getStatValueWithOverride(character, key)]))
     //add element
     initialStats.character_ele = this.getElementalKey(character.characterKey);
 
     //enemy stuff
     Character.getElementalKeys().forEach(eleKey => {
-      let statKey = `${eleKey}_enemy_ele_res_`
+      let statKey = `${eleKey}_enemy_res_`
       initialStats[statKey] = this.getStatValueWithOverride(character, statKey);
-      statKey = `${eleKey}_enemy_ele_immunity`
+      statKey = `${eleKey}_enemy_immunity`
       initialStats[statKey] = this.getStatValueWithOverride(character, statKey);
     })
 

@@ -61,7 +61,7 @@ let char = {
     base_def: [50, 129, 167, 250, 277, 318, 354, 396, 422, 464, 491, 532, 559, 601]
   },
   specializeStat: {
-    key: "cryo_ele_dmg_",
+    key: "cryo_dmg_",
     value: [0, 0, 0, 0, 6, 6, 12, 12, 12, 12, 18, 18, 24, 24]
   },
   talent: {

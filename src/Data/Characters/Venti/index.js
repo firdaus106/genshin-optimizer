@@ -167,7 +167,7 @@ let char = {
           sourceKey: "venti",
           maxStack: 1,
           stats: {
-            anemo_enemy_ele_res_: -12,
+            anemo_enemy_res_: -12,
           },
         }, {
           type: "character",
@@ -176,8 +176,8 @@ let char = {
           sourceKey: "venti",
           maxStack: 1,
           stats: {
-            anemo_enemy_ele_res_: -24,
-            physical_enemy_ele_res_: -12
+            anemo_enemy_res_: -24,
+            physical_enemy_res_: -12
           },
         }]
       }],
@@ -284,7 +284,7 @@ let char = {
           sourceKey: "venti",
           maxStack: 1,
           stats: {
-            anemo_ele_dmg_: 15,
+            anemo_dmg_: 15,
           },
           fields: [{
             text: "Duration",

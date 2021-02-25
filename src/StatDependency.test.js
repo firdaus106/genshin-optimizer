@@ -42,13 +42,13 @@ describe('Testing StatDependency', () => {
       expect(GetDependencies({}, ["final_def"])).toBeDependent({ final_def: ["base_def", "def_", "def"] })
     })
     test('should recursively get dependencies from database', () => {
-      const expected = expect(GetDependencies({}, ["final_physical_normal_dmg"]))
+      const expected = expect(GetDependencies({}, ["physical_normal_dmg"]))
       expected.toBeDependent({
-        physical_dmg: ["dmg", "final_atk", "physical_ele_dmg_"],
-        final_physical_normal_dmg: ["physical_normal_dmg", "enemy_level_multi", "physical_enemy_ele_res_multi"],
+        physical_dmg: ["dmg", "final_atk", "physical_dmg_"],
+        physical_normal_dmg: ["base_physical_normal_dmg", "enemy_level_multi", "physical_enemy_res_multi"],
         final_atk: ["base_atk", "atk_", "atk"],
         enemy_level_multi: ["character_level", "enemy_level"],
-        physical_enemy_ele_res_multi: ["physical_enemy_ele_immunity", "physical_enemy_ele_res_"],
+        physical_enemy_res_multi: ["physical_enemy_immunity", "physical_enemy_res_"],
         base_atk: ["character_atk", "weapon_atk"],
       })
     })
@@ -85,8 +85,8 @@ describe('Testing StatDependency', () => {
       expect([...new Set(received)]).toEqual(received)
     })
     test('should handle non-algebraic dependencies', () => {
-      expect(GetDependencies({}, ["physical_enemy_ele_res_multi"])).toBeDependent({
-        physical_enemy_ele_res_multi: ["physical_enemy_ele_immunity", "physical_enemy_ele_res_"]
+      expect(GetDependencies({}, ["physical_enemy_res_multi"])).toBeDependent({
+        physical_enemy_res_multi: ["physical_enemy_immunity", "physical_enemy_res_"]
       })
       expect(GetDependencies({}, ["amp_reaction_base_multi"])).toBeDependent({
         amp_reaction_base_multi: ["ele_mas"]

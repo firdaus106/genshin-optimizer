@@ -22,7 +22,7 @@ let artifact = {
   setEffects: {
     2: {
       text: <span><span className="text-anemo">Anemo DMG Bonus</span> +15%</span>,
-      stats: { anemo_ele_dmg_: 15 }
+      stats: { anemo_dmg_: 15 }
     },
     4: {
       text: "Increases Swirl DMG by 60%. Decreases opponent's Elemental RES to the element infused in the Swirl by 40% for 10s.",
@@ -33,7 +33,7 @@ let artifact = {
         sourceKey: "ViridescentVenerer_4",
         maxStack: 1,
         stats: {
-          [`${key}_enemy_ele_res_`]: -40,
+          [`${key}_enemy_res_`]: -40,
         }
       }))//TODO this is most likely a team effect.
     }

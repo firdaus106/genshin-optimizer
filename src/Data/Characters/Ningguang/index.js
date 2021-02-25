@@ -53,7 +53,7 @@ let char = {
     base_def: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
   },
   specializeStat: {
-    key: "geo_ele_dmg_",
+    key: "geo_dmg_",
     value: [0, 0, 0, 0, 6, 6, 12, 12, 12, 12, 18, 18, 24, 24]
   },
   talent: {
@@ -188,7 +188,7 @@ let char = {
           sourceKey: "ningguang",
           maxStack: 1,
           stats: {
-            geo_ele_dmg_: 12
+            geo_dmg_: 12
           },
           fields: [{
             text: "Duration",

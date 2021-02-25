@@ -105,8 +105,8 @@ export default function CharacterTalentPane(props) {
                   />
                 </Col>
                 {["physical", ...Character.getElementalKeys()].map(eleKey => {
-                  let statKey = eleKey === "physical" ? "physical_enemy_ele_res_" : `${eleKey}_enemy_ele_res_`
-                  let immunityStatKey = eleKey === "physical" ? "physical_enemy_ele_immunity" : `${eleKey}_enemy_ele_immunity`
+                  let statKey = eleKey === "physical" ? "physical_enemy_res_" : `${eleKey}_enemy_res_`
+                  let immunityStatKey = eleKey === "physical" ? "physical_enemy_immunity" : `${eleKey}_enemy_immunity`
                   let elementImmunity = Character.getStatValueWithOverride(character, immunityStatKey)
                   return <Col xs={12} xl={6} key={eleKey} className="mb-2">
                     <StatInput

@@ -258,8 +258,8 @@ function MainStatsCards(props) {
   const otherStatKeys = ["stam", "inc_heal_", "pow_shield_", "cd_red_"]
 
   Character.getElementalKeys().forEach(ele => {
-    otherStatKeys.push(`${ele}_ele_dmg_`)
-    otherStatKeys.push(`${ele}_ele_res_`)
+    otherStatKeys.push(`${ele}_dmg_`)
+    otherStatKeys.push(`${ele}_res_`)
   })
   const miscStatkeys = ["normal_dmg_", "charged_dmg_", "skill_dmg_", "burst_dmg_", "skill_crit_rate_", "burst_crit_rate_", "dmg_", "move_spd_", "atk_spd_", "weakspot_dmg_"]
 

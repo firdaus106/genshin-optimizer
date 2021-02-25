@@ -62,7 +62,7 @@ let char = {
     base_def: [59, 151, 195, 293, 324, 373, 414, 463, 494, 543, 574, 623, 654, 703]
   },
   specializeStat: {
-    key: "anemo_ele_dmg_",
+    key: "anemo_dmg_",
     value: [0, 0, 0, 0, 6, 6, 12, 12, 12, 12, 18, 18, 24, 24]
   },
   talent: {

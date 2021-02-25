@@ -217,7 +217,7 @@ let char = {
           sourceKey: "diluc",
           maxStack: 1,
           stats: {
-            pyro_ele_dmg_: 20,
+            pyro_dmg_: 20,
           },
         }
       }],

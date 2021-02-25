@@ -167,7 +167,7 @@ let char = {
           sourceKey: "ganyu",
           maxStack: 1,
           stats: {
-            cryo_enemy_ele_res_: -15,
+            cryo_enemy_res_: -15,
           },
         }
       }, {
@@ -260,7 +260,7 @@ let char = {
           sourceKey: "ganyu",
           maxStack: 1,
           stats: {
-            cryo_ele_dmg_: 20,
+            cryo_dmg_: 20,
           },
         }
       }, {

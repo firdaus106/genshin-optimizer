@@ -158,7 +158,7 @@ let char = {
           sourceKey: "barbara",
           maxStack: 1,
           stats: {
-            hydro_ele_dmg_: 15,
+            hydro_dmg_: 15,
           }
         }
       }],

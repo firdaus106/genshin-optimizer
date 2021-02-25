@@ -75,6 +75,7 @@ function DatabaseInitAndVerify() {
         valid = false
       }
       //key names were changed. convert old DB
+      // TODO We remove ele from the naming
       if (art?.mainStatKey === "physical_ele_dmg") {
         art.mainStatKey = "physical_ele_dmg_"
         valid = false

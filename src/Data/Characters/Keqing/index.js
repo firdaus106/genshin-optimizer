@@ -275,7 +275,7 @@ let char = {
           sourceKey: "keqing",
           maxStack: 1,
           stats: {
-            electro_ele_dmg_bonus: 6,
+            electro_dmg_bonus: 6,
           },
           fields: [{
             text: "Duration",

@@ -236,7 +236,7 @@ let char = {
       img: passive2,
       document: [{ text: <span>Increases Mona's <span className="text-hydro">Hydro DMG Bonus</span> by a degree equivalent to 20% of her Energy Recharge rate.</span>, }],
       stats: (c, a) => a >= 4 && {
-        modifiers: { hydro_ele_dmg_: { ener_rech_: 0.2 } },
+        modifiers: { hydro_dmg_: { ener_rech_: 0.2 } },
       }
     },
     passive3: {

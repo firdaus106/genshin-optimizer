@@ -77,12 +77,12 @@ const Formulas = {
   enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),
 
   // Elemental Reactions
-  overloaded_dmg: (s) => (1 + s.overloaded_dmg_ / 100) * s.ele_mas_y * s.overloaded_multi * s.pyro_enemy_ele_res_multi,
-  electrocharged_dmg: (s) => (1 + s.electrocharged_dmg_ / 100) * s.ele_mas_y * s.electrocharged_multi * s.electro_enemy_ele_res_multi,
-  superconduct_dmg: (s) => (1 + s.superconduct_dmg_ / 100) * s.ele_mas_y * s.superconduct_multi * s.cryo_enemy_ele_res_multi,
+  overloaded_dmg: (s) => (1 + s.overloaded_dmg_ / 100) * s.ele_mas_y * s.overloaded_multi * s.pyro_enemy_res_multi,
+  electrocharged_dmg: (s) => (1 + s.electrocharged_dmg_ / 100) * s.ele_mas_y * s.electrocharged_multi * s.electro_enemy_res_multi,
+  superconduct_dmg: (s) => (1 + s.superconduct_dmg_ / 100) * s.ele_mas_y * s.superconduct_multi * s.cryo_enemy_res_multi,
   // burning_dmg: (s) => "NO_FORMULA",//(1 + s.burning_dmg_ / 100)
-  swirl_dmg: (s) => (1 + s.swirl_dmg_ / 100) * s.ele_mas_y * s.swirl_multi * s.anemo_enemy_ele_res_multi,
-  shattered_dmg: (s) => (1 + s.shattered_dmg_ / 100) * s.ele_mas_y * s.shattered_multi * s.physical_enemy_ele_res_multi,
+  swirl_dmg: (s) => (1 + s.swirl_dmg_ / 100) * s.ele_mas_y * s.swirl_multi * s.anemo_enemy_res_multi,
+  shattered_dmg: (s) => (1 + s.shattered_dmg_ / 100) * s.ele_mas_y * s.shattered_multi * s.physical_enemy_res_multi,
   crystalize_dmg: (s) => (1 + s.crystalize_dmg_ / 100) * s.ele_mas_z * s.crystalize_multi,
 
   // Elemental DMG multipliers
@@ -151,38 +151,36 @@ Object.entries(dmgElements).forEach(([ele, {name: eleName}]) => {
   // TODO Remove `ele` from the terms
   const opt = { variant: ele }
   // DONT CHANGE. needed for screenshot parsing
-  StatData[`${ele}_ele_dmg_`] = { name: `${eleName} DMG Bonus`, unit: "%", ...opt }
-  StatData[`${ele}_ele_res_`] = { name: `${eleName} DMG RES`, unit: "%", ...opt }
+  StatData[`${ele}_dmg_`] = { name: `${eleName} DMG Bonus`, unit: "%", ...opt }
+  StatData[`${ele}_res_`] = { name: `${eleName} DMG RES`, unit: "%", ...opt }
 
   StatData[`${ele}_dmg`] = { name: `${eleName} DMG`, ...opt }
 
-  StatData[`${ele}_enemy_ele_res_`] = { name: `Enemy ${eleName} DMG RES`, unit: "%", default: 10, ...opt }
-  StatData[`${ele}_enemy_ele_immunity`] = { name: `Enemy ${eleName} Immunity`, default: false, ...opt }
+  StatData[`${ele}_enemy_res_`] = { name: `Enemy ${eleName} DMG RES`, unit: "%", default: 10, ...opt }
+  StatData[`${ele}_enemy_immunity`] = { name: `Enemy ${eleName} Immunity`, default: false, ...opt }
 
-  StatData[`${ele}_enemy_ele_res_multi`] = { name: `Enemy ${eleName} RES Multiplier`, unit: "multi", ...opt }
-  StatData[`${ele}_ele_bonus_multi`] = { name: `${eleName} Attack Bonus DMG Multiplier`, unit: "multi", ...opt }
+  StatData[`${ele}_enemy_res_multi`] = { name: `Enemy ${eleName} RES Multiplier`, unit: "multi", ...opt }
+  StatData[`${ele}_bonus_multi`] = { name: `${eleName} Attack Bonus DMG Multiplier`, unit: "multi", ...opt }
 
   Object.entries(dmgTypes).forEach(([type, typeName]) => {
-    StatData[`${ele}_ele_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
+    StatData[`${ele}_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
   })
 
-  Formulas[`${ele}_dmg`] = (s) => s.dmg + s.final_atk * s[`${ele}_ele_dmg_`]
-  Formulas[`${ele}_enemy_ele_res_multi`] = (s) => s[`${ele}_enemy_ele_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_ele_res_`])
+  Formulas[`${ele}_dmg`] = (s) => s.dmg + s.final_atk * s[`${ele}_dmg_`]
+  Formulas[`${ele}_enemy_res_multi`] = (s) => s[`${ele}_enemy_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_res_`])
 })
 
 Object.entries(dmgMoves).forEach(([move, moveName]) => {
   Object.entries(dmgElements).forEach(([ele, {name: eleName}]) => {
     const opt = { variant: ele }
     Object.entries(dmgTypes).forEach(([type, typeName]) => {
+      StatData[`base_${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName} w/o Enemy's Defence`, ...opt }
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
-      StatData[`final_${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName} given Enemy's Defence`, ...opt }
-
-      Formulas[`final_${ele}_${move}_${type}`] = (s) => s[`${ele}_${move}_${type}`] * s.enemy_level_multi * s[`${ele}_enemy_ele_res_multi`]
+      Formulas[`${ele}_${move}_${type}`] = (s) => s[`base_${ele}_${move}_${type}`] * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
     })
-
-    Formulas[`${ele}_${move}_dmg`] = (s) => s[`${ele}_dmg`] + s.final_atk * s[`${move}_dmg_`]
-    Formulas[`${ele}_${move}_crit_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ / 100)
-    Formulas[`${ele}_${move}_avg_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
+    Formulas[`base_${ele}_${move}_dmg`] = (s) => s[`${ele}_dmg`] + s.final_atk * s[`${move}_dmg_`]
+    Formulas[`base_${ele}_${move}_crit_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ / 100)
+    Formulas[`base_${ele}_${move}_avg_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
   })
 })
 
@@ -201,15 +199,12 @@ Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
   Object.entries(variants).forEach(([ele, reactionName]) => {
     const opt = { variant: ele }
     StatData[`${ele}_${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt };
-    
-    [...Object.entries(dmgMoves), ["ele", "Elemental"]].forEach(([move, moveName]) => {
-      Object.entries(dmgTypes).forEach(([type, typeName]) => {
+    Object.entries(dmgTypes).forEach(([type, typeName]) => {
+      StatData[`${ele}_${reaction}_${type}`] = { name: `${reactionName} ${typeName}`, ...opt }
+      Formulas[`${ele}_${reaction}_${type}`] = (s) => s[`${ele}_${reaction}_multi`] * s[`${ele}_${type}`]
+      Object.entries(dmgMoves).forEach(([move, moveName]) => {
         StatData[`${ele}_${reaction}_${move}_${type}`] = { name: `${reactionName} ${moveName} ${typeName}`, ...opt }
-        StatData[`final_${ele}_${reaction}_${move}_${type}`] = { name: `${reactionName} ${moveName} ${typeName} given Enemy's Defence`, ...opt }
-
         Formulas[`${ele}_${reaction}_${move}_${type}`] = (s) => s[`${ele}_${reaction}_multi`] * s[`${ele}_${move}_${type}`]
-
-        Formulas[`final_${ele}_${reaction}_${move}_${type}`] = (s) => s[`${ele}_${reaction}_${move}_${type}`] * s.enemy_level_multi * s[`${ele}_enemy_ele_res_multi`]
       })
     })
   })
