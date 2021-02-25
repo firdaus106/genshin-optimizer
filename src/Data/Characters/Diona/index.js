@@ -56,9 +56,9 @@ let char = {
   constellationName: "Feles",
   titles: ["Kätzlein Cocktail", "Wine Industry Slayer (Self-proclaimed)"],
   baseStat: {
-    base_hp: [802, 2061, 2661, 3985, 4411, 5074, 5642, 6305, 6731, 7393, 7818, 8481, 8907, 9570],
+    character_hp: [802, 2061, 2661, 3985, 4411, 5074, 5642, 6305, 6731, 7393, 7818, 8481, 8907, 9570],
     character_atk: [18, 46, 59, 88, 98, 113, 125, 140, 149, 164, 174, 188, 198, 212],
-    base_def: [50, 129, 167, 250, 277, 318, 354, 396, 422, 464, 491, 532, 559, 601]
+    character_def: [50, 129, 167, 250, 277, 318, 354, 396, 422, 464, 491, 532, 559, 601]
   },
   specializeStat: {
     key: "cryo_dmg_",

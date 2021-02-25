@@ -2,7 +2,7 @@ import { faDice, faDiceD20, faFirstAid, faFistRaised, faMagic, faShieldAlt, faSy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const StatIcon = {
-  base_hp: faTint,
+  character_hp: faTint,
   final_hp: faTint,
   hp_: faTint,
   hp: faTint,
@@ -13,7 +13,7 @@ const StatIcon = {
   atk_: faFistRaised,
   atk: faFistRaised,
 
-  base_def: faShieldAlt,
+  character_def: faShieldAlt,
   final_def: faShieldAlt,
   def_: faShieldAlt,
   def: faShieldAlt,

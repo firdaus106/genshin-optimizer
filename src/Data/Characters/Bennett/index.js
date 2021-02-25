@@ -60,9 +60,9 @@ let char = {
   constellationName: "Rota Calamitas",
   titles: ["Trial by Fire", "Leader of Benny's Adventure Team"],
   baseStat: {
-    base_hp: [1039, 2670, 3447, 5163, 5715, 6573, 7309, 8168, 8719, 9577, 10129, 10987, 11539, 12397],
+    character_hp: [1039, 2670, 3447, 5163, 5715, 6573, 7309, 8168, 8719, 9577, 10129, 10987, 11539, 12397],
     character_atk: [16, 41, 53, 80, 88, 101, 113, 126, 134, 148, 156, 169, 178, 191],
-    base_def: [65, 166, 214, 321, 356, 409, 455, 508, 542, 596, 630, 684, 718, 771]
+    character_def: [65, 166, 214, 321, 356, 409, 455, 508, 542, 596, 630, 684, 718, 771]
   },
   specializeStat: {
     key: "ener_rech_",

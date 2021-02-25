@@ -52,9 +52,9 @@ let char = {
   constellationName: "Corvus",
   titles: ["Prinzessin der Verurteilung", "Sovereign of Immernachtreich", "Ruler of the Ashen Darkness"],
   baseStat: {
-    base_hp: [770, 1979, 2555, 3827, 4236, 4872, 5418, 6054, 6463, 7099, 7508, 8144, 8553, 9189],
+    character_hp: [770, 1979, 2555, 3827, 4236, 4872, 5418, 6054, 6463, 7099, 7508, 8144, 8553, 9189],
     character_atk: [20, 53, 68, 102, 113, 130, 144, 161, 172, 189, 200, 216, 227, 244],
-    base_def: [50, 128, 165, 247, 274, 315, 350, 391, 418, 459, 485, 526, 553, 594]
+    character_def: [50, 128, 165, 247, 274, 315, 350, 391, 418, 459, 485, 526, 553, 594]
   },
   specializeStat: {
     key: "atk_",

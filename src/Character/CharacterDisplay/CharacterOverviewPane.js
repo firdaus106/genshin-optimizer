@@ -253,7 +253,7 @@ function MainStatsCards(props) {
   let additionalKeys = ["ele_mas", "crit_rate_", "crit_dmg_", "ener_rech_", "heal_"]
   const displayStatKeys = ["final_hp", "final_atk", "final_def"]
   displayStatKeys.push(...additionalKeys)
-  const editStatKeys = ["base_hp", "hp", "hp_", "character_atk", "atk", "atk_", "base_def", "def", "def_"]
+  const editStatKeys = ["character_hp", "hp", "hp_", "character_atk", "atk", "atk_", "character_def", "def", "def_"]
   editStatKeys.push(...additionalKeys)
   const otherStatKeys = ["stam", "inc_heal_", "pow_shield_", "cd_red_"]
 

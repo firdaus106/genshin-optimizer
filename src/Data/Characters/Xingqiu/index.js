@@ -57,9 +57,9 @@ let char = {
   constellationName: "Fabulae Textile",
   titles: ["Juvenile Galant", "Guhua Guru of Feiyun Fame", "Guhua Geek"],
   baseStat: {
-    base_hp: [857, 2202, 2842, 4257, 4712, 5420, 6027, 6735, 7190, 7897, 8352, 9060, 9515, 10222],
+    character_hp: [857, 2202, 2842, 4257, 4712, 5420, 6027, 6735, 7190, 7897, 8352, 9060, 9515, 10222],
     character_atk: [17, 43, 56, 84, 93, 107, 119, 133, 142, 156, 165, 179, 188, 202],
-    base_def: [64, 163, 211, 316, 349, 402, 447, 499, 533, 585, 619, 671, 705, 758]
+    character_def: [64, 163, 211, 316, 349, 402, 447, 499, 533, 585, 619, 671, 705, 758]
   },
   specializeStat: {
     key: "atk_",

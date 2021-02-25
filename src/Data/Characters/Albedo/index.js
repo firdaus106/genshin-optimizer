@@ -57,9 +57,9 @@ let char = {
   constellationName: "Princeps Cretaceus",
   titles: ["Kreideprinz", "The Chalk Prince", "Chief Alchemist"],
   baseStat: {
-    base_hp: [1030, 2671, 3554, 5317, 5944, 6839, 7675, 8579, 9207, 10119, 10746, 11669, 12296, 13226],
+    character_hp: [1030, 2671, 3554, 5317, 5944, 6839, 7675, 8579, 9207, 10119, 10746, 11669, 12296, 13226],
     character_atk: [20, 51, 67, 101, 113, 130, 146, 163, 175, 192, 204, 222, 233, 251],
-    base_def: [68, 177, 235, 352, 394, 453, 508, 568, 610, 670, 712, 773, 815, 876]
+    character_def: [68, 177, 235, 352, 394, 453, 508, 568, 610, 670, 712, 773, 815, 876]
   },
   specializeStat: {
     key: "geo_dmg_",

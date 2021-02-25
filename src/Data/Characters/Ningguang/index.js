@@ -48,9 +48,9 @@ let char = {
   constellationName: "Opus Aequilibrium",
   titles: ["Eclipsing Star", "Lady of the Jade Chamber", "Tianquan of the Liyue Qixing"],
   baseStat: {
-    base_hp: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
+    character_hp: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
     character_atk: [18, 46, 59, 89, 98, 113, 125, 140, 150, 164, 174, 188, 198, 212],
-    base_def: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
+    character_def: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
   },
   specializeStat: {
     key: "geo_dmg_",

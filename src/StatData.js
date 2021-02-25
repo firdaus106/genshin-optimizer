@@ -3,8 +3,8 @@ import { clamp } from "./Util/Util";
 
 const StatData = {
   // Character Stats
-  base_hp: { name: "HP", pretty: "HP Base" },
-  base_def: { name: "DEF", pretty: "DEF Base" },
+  character_hp: { name: "HP", pretty: "Character Base HP" },
+  character_def: { name: "DEF", pretty: "Character Base DEF" },
   character_atk: { name: "ATK", pretty: "Character Base ATK" },
   character_ele: { name: "Character Element Key", default: "anemo" },
   character_level: { name: "Character Level", default: 1 },
@@ -70,8 +70,8 @@ const Formulas = {
   // Basic Stats
   base_atk: (s) => s.character_atk + s.weapon_atk,
   final_atk: (s) => s.base_atk * (1 + s.atk_ / 100) + s.atk,
-  final_hp: (s) => s.base_hp * (1 + s.hp_ / 100) + s.hp,
-  final_def: (s) => s.base_def * (1 + s.def_ / 100) + s.def,
+  final_hp: (s) => s.character_hp * (1 + s.hp_ / 100) + s.hp,
+  final_def: (s) => s.character_def * (1 + s.def_ / 100) + s.def,
   dmg: (s) => s.final_atk * (1 + s.dmg_ / 100),
 
   enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),

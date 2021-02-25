@@ -190,9 +190,9 @@ export default class Character {
 
   static hasOverride = (character, statKey) => {
     if (statKey === "final_hp")
-      return Character.hasOverride(character, "hp") || Character.hasOverride(character, "hp_") || Character.hasOverride(character, "base_hp") || false
+      return Character.hasOverride(character, "hp") || Character.hasOverride(character, "hp_") || Character.hasOverride(character, "character_hp") || false
     else if (statKey === "final_def")
-      return Character.hasOverride(character, "def") || Character.hasOverride(character, "def_") || Character.hasOverride(character, "base_def") || false
+      return Character.hasOverride(character, "def") || Character.hasOverride(character, "def_") || Character.hasOverride(character, "character_def") || false
     else if (statKey === "final_atk")
       return Character.hasOverride(character, "atk") || Character.hasOverride(character, "atk_") || Character.hasOverride(character, "character_atk") || false
     return character?.baseStatOverrides ? (statKey in character.baseStatOverrides) : false;
@@ -287,7 +287,7 @@ export default class Character {
   })
 
   static calculateCharacterWithWeaponStats = (character) => {
-    let statKeys = ["base_hp", "character_atk", "base_def", "weapon_atk", "character_level", "enemy_level", "physical_enemy_res_", "physical_enemy_immunity", ...Object.keys(characterStatBase)]
+    let statKeys = ["character_hp", "character_atk", "character_def", "weapon_atk", "character_level", "enemy_level", "physical_enemy_res_", "physical_enemy_immunity", ...Object.keys(characterStatBase)]
     let initialStats = Object.fromEntries(statKeys.map(key => [key, this.getStatValueWithOverride(character, key)]))
     //add element
     initialStats.character_ele = this.getElementalKey(character.characterKey);

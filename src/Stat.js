@@ -64,12 +64,12 @@ function f(options, statKey) {
 
 const FormulaText = {
   //HP
-  final_hp: (o) => <span>{f(o, "base_hp")} * ( 1 + {f(o, "hp_")} ) + {f(o, "hp")}</span>,
+  final_hp: (o) => <span>{f(o, "character_hp")} * ( 1 + {f(o, "hp_")} ) + {f(o, "hp")}</span>,
   //ATK
   base_atk: (o) => <span>{f(o, "character_atk")} + {f(o, "weapon_atk")} </span>,
   final_atk: (o) => <span>{f(o, "base_atk")} * ( 1 + {f(o, "atk_")} ) + {f(o, "atk")}</span>,
   //DEF
-  final_def: (o) => <span>{f(o, "base_def")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
+  final_def: (o) => <span>{f(o, "character_def")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
 
   normal_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "normal_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,
   charged_crit_multi: (o) => <span>( 1 + Min[( {f(o, "crit_rate_")} + {f(o, "charged_crit_rate_")} ), 100%] * {f(o, "crit_dmg_")} )</span>,

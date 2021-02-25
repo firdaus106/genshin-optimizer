@@ -56,9 +56,9 @@ let char = {
   constellationName: "Nubis Caesor",
   titles: ["Frozen Ardor", "Banisher of Evil and Rumors Thereof"],
   baseStat: {
-    base_hp: [921, 2366, 3054, 4574, 5063, 5824, 6475, 7236, 7725, 8485, 8974, 9734, 10223, 10984],
+    character_hp: [921, 2366, 3054, 4574, 5063, 5824, 6475, 7236, 7725, 8485, 8974, 9734, 10223, 10984],
     character_atk: [19, 48, 62, 93, 103, 119, 131, 147, 157, 172, 182, 198, 208, 223],
-    base_def: [54, 140, 180, 270, 299, 344, 382, 427, 456, 501, 530, 575, 603, 648]
+    character_def: [54, 140, 180, 270, 299, 344, 382, 427, 456, 501, 530, 575, 603, 648]
   },
   specializeStat: {
     key: "atk_",
