@@ -174,13 +174,11 @@ Object.entries(dmgMoves).forEach(([move, moveName]) => {
   Object.entries(dmgElements).forEach(([ele, {name: eleName}]) => {
     const opt = { variant: ele }
     Object.entries(dmgTypes).forEach(([type, typeName]) => {
-      StatData[`base_${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName} w/o Enemy's Defence`, ...opt }
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
-      Formulas[`${ele}_${move}_${type}`] = (s) => s[`base_${ele}_${move}_${type}`] * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
     })
-    Formulas[`base_${ele}_${move}_dmg`] = (s) => s[`${ele}_dmg`] + s.final_atk * s[`${move}_dmg_`]
-    Formulas[`base_${ele}_${move}_crit_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ / 100)
-    Formulas[`base_${ele}_${move}_avg_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
+    Formulas[`${ele}_${move}_dmg`] = (s) => (s[`${ele}_dmg`] + s.final_atk * s[`${move}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
+    Formulas[`${ele}_${move}_crit_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ / 100)
+    Formulas[`${ele}_${move}_avg_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
   })
 })
 
