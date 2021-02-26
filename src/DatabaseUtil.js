@@ -70,12 +70,14 @@ function DatabaseInitAndVerify() {
         valid = false
       }
       //key names were changed. convert old DB
+      // TODO we change `dmg` to `hit`
       if (art?.mainStatKey?.endsWith?.("ele_dmg")) {
         art.mainStatKey = art.mainStatKey.replace("ele_dmg", "ele_dmg_")
         valid = false
       }
       //key names were changed. convert old DB
       // TODO We remove ele from the naming
+      // TODO we change `dmg` to `hit`
       if (art?.mainStatKey === "physical_ele_dmg") {
         art.mainStatKey = "physical_ele_dmg_"
         valid = false
@@ -111,6 +113,7 @@ function DatabaseInitAndVerify() {
       }) ?? []
 
       //check for dmgMode
+      // TODO we change this to `hit` and `hitMode`
       if (!character.dmgMode) {
         character.dmgMode = "dmg"
         valid = false

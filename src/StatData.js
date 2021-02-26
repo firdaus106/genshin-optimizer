@@ -146,7 +146,6 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
 })
 
 Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
-  // TODO Remove `ele` from the terms
   const opt = { variant: ele }
   // DONT CHANGE. needed for screenshot parsing
   StatData[`${ele}_dmg_`] = { name: `${eleName} DMG Bonus`, unit: "%", ...opt }
