@@ -28,7 +28,6 @@ const StatData = {
   final_hp: { name: "HP", pretty: "HP Final" },
   final_atk: { name: "ATK", pretty: "ATK Final" },
   final_def: { name: "DEF", pretty: "DEF Final" },
-  dmg: { name: "Base DMG" },
 
   ele_mas: { name: "Elemental Mastery", },
   ener_rech_: { name: "Energy Recharge", unit: "%" },
@@ -72,7 +71,6 @@ const Formulas = {
   final_atk: (s) => s.base_atk * (1 + s.atk_ / 100) + s.atk,
   final_hp: (s) => s.character_hp * (1 + s.hp_ / 100) + s.hp,
   final_def: (s) => s.character_def * (1 + s.def_ / 100) + s.def,
-  dmg: (s) => s.final_atk * (1 + s.dmg_ / 100),
 
   enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),
 
@@ -166,7 +164,7 @@ Object.entries(dmgElements).forEach(([ele, {name: eleName}]) => {
     StatData[`${ele}_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
   })
 
-  Formulas[`${ele}_dmg`] = (s) => s.dmg + s.final_atk * s[`${ele}_dmg_`]
+  Formulas[`${ele}_dmg`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
   Formulas[`${ele}_enemy_res_multi`] = (s) => s[`${ele}_enemy_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_res_`])
 })
 
@@ -176,7 +174,7 @@ Object.entries(dmgMoves).forEach(([move, moveName]) => {
     Object.entries(dmgTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
     })
-    Formulas[`${ele}_${move}_dmg`] = (s) => (s[`${ele}_dmg`] + s.final_atk * s[`${move}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
+    Formulas[`${ele}_${move}_dmg`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
     Formulas[`${ele}_${move}_crit_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ / 100)
     Formulas[`${ele}_${move}_avg_dmg`] = (s) => s[`${ele}_${move}_dmg`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
   })
@@ -185,7 +183,6 @@ Object.entries(dmgMoves).forEach(([move, moveName]) => {
 Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]) => {
   let opt = {}
   if (ele) opt.variant = ele
-  StatData[`${reaction}_dmg`] = { name: `${reactionName} DMG`, ...opt }
   StatData[`${reaction}_dmg_`] = { name: `${reactionName} DMG Bonus`, unit: "%", ...opt }
   StatData[`${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt }
 

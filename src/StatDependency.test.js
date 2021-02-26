@@ -44,8 +44,7 @@ describe('Testing StatDependency', () => {
     test('should recursively get dependencies from database', () => {
       const expected = expect(GetDependencies({}, ["physical_normal_dmg"]))
       expected.toBeDependent({
-        physical_dmg: ["dmg", "final_atk", "physical_dmg_"],
-        physical_normal_dmg: ["base_physical_normal_dmg", "enemy_level_multi", "physical_enemy_res_multi"],
+        physical_normal_dmg: ["final_atk", "physical_dmg_", "normal_dmg_", "enemy_level_multi", "physical_enemy_res_multi"],
         final_atk: ["base_atk", "atk_", "atk"],
         enemy_level_multi: ["character_level", "enemy_level"],
         physical_enemy_res_multi: ["physical_enemy_immunity", "physical_enemy_res_"],
