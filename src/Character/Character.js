@@ -128,7 +128,7 @@ export default class Character {
     let eleKey = ""
     if (skillKey === "ele" || skillKey === "burst" || skillKey === "skill" || elemental)
       eleKey = (reactionMode ? reactionMode : charEleKey) + "_"
-    //{pyro_}{burst}_{avg_hit}
+    //{pyro_}{burst}_{avghit}
     return `${eleKey}${skillKey}_${hitMode}`
   }
   static getTalentStatKeyVariant = (skillKey, character, elemental = false) => {
@@ -163,15 +163,15 @@ export default class Character {
       atkKeys.push("physical_dmg_")
 
     if (!isAutoElemental) //add phy auto + charged + physical 
-      atkKeys.push("physical_normal_avg_hit", "physical_charged_avg_hit")
+      atkKeys.push("physical_normal_avghit", "physical_charged_avghit")
 
     if (isAutoElemental || isAutoInfusable) //add elemental auto + charged
-      atkKeys.push(`${eleKey}_normal_avg_hit`, `${eleKey}_charged_avg_hit`)
+      atkKeys.push(`${eleKey}_normal_avghit`, `${eleKey}_charged_avghit`)
     else if (Character.getWeaponTypeKey(characterKey) === "bow") {//bow charged atk does elemental dmg on charge
-      atkKeys.push(`${eleKey}_charged_avg_hit`)
+      atkKeys.push(`${eleKey}_charged_avghit`)
     }
     //show skill/burst 
-    atkKeys.push(`${eleKey}_skill_avg_hit`, `${eleKey}_burst_avg_hit`)
+    atkKeys.push(`${eleKey}_skill_avghit`, `${eleKey}_burst_avghit`)
     keys.push(...atkKeys)
     if (eleKey === "pyro") {
       keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
