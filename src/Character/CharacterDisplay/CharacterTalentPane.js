@@ -13,7 +13,7 @@ import Character from "../Character";
 import StatInput from "../StatInput";
 
 export default function CharacterTalentPane(props) {
-  let { character, character: { characterKey, levelKey, constellation, dmgMode }, editable, setState, setOverride, newBuild, equippedBuild } = props
+  let { character, character: { characterKey, levelKey, constellation, hitMode }, editable, setState, setOverride, newBuild, equippedBuild } = props
   let build = newBuild ? newBuild : equippedBuild
   //choose which one to display stats for
   let ascension = Character.getAscension(levelKey)
@@ -58,7 +58,7 @@ export default function CharacterTalentPane(props) {
     //show elemental interactions
     keys.push(...(ElementToReactionKeys[Character.getElementalKey(characterKey)] || []))
     let weaponTypeKey = Character.getWeaponTypeKey(characterKey)
-    if (!keys.includes("shattered_dmg") && weaponTypeKey === "claymore") keys.push("shattered_dmg")
+    if (!keys.includes("shattered_hit") && weaponTypeKey === "claymore") keys.push("shattered_hit")
 
     //search for dependency
     return Stat.getPrintableFormulaStatKeyList(GetDependencies(build?.finalStats?.modifiers, keys), build?.finalStats?.modifiers)
@@ -74,9 +74,9 @@ export default function CharacterTalentPane(props) {
                 <small>Expand below to edit enemy details.</small>
               </Col>
               <Col xs="auto">
-                <ToggleButtonGroup type="radio" value={dmgMode} name="dmgOptions" onChange={(dmgMode) => setState({ dmgMode })}>
-                  <ToggleButton value="avg_dmg">Avg. DMG</ToggleButton>
-                  <ToggleButton value="dmg">Normal Hit, No Crit</ToggleButton>
+                <ToggleButtonGroup type="radio" value={hitMode} name="hitOptions" onChange={(hitMode) => setState({ hitMode })}>
+                  <ToggleButton value="avg_hit">Avg. DMG</ToggleButton>
+                  <ToggleButton value="hit">Normal Hit, No Crit</ToggleButton>
                   <ToggleButton value="crit_dmg_">Crit Hit DMG</ToggleButton>
                 </ToggleButtonGroup>
               </Col>
@@ -214,18 +214,18 @@ export default function CharacterTalentPane(props) {
   </>
 }
 const ReactionComponents = {
-  superconduct_dmg: SuperConductCard,
-  electrocharged_dmg: ElectroChargedCard,
-  overloaded_dmg: OverloadedCard,
-  swirl_dmg: SwirlCard,
-  shattered_dmg: ShatteredCard,
-  crystalize_dmg: CrystalizeCard,
+  superconduct_hit: SuperConductCard,
+  electrocharged_hit: ElectroChargedCard,
+  overloaded_hit: OverloadedCard,
+  swirl_hit: SwirlCard,
+  shattered_hit: ShatteredCard,
+  crystalize_hit: CrystalizeCard,
 }
 function ReactionDisplay({ character: { characterKey, reactionMode = "none" }, newBuild, equippedBuild, setState }) {
   let build = newBuild ? newBuild : equippedBuild
   let charEleKey = Character.getElementalKey(characterKey)
   let eleInterArr = [...(ElementToReactionKeys[charEleKey] || [])]
-  if (!eleInterArr.includes("shattered_dmg") && Character.getWeaponTypeKey(characterKey) === "claymore") eleInterArr.push("shattered_dmg")
+  if (!eleInterArr.includes("shattered_hit") && Character.getWeaponTypeKey(characterKey) === "claymore") eleInterArr.push("shattered_hit")
   return <Card bg="lightcontent" text="lightfont" className="mb-2">
     <Card.Body className="px-3 py-2">
       <Row>
@@ -275,7 +275,7 @@ function ReactionDisplay({ character: { characterKey, reactionMode = "none" }, n
 }
 function SuperConductCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("superconduct_dmg")}</h5>
+    <h5>{Stat.getStatName("superconduct_hit")}</h5>
     <h4 className="text-superconduct mb-0">
       <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" /> {value}
     </h4>
@@ -283,7 +283,7 @@ function SuperConductCard({ value }) {
 }
 function ElectroChargedCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("electrocharged_dmg")}</h5>
+    <h5>{Stat.getStatName("electrocharged_hit")}</h5>
     <h4 className="text-electrocharged mb-0">
       <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.hydro} className="inline-icon" /> {value}
     </h4>
@@ -291,7 +291,7 @@ function ElectroChargedCard({ value }) {
 }
 function OverloadedCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("overloaded_dmg")}</h5>
+    <h5>{Stat.getStatName("overloaded_hit")}</h5>
     <h4 className="text-overloaded mb-0">
       <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" /> {value}
     </h4>
@@ -299,7 +299,7 @@ function OverloadedCard({ value }) {
 }
 function SwirlCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("swirl_dmg")}</h5>
+    <h5>{Stat.getStatName("swirl_hit")}</h5>
     <h4 className="text-swirl mb-0">
       <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.anemo} className="inline-icon" /> {value}
     </h4>
@@ -313,7 +313,7 @@ function ShatteredCard({ value }) {
     <FontAwesomeIcon icon={faQuestionCircle} className="ml-2" style={{ cursor: "help" }} />
   </OverlayTrigger>
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("shattered_dmg")}</h5>
+    <h5>{Stat.getStatName("shattered_hit")}</h5>
     <h4 className="text-shattered mb-0">
       <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" />+ <small className="text-physical">Heavy Attack{information} </small> {value}
     </h4>
@@ -321,7 +321,7 @@ function ShatteredCard({ value }) {
 }
 function CrystalizeCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("crystalize_dmg")}</h5>
+    <h5>{Stat.getStatName("crystalize_hit")}</h5>
     <h4 className="text-crystalize mb-0">
       <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.geo} className="inline-icon" /> {value}
     </h4>

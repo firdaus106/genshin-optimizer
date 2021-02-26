@@ -121,15 +121,15 @@ export default class Character {
     return fields || defVal
   }
   static getTalentStatKey = (skillKey, character, elemental = false) => {
-    let { dmgMode = "", autoInfused = false, characterKey, reactionMode = null } = character
-    if (skillKey === "phy") return `phy_${dmgMode}`
+    let { hitMode = "", autoInfused = false, characterKey, reactionMode = null } = character
+    if (skillKey === "phy") return `phy_${hitMode}`
     let charEleKey = this.getElementalKey(characterKey)
     if (!elemental) elemental = this.isAutoElemental(characterKey) || (autoInfused && (Character.getCDataObj(characterKey)?.talent?.auto?.infusable || false))
     let eleKey = ""
     if (skillKey === "ele" || skillKey === "burst" || skillKey === "skill" || elemental)
       eleKey = (reactionMode ? reactionMode : charEleKey) + "_"
-    //{pyro_}{burst}_{avg_dmg}
-    return `${eleKey}${skillKey}_${dmgMode}`
+    //{pyro_}{burst}_{avg_hit}
+    return `${eleKey}${skillKey}_${hitMode}`
   }
   static getTalentStatKeyVariant = (skillKey, character, elemental = false) => {
     if (skillKey === "phy") return "physical"
@@ -163,15 +163,15 @@ export default class Character {
       atkKeys.push("physical_dmg_")
 
     if (!isAutoElemental) //add phy auto + charged + physical 
-      atkKeys.push("physical_normal_avg_dmg", "physical_charged_avg_dmg")
+      atkKeys.push("physical_normal_avg_hit", "physical_charged_avg_hit")
 
     if (isAutoElemental || isAutoInfusable) //add elemental auto + charged
-      atkKeys.push(`${eleKey}_normal_avg_dmg`, `${eleKey}_charged_avg_dmg`)
+      atkKeys.push(`${eleKey}_normal_avg_hit`, `${eleKey}_charged_avg_hit`)
     else if (Character.getWeaponTypeKey(characterKey) === "bow") {//bow charged atk does elemental dmg on charge
-      atkKeys.push(`${eleKey}_charged_avg_dmg`)
+      atkKeys.push(`${eleKey}_charged_avg_hit`)
     }
     //show skill/burst 
-    atkKeys.push(`${eleKey}_skill_avg_dmg`, `${eleKey}_burst_avg_dmg`)
+    atkKeys.push(`${eleKey}_skill_avg_hit`, `${eleKey}_burst_avg_hit`)
     keys.push(...atkKeys)
     if (eleKey === "pyro") {
       keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
@@ -184,7 +184,7 @@ export default class Character {
     //show elemental interactions
     keys.push(...ElementToReactionKeys[eleKey])
     let weaponTypeKey = this.getWeaponTypeKey(characterKey)
-    if (!keys.includes("shattered_dmg") && weaponTypeKey === "claymore") keys.push("shattered_dmg")
+    if (!keys.includes("shattered_hit") && weaponTypeKey === "claymore") keys.push("shattered_hit")
     return keys
   }
 

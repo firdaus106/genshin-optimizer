@@ -49,7 +49,7 @@ export default class CharacterDisplayCard extends React.Component {
     name: "",
     characterKey: "",//the game character this is based off
     levelKey: "L1",//combination of level and ascension
-    dmgMode: "dmg",
+    hitMode: "hit",
     reactionMode: null,
     equippedArtifacts: {},
     artifactConditionals: [],
