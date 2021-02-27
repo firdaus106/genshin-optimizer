@@ -45,7 +45,7 @@ const StatData = {
   burst_cd_red: { name: "Ele. Burst CD Red.", unit: "%" },
   move_spd_: { name: "Movement SPD", unit: "%" },
   atk_spd_: { name: "ATK SPD", unit: "%" },
-  stam: { name: "Stamina" },
+  stamina: { name: "Stamina" },
   stamina_dec_: { name: "Stamina Consumption Dec.", unit: "%" },
   stamina_gliding_dec_: { name: "Gliding Stamina Consumption Dec.", unit: "%" },
   stamina_charged_dec_: { name: "Charged Attack Stamina Consumption Dec.", unit: "%" },
