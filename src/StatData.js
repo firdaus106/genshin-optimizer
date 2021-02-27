@@ -41,8 +41,8 @@ const StatData = {
   inc_heal_: { name: "Incoming Healing Bonus", unit: "%" },
   pow_shield_: { name: "Powerful Shield", unit: "%" },
   cd_red_: { name: "CD Red.", unit: "%" },
-  skill_cd_red: { name: "Ele. Skill CD Red.", unit: "%" },
-  burst_cd_red: { name: "Ele. Burst CD Red.", unit: "%" },
+  skill_cd_red_: { name: "Ele. Skill CD Red.", unit: "%" },
+  burst_cd_red_: { name: "Ele. Burst CD Red.", unit: "%" },
   move_spd_: { name: "Movement SPD", unit: "%" },
   atk_spd_: { name: "ATK SPD", unit: "%" },
   stamina: { name: "Stamina" },
@@ -123,7 +123,7 @@ function ampliBase(ele_mas) {
   return 1 + 0.189266831 * ele_mas * Math.exp(-0.000505 * ele_mas) / 100
 }
 
-const hitTypes = { hit: "DMG", avghit: "Avg. DMG", crithit: "CRIT Hit DMG" }
+const hitTypes = { hit: "DMG", avg_hit: "Avg. DMG", crit_hit: "CRIT Hit DMG" }
 const hitMoves = { normal: "Normal Attack", charged: "Charged Attack", plunging: "Plunging Attack", skill: "Ele. Skill", burst: "Ele. Burst" }
 const hitElements = ElementalData
 const transformativeReactions = {
@@ -162,8 +162,8 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
   })
 
   Formulas[`${ele}_hit`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
-  Formulas[`${ele}_crithit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ / 100)
-  Formulas[`${ele}_avghit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ * s[`crit_rate_`] / 100)
+  Formulas[`${ele}_crit_hit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ / 100)
+  Formulas[`${ele}_avg_hit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ * s[`crit_rate_`] / 100)
 
   Formulas[`${ele}_enemy_res_multi`] = (s) => s[`${ele}_enemy_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_res_`])
 })
@@ -175,8 +175,8 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
     })
     Formulas[`${ele}_${move}_hit`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
-    Formulas[`${ele}_${move}_crithit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ / 100)
-    Formulas[`${ele}_${move}_avghit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
+    Formulas[`${ele}_${move}_crit_hit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ / 100)
+    Formulas[`${ele}_${move}_avg_hit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
   })
 })
 

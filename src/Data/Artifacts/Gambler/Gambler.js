@@ -31,7 +31,7 @@ let artifact = {
         sourceKey: "Gambler_4",
         maxStack: 1,
         stats: {
-          skill_cd_red: 100,
+          skill_cd_red_: 100,
         }
       }
     }

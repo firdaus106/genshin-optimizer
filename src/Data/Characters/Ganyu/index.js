@@ -103,7 +103,7 @@ let char = {
         }, {
           text: `Frostflake Arrow DMG`,
           basicVal: (tlvl, stats, c) => {
-            if (c.hitMode === "avghit") {
+            if (c.hitMode === "avg_hit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
@@ -113,7 +113,7 @@ let char = {
           },
           finalVal: (tlvl, stats, c) => {
             let base = (frostflake[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c, true)]
-            if (c.hitMode === "avghit") {
+            if (c.hitMode === "avg_hit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
@@ -125,7 +125,7 @@ let char = {
         }, {
           text: `Frostflake Arrow Bloom DMG`,
           basicVal: (tlvl, stats, c) => {
-            if (c.hitMode === "avghit") {
+            if (c.hitMode === "avg_hit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
@@ -135,7 +135,7 @@ let char = {
           },
           finalVal: (tlvl, stats, c) => {
             let base = (frostflake_bloom[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c, true)]
-            if (c.hitMode === "avghit") {
+            if (c.hitMode === "avg_hit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
