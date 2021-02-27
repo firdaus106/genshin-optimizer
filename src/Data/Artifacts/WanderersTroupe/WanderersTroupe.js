@@ -23,7 +23,7 @@ let artifact = {
     2: {
       text: "Elemental Mastery +80",
       stats: {
-        ele_mas: 80
+        eleMas: 80
       }
     },
     4: {

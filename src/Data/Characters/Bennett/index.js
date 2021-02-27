@@ -60,12 +60,12 @@ let char = {
   constellationName: "Rota Calamitas",
   titles: ["Trial by Fire", "Leader of Benny's Adventure Team"],
   baseStat: {
-    character_hp: [1039, 2670, 3447, 5163, 5715, 6573, 7309, 8168, 8719, 9577, 10129, 10987, 11539, 12397],
-    character_atk: [16, 41, 53, 80, 88, 101, 113, 126, 134, 148, 156, 169, 178, 191],
-    character_def: [65, 166, 214, 321, 356, 409, 455, 508, 542, 596, 630, 684, 718, 771]
+    characterHP: [1039, 2670, 3447, 5163, 5715, 6573, 7309, 8168, 8719, 9577, 10129, 10987, 11539, 12397],
+    characterATK: [16, 41, 53, 80, 88, 101, 113, 126, 134, 148, 156, 169, 178, 191],
+    characterDEF: [65, 166, 214, 321, 356, 409, 455, 508, 542, 596, 630, 684, 718, 771]
   },
   specializeStat: {
-    key: "ener_rech_",
+    key: "enerRech_",
     value: [0, 0, 0, 0, 6.7, 6.7, 13.3, 13.3, 13.3, 13.3, 20, 20, 26.7, 26.7]
   },
   talent: {
@@ -191,12 +191,12 @@ let char = {
         }, {
           text: "Continuous Regeneration Per Sec",
           basicVal: (tlvl, stats, c) => <span>{eleBurst.heal_hp[tlvl]}% Max HP + {eleBurst.heal_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (eleBurst.heal_hp[tlvl] / 100) * stats.final_hp + eleBurst.heal_flat[tlvl],
+          finalVal: (tlvl, stats, c) => (eleBurst.heal_hp[tlvl] / 100) * stats.finalHP + eleBurst.heal_flat[tlvl],
           variant: (tlvl, stats, c) => "success",
         }, (con, a) => ({
           text: "ATK Bonus Ratio",
-          basicVal: (tlvl, stats, c) => <span>{con < 1 ? eleBurst.atk_ratio[tlvl] : `(${eleBurst.atk_ratio[tlvl]} + 20)`}% {Stat.printStat("base_atk", stats)}</span>,
-          finalVal: (tlvl, stats, c) => ((con < 1 ? eleBurst.atk_ratio[tlvl] : eleBurst.atk_ratio[tlvl] + 20) / 100) * stats.base_atk,
+          basicVal: (tlvl, stats, c) => <span>{con < 1 ? eleBurst.atk_ratio[tlvl] : `(${eleBurst.atk_ratio[tlvl]} + 20)`}% {Stat.printStat("baseATK", stats)}</span>,
+          finalVal: (tlvl, stats, c) => ((con < 1 ? eleBurst.atk_ratio[tlvl] : eleBurst.atk_ratio[tlvl] + 20) / 100) * stats.baseATK,
         }), {
           text: "Duration",
           value: "12s",
@@ -214,7 +214,7 @@ let char = {
           sourceKey: "bennett",
           maxStack: 1,
           stats: {
-            modifiers: { final_atk: { base_atk: (c < 1 ? eleBurst.atk_ratio[tlvl] : eleBurst.atk_ratio[tlvl] + 20) / 100, } },
+            modifiers: { finalATK: { baseATK: (c < 1 ? eleBurst.atk_ratio[tlvl] : eleBurst.atk_ratio[tlvl] + 20) / 100, } },
           },
         })
       }],
@@ -251,7 +251,7 @@ let char = {
           sourceKey: "bennett",
           maxStack: 1,
           stats: {
-            ener_rech_: 30,
+            enerRech_: 30,
           }
         }
       }],

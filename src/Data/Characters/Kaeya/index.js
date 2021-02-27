@@ -23,7 +23,7 @@ const hitPercent = [
 ]
 
 const charged_atk_spinnning = []
-const charged_final_atk = []
+const charged_finalATK = []
 const plunging_dmg = []
 const plunging_dmg_low = []
 const plunging_dmg_high = []
@@ -56,12 +56,12 @@ let char = {
   constellationName: "Pavo Ocellus",
   titles: ["Cavalry Captain", "Quartermaster", "Frostblade"],
   baseStat: {
-    character_hp: [976, 2506, 3235, 4846, 5364, 6170, 6860, 7666, 8184, 8989, 9507, 10312, 10830, 11636],
-    character_atk: [19, 48, 62, 93, 103, 118, 131, 147, 157, 172, 182, 198, 208, 223],
-    character_def: [66, 171, 220, 330, 365, 420, 467, 522, 557, 612, 647, 702, 737, 792]
+    characterHP: [976, 2506, 3235, 4846, 5364, 6170, 6860, 7666, 8184, 8989, 9507, 10312, 10830, 11636],
+    characterATK: [19, 48, 62, 93, 103, 118, 131, 147, 157, 172, 182, 198, 208, 223],
+    characterDEF: [66, 171, 220, 330, 365, 420, 467, 522, 557, 612, 647, 702, 737, 792]
   },
   specializeStat: {
-    key: "ener_rech_",
+    key: "enerRech_",
     value: [0, 0, 0, 0, 6.7, 6.7, 13.3, 13.3, 13.3, 13.3, 20, 20, 26.7, 26.7]
   },
   talent: {
@@ -74,7 +74,7 @@ let char = {
         ({
           text: `${i + 1}-Hit DMG`,
           basicVal: (tlvl) => percentArr[tlvl] + "%",
-          finalVal: (tlvl, stats) => (percentArr[tlvl] / 100) * stats.physical_normal_avg_hit
+          finalVal: (tlvl, stats) => (percentArr[tlvl] / 100) * stats.physical_normal_avgHit
         }))
       },
       charged: {
@@ -82,11 +82,11 @@ let char = {
         fields: [{
           text: `Spinning DMG`,
           basicVal: (tlvl) => charged_atk_spinnning[tlvl] + "%",
-          finalVal: (tlvl, stats) => (charged_atk_spinnning[tlvl] / 100) * stats.physical_charged_avg_hit
+          finalVal: (tlvl, stats) => (charged_atk_spinnning[tlvl] / 100) * stats.physical_charged_avgHit
         }, {
           text: `Spinning Final DMG`,
-          basicVal: (tlvl) => charged_final_atk[tlvl] + "%",
-          finalVal: (tlvl, stats) => (charged_final_atk[tlvl] / 100) * stats.physical_charged_avg_hit
+          basicVal: (tlvl) => charged_finalATK[tlvl] + "%",
+          finalVal: (tlvl, stats) => (charged_finalATK[tlvl] / 100) * stats.physical_charged_avgHit
         }, {
           text: `Stamina Cost`,
           value: `40/s`,
@@ -100,15 +100,15 @@ let char = {
         fields: [{
           text: `Plunge DMG`,
           basicVal: (tlvl) => plunging_dmg[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunging_dmg[tlvl] / 100) * stats.physical_plunging_avg_hit
+          finalVal: (tlvl, stats) => (plunging_dmg[tlvl] / 100) * stats.physical_plunging_avgHit
         }, {
           text: `Low Plunge DMG`,
           basicVal: (tlvl) => plunging_dmg_low[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunging_dmg_low[tlvl] / 100) * stats.physical_plunging_avg_hit
+          finalVal: (tlvl, stats) => (plunging_dmg_low[tlvl] / 100) * stats.physical_plunging_avgHit
         }, {
           text: `High Plunge DMG`,
           basicVal: (tlvl) => plunging_dmg_high[tlvl] + "%",
-          finalVal: (tlvl, stats) => (plunging_dmg_high[tlvl] / 100) * stats.physical_plunging_avg_hit
+          finalVal: (tlvl, stats) => (plunging_dmg_high[tlvl] / 100) * stats.physical_plunging_avgHit
         }]
       }
     },
@@ -119,7 +119,7 @@ let char = {
       fields: [{
         text: "TEMPLATE",
         basicVal: (tlvl) => breastplateStats.skill_dmg[tlvl] + "%",
-        finalVal: (tlvl, s) => (breastplateStats.skill_dmg[tlvl] / 100) * s.physical_skill_avg_hit,
+        finalVal: (tlvl, s) => (breastplateStats.skill_dmg[tlvl] / 100) * s.physical_skill_avgHit,
       }, {
         text: "TEMPLATE",
         basicVal: (tlvl) => breastplateStats.shield_def[tlvl] + "% DEF + " + breastplateStats.shield_flat[tlvl],
@@ -143,11 +143,11 @@ let char = {
       fields: [{
         text: "TEMPLATE",
         basicVal: (tlvl) => sweepingTimeStats.burst_dmg[tlvl] + "%",
-        finalVal: (tlvl, s) => (sweepingTimeStats.burst_dmg[tlvl] / 100) * s.physical_burst_avg_hit,
+        finalVal: (tlvl, s) => (sweepingTimeStats.burst_dmg[tlvl] / 100) * s.physical_burst_avgHit,
       }, {
         text: "TEMPLATE",
         basicVal: (tlvl) => sweepingTimeStats.skill_dmg[tlvl] + "%",
-        finalVal: (tlvl, s) => (sweepingTimeStats.skill_dmg[tlvl] / 100) * s.physical_burst_avg_hit,
+        finalVal: (tlvl, s) => (sweepingTimeStats.skill_dmg[tlvl] / 100) * s.physical_burst_avgHit,
       }, {
         text: "TEMPLATE",
         basicVal: (tlvl, s, constellation) => `${sweepingTimeStats.atk_bonu[tlvl]}%${constellation >= 6 ? " +50%" : ""} DEF`,

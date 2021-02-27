@@ -54,12 +54,12 @@ let char = {
   constellationName: "Alatus Nemeseos",
   titles: ["Vigilant Yaksha", "Guardian Yaksha", "Nuo Dance of Evil Conquering", "Alatus, the Golden-Winged King", "Conqueror of Demons"],
   baseStat: {
-    character_hp: [991, 2572, 3422, 5120, 5724, 6586, 7391, 8262, 8866, 9744, 10348, 11236, 11840, 12736],
-    character_atk: [27, 71, 94, 140, 157, 181, 203, 227, 243, 267, 284, 308, 325, 349],
-    character_def: [62, 161, 215, 321, 359, 413, 464, 519, 556, 612, 649, 705, 743, 799]
+    characterHP: [991, 2572, 3422, 5120, 5724, 6586, 7391, 8262, 8866, 9744, 10348, 11236, 11840, 12736],
+    characterATK: [27, 71, 94, 140, 157, 181, 203, 227, 243, 267, 284, 308, 325, 349],
+    characterDEF: [62, 161, 215, 321, 359, 413, 464, 519, 556, 612, 649, 705, 743, 799]
   },
   specializeStat: {
-    key: "crit_rate_",
+    key: "critRate_",
     value: [0, 0, 0, 0, 4.8, 4.8, 9.6, 9.6, 9.6, 9.6, 14.4, 14.4, 19.2, 19.2]
   },
 
@@ -229,7 +229,7 @@ let char = {
           sourceKey: "xiao",
           maxStack: 1,
           stats: {
-            ener_rech_: 25,
+            enerRech_: 25,
           }
         }
       }],
@@ -244,7 +244,7 @@ let char = {
       name: "Transcension: Extinction of Suffering",
       img: c4,
       document: [{
-        text: (tlvl, stats, c) => <span>When Xiao's HP falls below 50%{DisplayPercent(50, stats, "final_hp")}, he gains a 100% DEF Bonus.</span>,
+        text: (tlvl, stats, c) => <span>When Xiao's HP falls below 50%{DisplayPercent(50, stats, "finalHP")}, he gains a 100% DEF Bonus.</span>,
         conditional: (tlvl, c, a) => c >= 4 && {
           type: "character",
           conditionalKey: "ExtinctionofSuffering",

@@ -4,12 +4,12 @@ describe(`Testing StatData`, () => {
   describe(`PreprocessFormulas()`, () => {
     test(`basic def`, () => {
       const stat = {
-        character_def: 10,
+        characterDEF: 10,
         def_: 100,
         def: 15
-      }, dependencyKeys = ["final_def", "character_def", "def_", "def"]
+      }, dependencyKeys = ["findlDEF", "characterDEF", "def_", "def"]
       PreprocessFormulas(dependencyKeys)(stat)
-      expect(stat).toHaveProperty("final_def", 10 * 2 + 15);
+      expect(stat).toHaveProperty("findlDEF", 10 * 2 + 15);
     })
     test(`modifiers`, () => {
       const stat = {

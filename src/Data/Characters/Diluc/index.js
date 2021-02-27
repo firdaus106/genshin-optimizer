@@ -24,7 +24,7 @@ const hitPercent = [
 ]
 
 const charged_atk_spinnning = [68.8, 74.4, 80, 88, 93.6, 100, 108.8, 117.6, 126.4, 136, 147, 159.94, 172.87, 185.81, 199.92]
-const charged_final_atk = [124.7, 134.85, 145, 159.5, 169.65, 181.25, 197.2, 213.15, 229.1, 246.5, 266.44, 289.88, 313.33, 336.78, 362.36]
+const charged_finalATK = [124.7, 134.85, 145, 159.5, 169.65, 181.25, 197.2, 213.15, 229.1, 246.5, 266.44, 289.88, 313.33, 336.78, 362.36]
 const plunging_dmg = [89.51, 96.79, 104.08, 114.48, 121.77, 130.1, 141.54, 152.99, 164.44, 176.93, 189.42, 201.91, 214.4, 226.89, 239.37]
 const plunging_dmg_low = [178.97, 193.54, 208.11, 228.92, 243.49, 260.13, 283.03, 305.92, 328.81, 353.78, 378.76, 403.73, 428.7, 453.68, 478.65]
 const plunging_dmg_high = [223.55, 241.74, 259.94, 285.93, 304.13, 324.92, 353.52, 382.11, 410.7, 441.89, 473.09, 504.28, 535.47, 566.66, 597.86]
@@ -54,12 +54,12 @@ let char = {
   constellationName: "Noctua",
   titles: ["The Dark Side of Dawn", "Darknight Hero", "The Uncrowned King of Mondstadt"],
   baseStat: {
-    character_hp: [1011, 2621, 3488, 5219, 5834, 6712, 7533, 8421, 9036, 9932, 10547, 11453, 12068, 12981],
-    character_atk: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
-    character_def: [61, 158, 211, 315, 352, 405, 455, 509, 546, 600, 637, 692, 729, 784]
+    characterHP: [1011, 2621, 3488, 5219, 5834, 6712, 7533, 8421, 9036, 9932, 10547, 11453, 12068, 12981],
+    characterATK: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
+    characterDEF: [61, 158, 211, 315, 352, 405, 455, 509, 546, 600, 637, 692, 729, 784]
   },
   specializeStat: {
-    key: "crit_rate_",
+    key: "critRate_",
     value: [0, 0, 0, 0, 4.8, 4.8, 9.6, 9.6, 9.6, 9.6, 14.4, 14.4, 19.2, 19.2]
   },
   talent: {
@@ -85,8 +85,8 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c)
         }, {
           text: `Spinning Final DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_final_atk[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_final_atk[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          basicVal: (tlvl, stats, c) => <span>{charged_finalATK[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_finalATK[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c)
         }, (c, a) => ({
           text: `Stamina Cost`,
@@ -167,7 +167,7 @@ let char = {
           maxStack: 1,
           stats: {
             normal_dmg_: 30,
-            atk_spd_: 30,
+            atkSPD_: 30,
           },
           fields: [{
             text: "Next 2 Normal Attack within",
@@ -270,7 +270,7 @@ let char = {
           maxStack: 3,
           stats: {
             atk_: 10,
-            atk_spd_: 5
+            atkSPD_: 5
           },
           fields: [{
             text: "Duration",

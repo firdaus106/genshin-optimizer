@@ -33,7 +33,7 @@ let artifact = {
         sourceKey: "ViridescentVenerer_4",
         maxStack: 1,
         stats: {
-          [`${key}_enemy_res_`]: -40,
+          [`${key}_enemyRes_`]: -40,
         }
       }))//TODO this is most likely a team effect.
     }

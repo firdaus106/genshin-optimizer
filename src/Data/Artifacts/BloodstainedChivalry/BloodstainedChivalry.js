@@ -32,7 +32,7 @@ let artifact = {
         maxStack: 1,
         stats: {
           charged_dmg_: 50,
-          stamina_dec_: 100,
+          staminaDec_: 100,
         }
       }
     }

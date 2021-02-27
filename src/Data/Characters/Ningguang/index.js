@@ -48,9 +48,9 @@ let char = {
   constellationName: "Opus Aequilibrium",
   titles: ["Eclipsing Star", "Lady of the Jade Chamber", "Tianquan of the Liyue Qixing"],
   baseStat: {
-    character_hp: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
-    character_atk: [18, 46, 59, 89, 98, 113, 125, 140, 150, 164, 174, 188, 198, 212],
-    character_def: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
+    characterHP: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
+    characterATK: [18, 46, 59, 89, 98, 113, 125, 140, 150, 164, 174, 188, 198, 212],
+    characterDEF: [48, 123, 159, 239, 264, 304, 338, 378, 403, 443, 468, 508, 533, 573]
   },
   specializeStat: {
     key: "geo_dmg_",
@@ -125,8 +125,8 @@ let char = {
         </span>,
         fields: [{
           text: "Inherited HP",
-          basicVal: (tlvl, stats, c) => <span>{jadeScreen.inheri_hp[tlvl]}% {Stat.printStat("final_hp", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (jadeScreen.inheri_hp[tlvl] / 100) * stats.final_hp,
+          basicVal: (tlvl, stats, c) => <span>{jadeScreen.inheri_hp[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (jadeScreen.inheri_hp[tlvl] / 100) * stats.finalHP,
         }, {
           text: "Skill DMG",
           basicVal: (tlvl, stats, c) => <span>{jadeScreen.skill_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,

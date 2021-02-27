@@ -52,9 +52,9 @@ let char = {
   constellationName: "Corvus",
   titles: ["Prinzessin der Verurteilung", "Sovereign of Immernachtreich", "Ruler of the Ashen Darkness"],
   baseStat: {
-    character_hp: [770, 1979, 2555, 3827, 4236, 4872, 5418, 6054, 6463, 7099, 7508, 8144, 8553, 9189],
-    character_atk: [20, 53, 68, 102, 113, 130, 144, 161, 172, 189, 200, 216, 227, 244],
-    character_def: [50, 128, 165, 247, 274, 315, 350, 391, 418, 459, 485, 526, 553, 594]
+    characterHP: [770, 1979, 2555, 3827, 4236, 4872, 5418, 6054, 6463, 7099, 7508, 8144, 8553, 9189],
+    characterATK: [20, 53, 68, 102, 113, 130, 144, 161, 172, 189, 200, 216, 227, 244],
+    characterDEF: [50, 128, 165, 247, 274, 315, 350, 391, 418, 459, 485, 526, 553, 594]
   },
   specializeStat: {
     key: "atk_",
@@ -179,8 +179,8 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, (con, a) => con >= 4 && {
           text: "HP Recovered",
-          basicVal: (tlvl, stats, c) => <span>20% {Stat.printStat("final_hp", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (20 / 100) * stats.final_hp,
+          basicVal: (tlvl, stats, c) => <span>20% {Stat.printStat("finalHP", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (20 / 100) * stats.finalHP,
           variant: (tlvl, stats, c) => "success",
         }, {
           text: "CD",

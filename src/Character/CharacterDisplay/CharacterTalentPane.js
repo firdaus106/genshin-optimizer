@@ -41,7 +41,7 @@ export default function CharacterTalentPane(props) {
     );
   }
   const statsDisplayKeys = () => {
-    let keys = ["final_hp", "final_atk", "final_def"]
+    let keys = ["finalHP", "finalATK", "findlDEF"]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
     let isAutoElemental = Character.isAutoElemental(characterKey)
     let isAutoInfusable = Character.isAutoInfusable(characterKey)
@@ -75,10 +75,10 @@ export default function CharacterTalentPane(props) {
               </Col>
               <Col xs="auto">
                 <ToggleButtonGroup type="radio" value={hitMode} name="hitOptions" onChange={(hitMode) => setState({ hitMode })}>
-                  <ToggleButton value="avg_hit">Avg. DMG</ToggleButton>
+                  <ToggleButton value="avgHit">Avg. DMG</ToggleButton>
                   <ToggleButton value="hit">Normal Hit, No Crit</ToggleButton>
-                  <ToggleButton value="crit_dmg_">Crit Hit DMG</ToggleButton>
-                  {/* TODO  should this be crit_hit instead */}
+                  <ToggleButton value="critDMG_">Crit Hit DMG</ToggleButton>
+                  {/* TODO  should this be critHit instead */}
                 </ToggleButtonGroup>
               </Col>
               <Col xs="auto">
@@ -99,15 +99,15 @@ export default function CharacterTalentPane(props) {
                 <Col xs={12} xl={6} className="mb-2">
                   <StatInput
                     name={<b>Enemy Level</b>}
-                    value={Character.getStatValueWithOverride(character, "enemy_level")}
-                    placeholder={Stat.getStatNameRaw("enemy_level")}
-                    defaultValue={Character.getBaseStatValue(character, "enemy_level")}
-                    onValueChange={(val) => setOverride("enemy_level", val)}
+                    value={Character.getStatValueWithOverride(character, "enemyLevel")}
+                    placeholder={Stat.getStatNameRaw("enemyLevel")}
+                    defaultValue={Character.getBaseStatValue(character, "enemyLevel")}
+                    onValueChange={(val) => setOverride("enemyLevel", val)}
                   />
                 </Col>
                 {["physical", ...Character.getElementalKeys()].map(eleKey => {
-                  let statKey = eleKey === "physical" ? "physical_enemy_res_" : `${eleKey}_enemy_res_`
-                  let immunityStatKey = eleKey === "physical" ? "physical_enemy_immunity" : `${eleKey}_enemy_immunity`
+                  let statKey = eleKey === "physical" ? "physical_enemyRes_" : `${eleKey}_enemyRes_`
+                  let immunityStatKey = eleKey === "physical" ? "physical_enemyImmunity" : `${eleKey}_enemyImmunity`
                   let elementImmunity = Character.getStatValueWithOverride(character, immunityStatKey)
                   return <Col xs={12} xl={6} key={eleKey} className="mb-2">
                     <StatInput

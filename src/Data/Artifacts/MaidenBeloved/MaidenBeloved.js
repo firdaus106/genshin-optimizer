@@ -31,7 +31,7 @@ let artifact = {
         sourceKey: "MaidenBeloved_4",
         maxStack: 1,
         stats: {
-          inc_heal_: 20,//TODO party conditional
+          incHeal_: 20,//TODO party conditional
         }
       }
     }

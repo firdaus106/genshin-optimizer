@@ -3,17 +3,17 @@ import { clamp } from "./Util/Util";
 
 const StatData = {
   // Character Stats
-  character_hp: { name: "HP", pretty: "Character Base HP" },
-  character_def: { name: "DEF", pretty: "Character Base DEF" },
-  character_atk: { name: "ATK", pretty: "Character Base ATK" },
-  character_ele: { name: "Character Element Key", default: "anemo" },
-  character_level: { name: "Character Level", default: 1 },
+  characterHP: { name: "HP", pretty: "Character Base HP" },
+  characterDEF: { name: "DEF", pretty: "Character Base DEF" },
+  characterATK: { name: "ATK", pretty: "Character Base ATK" },
+  characterEle: { name: "Character Element Key", default: "anemo" },
+  characterLevel: { name: "Character Level", default: 1 },
 
   // Weapon Stats
-  weapon_atk: { name: "Weapon ATK", pretty: "ATK Weapon" },
+  weaponATK: { name: "Weapon ATK", pretty: "ATK Weapon" },
   
   // Character & Weapon Stats
-  base_atk: { name: "ATK", pretty: "ATK Base" }, // character_atk + weapon_atk
+  baseATK: { name: "ATK", pretty: "ATK Base" }, // characterATK + weaponATK
 
   // Weapon & Artifact Stats
   hp: { name: "HP", pretty: "HP Flat" },//flat hp
@@ -25,74 +25,74 @@ const StatData = {
   dmg_: { name: "All DMG Bonus", unit: "%" },
 
   // Attack-related Character, Weapon & Artifact Stats
-  final_hp: { name: "HP", pretty: "HP Final" },
-  final_atk: { name: "ATK", pretty: "ATK Final" },
-  final_def: { name: "DEF", pretty: "DEF Final" },
+  finalHP: { name: "HP", pretty: "HP Final" },
+  finalATK: { name: "ATK", pretty: "ATK Final" },
+  findlDEF: { name: "DEF", pretty: "DEF Final" },
 
-  ele_mas: { name: "Elemental Mastery", },
-  ener_rech_: { name: "Energy Recharge", unit: "%" },
-  crit_rate_: { name: "CRIT Rate", unit: "%" },
+  eleMas: { name: "Elemental Mastery", },
+  enerRech_: { name: "Energy Recharge", unit: "%" },
+  critRate_: { name: "CRIT Rate", unit: "%" },
 
-  crit_dmg_: { name: "CRIT DMG", unit: "%" },
-  weakspot_dmg_: { name: "Weakspot DMG", unit: "%" },
+  critDMG_: { name: "CRIT DMG", unit: "%" },
+  weakspotDMG_: { name: "Weakspot DMG", unit: "%" },
 
   // Misc. Stats
   heal_: { name: "Healing Bonus", unit: "%" },
-  inc_heal_: { name: "Incoming Healing Bonus", unit: "%" },
-  pow_shield_: { name: "Powerful Shield", unit: "%" },
-  cd_red_: { name: "CD Red.", unit: "%" },
-  skill_cd_red_: { name: "Ele. Skill CD Red.", unit: "%" },
-  burst_cd_red_: { name: "Ele. Burst CD Red.", unit: "%" },
-  move_spd_: { name: "Movement SPD", unit: "%" },
-  atk_spd_: { name: "ATK SPD", unit: "%" },
+  incHeal_: { name: "Incoming Healing Bonus", unit: "%" },
+  powShield_: { name: "Powerful Shield", unit: "%" },
+  cdRed_: { name: "CD Red.", unit: "%" },
+  skillCDRed_: { name: "Ele. Skill CD Red.", unit: "%" },
+  burstCDRed_: { name: "Ele. Burst CD Red.", unit: "%" },
+  moveSPD_: { name: "Movement SPD", unit: "%" },
+  atkSPD_: { name: "ATK SPD", unit: "%" },
   stamina: { name: "Stamina" },
-  stamina_dec_: { name: "Stamina Consumption Dec.", unit: "%" },
-  stamina_gliding_dec_: { name: "Gliding Stamina Consumption Dec.", unit: "%" },
-  stamina_charged_dec_: { name: "Charged Attack Stamina Consumption Dec.", unit: "%" },
+  staminaDec_: { name: "Stamina Consumption Dec.", unit: "%" },
+  staminaGlidingDec_: { name: "Gliding Stamina Consumption Dec.", unit: "%" },
+  staminaChargedDec_: { name: "Charged Attack Stamina Consumption Dec.", unit: "%" },
 
   // Multi
-  amp_reaction_base_multi: { name: "Amplifying Reaction Base Multiplier", unit: "multi" },
+  ampReactionBase_multi: { name: "Amplifying Reaction Base Multiplier", unit: "multi" },
 
   // Elemental interaction
   melt_dmg_: { name: "Melt DMG Bonus", unit: "%", variant: "melt" },
   vaporize_dmg_: { name: "Vaporize DMG Bonus", unit: "%", variant: "vaporize" },
 
-  ele_mas_x: { name: "Elemental Mastery Multiplier X", unit: "multi" },
-  ele_mas_y: { name: "Elemental Mastery Multiplier Y", unit: "multi" },
-  ele_mas_z: { name: "Elemental Mastery Multiplier Z", unit: "multi" },
+  eleMasX: { name: "Elemental Mastery Multiplier X", unit: "multi" },
+  eleMasY: { name: "Elemental Mastery Multiplier Y", unit: "multi" },
+  eleMasZ: { name: "Elemental Mastery Multiplier Z", unit: "multi" },
 
   // Enemy
-  enemy_level: { name: "Enemy Level" },
-  enemy_level_multi: { name: "Enemy Level Multiplier", unit: "multi" },
+  enemyLevel: { name: "Enemy Level" },
+  enemyLevel_multi: { name: "Enemy Level Multiplier", unit: "multi" },
 }
 const Formulas = {
   // Basic Stats
-  base_atk: (s) => s.character_atk + s.weapon_atk,
-  final_atk: (s) => s.base_atk * (1 + s.atk_ / 100) + s.atk,
-  final_hp: (s) => s.character_hp * (1 + s.hp_ / 100) + s.hp,
-  final_def: (s) => s.character_def * (1 + s.def_ / 100) + s.def,
+  baseATK: (s) => s.characterATK + s.weaponATK,
+  finalATK: (s) => s.baseATK * (1 + s.atk_ / 100) + s.atk,
+  finalHP: (s) => s.characterHP * (1 + s.hp_ / 100) + s.hp,
+  findlDEF: (s) => s.characterDEF * (1 + s.def_ / 100) + s.def,
 
-  enemy_level_multi: (s) => (100 + s.character_level) / (100 + s.enemy_level + 100 + s.character_level),
+  enemyLevel_multi: (s) => (100 + s.characterLevel) / (100 + s.enemyLevel + 100 + s.characterLevel),
 
   // Elemental Reactions
-  overloaded_hit: (s) => (1 + s.overloaded_dmg_ / 100) * s.ele_mas_y * s.overloaded_multi * s.pyro_enemy_res_multi,
-  electrocharged_hit: (s) => (1 + s.electrocharged_dmg_ / 100) * s.ele_mas_y * s.electrocharged_multi * s.electro_enemy_res_multi,
-  superconduct_hit: (s) => (1 + s.superconduct_dmg_ / 100) * s.ele_mas_y * s.superconduct_multi * s.cryo_enemy_res_multi,
+  overloaded_hit: (s) => (1 + s.overloaded_dmg_ / 100) * s.eleMasY * s.overloaded_multi * s.pyro_enemyRes_multi,
+  electrocharged_hit: (s) => (1 + s.electrocharged_dmg_ / 100) * s.eleMasY * s.electrocharged_multi * s.electro_enemyRes_multi,
+  superconduct_hit: (s) => (1 + s.superconduct_dmg_ / 100) * s.eleMasY * s.superconduct_multi * s.cryo_enemyRes_multi,
   // burning_hit: (s) => "NO_FORMULA",//(1 + s.burning_dmg_ / 100)
-  swirl_hit: (s) => (1 + s.swirl_dmg_ / 100) * s.ele_mas_y * s.swirl_multi * s.anemo_enemy_res_multi,
-  shattered_hit: (s) => (1 + s.shattered_dmg_ / 100) * s.ele_mas_y * s.shattered_multi * s.physical_enemy_res_multi,
-  crystalize_hit: (s) => (1 + s.crystalize_dmg_ / 100) * s.ele_mas_z * s.crystalize_multi,
+  swirl_hit: (s) => (1 + s.swirl_dmg_ / 100) * s.eleMasY * s.swirl_multi * s.anemo_enemyRes_multi,
+  shattered_hit: (s) => (1 + s.shattered_dmg_ / 100) * s.eleMasY * s.shattered_multi * s.physical_enemyRes_multi,
+  crystalize_hit: (s) => (1 + s.crystalize_dmg_ / 100) * s.eleMasZ * s.crystalize_multi,
 
   // Elemental DMG multipliers
-  pyro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 1.5 * s.amp_reaction_base_multi,
-  hydro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 2 * s.amp_reaction_base_multi,
-  pyro_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 2 * s.amp_reaction_base_multi,
-  cryo_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 1.5 * s.amp_reaction_base_multi,
-  amp_reaction_base_multi: (s) => ampliBase(s.ele_mas),
+  pyro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 1.5 * s.ampReactionBase_multi,
+  hydro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 2 * s.ampReactionBase_multi,
+  pyro_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 2 * s.ampReactionBase_multi,
+  cryo_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 1.5 * s.ampReactionBase_multi,
+  ampReactionBase_multi: (s) => ampliBase(s.eleMas),
 
-  ele_mas_x: (s) => (1 + (25 / 9 * s.ele_mas / (1401 + s.ele_mas))),
-  ele_mas_y: (s) => (1 + (60 / 9 * s.ele_mas / (1401 + s.ele_mas))),
-  ele_mas_z: (s) => (1 + (40 / 9 * s.ele_mas / (1401 + s.ele_mas))),
+  eleMasX: (s) => (1 + (25 / 9 * s.eleMas / (1401 + s.eleMas))),
+  eleMasY: (s) => (1 + (60 / 9 * s.eleMas / (1401 + s.eleMas))),
+  eleMasZ: (s) => (1 + (40 / 9 * s.eleMas / (1401 + s.eleMas))),
 }
 
 const ElementToReactionKeys = {
@@ -119,11 +119,11 @@ const ReactionMatrix = {
   swirl: [13.5157684329, -1.7733381829, 0.3097567417, -0.0103922088, 0.0001679502, -0.0000008854],
   crystalize: [83.06561, -4.42541, 0.5568372, -0.01637168, 0.0002253889, -0.000001088197]
 }
-function ampliBase(ele_mas) {
-  return 1 + 0.189266831 * ele_mas * Math.exp(-0.000505 * ele_mas) / 100
+function ampliBase(eleMas) {
+  return 1 + 0.189266831 * eleMas * Math.exp(-0.000505 * eleMas) / 100
 }
 
-const hitTypes = { hit: "DMG", avg_hit: "Avg. DMG", crit_hit: "CRIT Hit DMG" }
+const hitTypes = { hit: "DMG", avgHit: "Avg. DMG", critHit: "CRIT Hit DMG" }
 const hitMoves = { normal: "Normal Attack", charged: "Charged Attack", plunging: "Plunging Attack", skill: "Ele. Skill", burst: "Ele. Burst" }
 const hitElements = ElementalData
 const transformativeReactions = {
@@ -139,10 +139,10 @@ const amplifyingReactions = { vaporize: { pyro: "Vaporized (Pyro)", hydro: "Vapo
 
 Object.entries(hitMoves).forEach(([move, moveName]) => {
   StatData[`${move}_dmg_`] = { name: `${moveName} DMG Bonus`, unit: "%" }
-  StatData[`${move}_crit_rate_`] = { name: `${moveName} CRIT Rate Bonus`, unit: "%" }
-  StatData[`final_${move}_crit_rate_`] = { name: `${moveName} CRIT Rate`, unit: "%" }
+  StatData[`${move}_critRate_`] = { name: `${moveName} CRIT Rate Bonus`, unit: "%" }
+  StatData[`final_${move}_critRate_`] = { name: `${moveName} CRIT Rate`, unit: "%" }
 
-  Formulas[`final_${move}_crit_rate_`] = (s) => clamp(s.crit_rate_ + s[`${move}_crit_rate_`], 0, 100)
+  Formulas[`final_${move}_critRate_`] = (s) => clamp(s.critRate_ + s[`${move}_critRate_`], 0, 100)
 })
 
 Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
@@ -151,21 +151,21 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
   StatData[`${ele}_dmg_`] = { name: `${eleName} DMG Bonus`, unit: "%", ...opt }
   StatData[`${ele}_res_`] = { name: `${eleName} DMG RES`, unit: "%", ...opt }
 
-  StatData[`${ele}_enemy_res_`] = { name: `Enemy ${eleName} DMG RES`, unit: "%", default: 10, ...opt }
-  StatData[`${ele}_enemy_immunity`] = { name: `Enemy ${eleName} Immunity`, default: false, ...opt }
+  StatData[`${ele}_enemyRes_`] = { name: `Enemy ${eleName} DMG RES`, unit: "%", default: 10, ...opt }
+  StatData[`${ele}_enemyImmunity`] = { name: `Enemy ${eleName} Immunity`, default: false, ...opt }
 
-  StatData[`${ele}_enemy_res_multi`] = { name: `Enemy ${eleName} RES Multiplier`, unit: "multi", ...opt }
+  StatData[`${ele}_enemyRes_multi`] = { name: `Enemy ${eleName} RES Multiplier`, unit: "multi", ...opt }
   StatData[`${ele}_bonus_multi`] = { name: `${eleName} Attack Bonus DMG Multiplier`, unit: "multi", ...opt }
 
   Object.entries(hitTypes).forEach(([type, typeName]) => {
     StatData[`${ele}_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
   })
 
-  Formulas[`${ele}_hit`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
-  Formulas[`${ele}_crit_hit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ / 100)
-  Formulas[`${ele}_avg_hit`] = (s) => s[`${ele}_hit`] * (1 + s.crit_dmg_ * s[`crit_rate_`] / 100)
+  Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+  Formulas[`${ele}_critHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ / 100)
+  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 100)
 
-  Formulas[`${ele}_enemy_res_multi`] = (s) => s[`${ele}_enemy_immunity`] ? 0 : resMultiplier(s[`${ele}_enemy_res_`])
+  Formulas[`${ele}_enemyRes_multi`] = (s) => s[`${ele}_enemyImmunity`] ? 0 : resMultiplier(s[`${ele}_enemyRes_`])
 })
 
 Object.entries(hitMoves).forEach(([move, moveName]) => {
@@ -174,9 +174,9 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
     })
-    Formulas[`${ele}_${move}_hit`] = (s) => s.final_atk * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemy_level_multi * s[`${ele}_enemy_res_multi`]
-    Formulas[`${ele}_${move}_crit_hit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ / 100)
-    Formulas[`${ele}_${move}_avg_hit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.crit_dmg_ * s[`final_${move}_crit_rate_`] / 100)
+    Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+    Formulas[`${ele}_${move}_critHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ / 100)
+    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 100)
   })
 })
 
@@ -187,7 +187,7 @@ Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]
   StatData[`${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt }
 
   if (ReactionMatrix[reaction])
-    Formulas[`${reaction}_multi`] = (s) => ReactionMatrix[reaction].reduce((accu, val, i) => accu + val * Math.pow(s.character_level, i), 0)
+    Formulas[`${reaction}_multi`] = (s) => ReactionMatrix[reaction].reduce((accu, val, i) => accu + val * Math.pow(s.characterLevel, i), 0)
 })
 
 Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {

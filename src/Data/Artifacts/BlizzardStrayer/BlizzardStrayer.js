@@ -32,7 +32,7 @@ let artifact = {//Icebreaker
         condition: "Enemy affected by Cryo",
         maxStack: 1,
         stats: {
-          crit_rate_: 20,
+          critRate_: 20,
         }
       }, {
         type: "artifact",
@@ -40,7 +40,7 @@ let artifact = {//Icebreaker
         condition: "Frozen Enemy",
         maxStack: 1,
         stats: {
-          crit_rate_: 40,
+          critRate_: 40,
         }
       }]
     }

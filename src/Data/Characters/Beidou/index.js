@@ -26,7 +26,7 @@ const hitPercent = [
 ]
 
 const charged_atk_spinnning = [56.24, 60.82, 65.4, 71.94, 76.52, 81.75, 88.94, 96.14, 103.33, 111.18, 120.17, 130.75, 141.32, 151.9, 163.43]
-const charged_final_atk = [101.82, 110.11, 118.4, 130.24, 138.53, 148, 161.02, 174.05, 187.07, 201.28, 217.56, 236.71, 255.85, 275, 295.88]
+const charged_finalATK = [101.82, 110.11, 118.4, 130.24, 138.53, 148, 161.02, 174.05, 187.07, 201.28, 217.56, 236.71, 255.85, 275, 295.88]
 const plunging_dmg = [74.59, 80.66, 86.73, 95.4, 101.47, 108.41, 117.95, 127.49, 137.03, 147.44, 157.85, 168.26, 178.66, 189.07, 199.48]
 const plunging_dmg_low = [149.14, 161.28, 173.42, 190.77, 202.91, 216.78, 235.86, 254.93, 274.01, 294.82, 315.63, 336.44, 357.25, 378.06, 398.87]
 const plunging_dmg_high = [186.29, 201.45, 216.62, 238.28, 253.44, 270.77, 294.6, 318.42, 342.25, 368.25, 394.24, 420.23, 446.23, 472.22, 498.21]
@@ -57,9 +57,9 @@ let char = {
   constellationName: "Victor Mare",
   titles: ["Uncrowned Lord of Ocean", "Queen of the Crux Fleet"],
   baseStat: {
-    character_hp: [1094, 2811, 3628, 5435, 6015, 6919, 7694, 8597, 9178, 10081, 10662, 11565, 12146, 13050],
-    character_atk: [19, 49, 63, 94, 104, 119, 133, 148, 158, 174, 184, 200, 210, 225],
-    character_def: [54, 140, 180, 270, 299, 344, 382, 427, 456, 501, 530, 575, 603, 648]
+    characterHP: [1094, 2811, 3628, 5435, 6015, 6919, 7694, 8597, 9178, 10081, 10662, 11565, 12146, 13050],
+    characterATK: [19, 49, 63, 94, 104, 119, 133, 148, 158, 174, 184, 200, 210, 225],
+    characterDEF: [54, 140, 180, 270, 299, 344, 382, 427, 456, 501, 530, 575, 603, 648]
   },
   specializeStat: {
     key: "electro_dmg_",
@@ -96,8 +96,8 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Spinning Final DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_final_atk[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_final_atk[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          basicVal: (tlvl, stats, c) => <span>{charged_finalATK[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_finalATK[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Stamina Cost`,
@@ -148,8 +148,8 @@ let char = {
         </span>,
         fields: [{
           text: "Shield DMG Absorption",
-          basicVal: (tlvl, stats, c) => <span>{tideCaller.hp[tlvl]}% {Stat.printStat("final_hp", stats)} + {tideCaller.flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (tideCaller.hp[tlvl] / 100) * stats.final_hp + tideCaller.flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{tideCaller.hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {tideCaller.flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (tideCaller.hp[tlvl] / 100) * stats.finalHP + tideCaller.flat[tlvl],
         }, {
           text: "Base DMG",
           basicVal: (tlvl, stats, c) => <span>{tideCaller.base_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
@@ -174,7 +174,7 @@ let char = {
           stats: {
             normal_dmg_: 15,
             charged_dmg_: 15,
-            atk_spd_: 15,
+            atkSPD_: 15,
           },
           fields: [{
             text: "Duration",
@@ -228,7 +228,7 @@ let char = {
           sourceKey: "beidou",
           maxStack: 1,
           stats: {
-            electro_enemy_res_: -15,
+            electro_enemyRes_: -15,
           }
         }
       }],
@@ -264,7 +264,7 @@ let char = {
     constellation1: {
       name: "Sea Beast's Scourge",
       img: c1,
-      document: [{ text: (tlvl, s) => <span>When <b>Stormbreaker</b> is used: Creates a shield that absorbs up to 16% of Beidou's Max HP{DisplayPercent(16, s, "final_hp")} for 15s. This shield absorbs <span className="text-electro">Electro DMG</span> 250% more effectively.</span> }],
+      document: [{ text: (tlvl, s) => <span>When <b>Stormbreaker</b> is used: Creates a shield that absorbs up to 16% of Beidou's Max HP{DisplayPercent(16, s, "finalHP")} for 15s. This shield absorbs <span className="text-electro">Electro DMG</span> 250% more effectively.</span> }],
     },
     constellation2: {
       name: "Upon the Turbulent Sea, the Thunder Arises",

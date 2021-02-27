@@ -175,7 +175,7 @@ export default class CharacterDisplayCard extends React.Component {
                     <h6 >{Character.getlevelNames(lvlKey)} </h6>
                   </Dropdown.Item>)}
               </DropdownButton>
-            </ButtonGroup> : <span>{HeaderIconDisplay} Lvl. {Character.getStatValueWithOverride(this.state, "character_level")}</span>}
+            </ButtonGroup> : <span>{HeaderIconDisplay} Lvl. {Character.getStatValueWithOverride(this.state, "characterLevel")}</span>}
           </Col>
           {/* Name editor/display */}
           <Col className="pl-0 pr-0">

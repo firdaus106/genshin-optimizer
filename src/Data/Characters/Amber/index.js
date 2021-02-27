@@ -51,9 +51,9 @@ let char = {
   constellationName: "Lepus",
   titles: ["Outrider", "Champion Glider"],
   baseStat: {
-    character_hp: [793, 2038, 2630, 3940, 4361, 5016, 5578, 6233, 6654, 7309, 7730, 8385, 8806, 9461],
-    character_atk: [19, 48, 62, 93, 103, 118, 131, 147, 157, 172, 182, 198, 208, 223],
-    character_def: [50, 129, 167, 250, 277, 318, 354, 396, 423, 464, 491, 532, 559, 601]
+    characterHP: [793, 2038, 2630, 3940, 4361, 5016, 5578, 6233, 6654, 7309, 7730, 8385, 8806, 9461],
+    characterATK: [19, 48, 62, 93, 103, 118, 131, 147, 157, 172, 182, 198, 208, 223],
+    characterDEF: [50, 129, 167, 250, 277, 318, 354, 396, 423, 464, 491, 532, 559, 601]
   },
   specializeStat: {
     key: "atk_",
@@ -122,8 +122,8 @@ let char = {
         </span>,
         fields: [{
           text: "Inherited HP",
-          basicVal: (tlvl, stats, c) => <span>{explosivePuppet.hp[tlvl]}% {Stat.printStat("final_hp", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (explosivePuppet.hp[tlvl] / 100) * stats.final_hp,
+          basicVal: (tlvl, stats, c) => <span>{explosivePuppet.hp[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (explosivePuppet.hp[tlvl] / 100) * stats.finalHP,
         }, {
           text: "Explosion DMG",
           basicVal: (tlvl, stats, c) => <span>{explosivePuppet.dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
@@ -191,7 +191,7 @@ let char = {
           maxStack: 1,
           stats: {
             atk_: 15,
-            move_spd_: 15
+            moveSPD_: 15
           },
           fields: [{
             text: "Duration",
@@ -200,7 +200,7 @@ let char = {
         }
       }],
       stats: (c, a) => a >= 1 ? ({
-        burst_crit_rate_: 10
+        burst_critRate_: 10
       }) : null,
     },
     passive1: {
@@ -238,7 +238,7 @@ let char = {
       </span>
       }],
       stats: {
-        stamina_gliding_dec_: 20,
+        staminaGlidingDec_: 20,
       }
     },
     constellation1: {

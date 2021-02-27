@@ -20,7 +20,7 @@ const weapon = {
     maxStack: 4,
     stats: (refineIndex) => ({
       atk_: refinementVals[refineIndex],
-      atk_spd_: refinementSpdVals[refineIndex]
+      atkSPD_: refinementSpdVals[refineIndex]
     })
   }
 }

@@ -11,7 +11,7 @@ const weapon = {
   description: "A greatsword carved and chiseled from the very bedrock of Liyue.",
   baseStats: {
     main: [41, NaN, NaN, NaN, 99, 125, NaN, NaN, NaN, 184, 210, NaN, 238, 264, NaN, 293, 319, NaN, 347, 373, NaN, 401, 427, NaN, 454],
-    subStatKey: "crit_dmg_",
+    subStatKey: "critDMG_",
     sub: [16, NaN, NaN, NaN, 28.3, 28.3, NaN, NaN, NaN, 41.2, 41.2, NaN, 47.7, 47.7, NaN, 54.1, 54.1, NaN, 60.6, 60.6, NaN, NaN, NaN, NaN, NaN],
   },
   conditional: {
@@ -20,7 +20,7 @@ const weapon = {
     maxStack: 4,
     stats: (refineIndex) => ({
       atk_: refinementAtkVals[refineIndex],
-      crit_rate_: refinementCritVals[refineIndex]
+      critRate_: refinementCritVals[refineIndex]
     })
   }
 }

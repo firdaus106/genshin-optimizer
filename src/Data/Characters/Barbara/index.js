@@ -52,9 +52,9 @@ let char = {
   constellationName: "Crater",
   titles: ["Shining Idol", "Deaconess"],
   baseStat: {
-    character_hp: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
-    character_atk: [13, 34, 44, 66, 73, 84, 94, 105, 112, 123, 130, 141, 148, 159],
-    character_def: [56, 144, 186, 279, 308, 355, 394, 441, 470, 517, 546, 593, 623, 669]
+    characterHP: [821, 2108, 2721, 4076, 4512, 5189, 5770, 6448, 6884, 7561, 7996, 8674, 9110, 9787],
+    characterATK: [13, 34, 44, 66, 73, 84, 94, 105, 112, 123, 130, 141, 148, 159],
+    characterDEF: [56, 144, 186, 279, 308, 355, 394, 441, 470, 517, 546, 593, 623, 669]
   },
   specializeStat: {
     key: "hp_",
@@ -120,12 +120,12 @@ let char = {
         </span>,
         fields: [{
           text: "HP Regeneration Per Hit",
-          basicVal: (tlvl, stats, c) => <span>{letShowStats.hp[tlvl]}% {Stat.printStat("final_hp", stats)} + {letShowStats.hp_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (letShowStats.hp[tlvl] / 100) * stats.final_hp + letShowStats.hp_flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{letShowStats.hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.hp_flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (letShowStats.hp[tlvl] / 100) * stats.finalHP + letShowStats.hp_flat[tlvl],
         }, {
           text: "Continuous Regeneration",
-          basicVal: (tlvl, stats, c) => <span>{letShowStats.cont_hp[tlvl]}% {Stat.printStat("final_hp", stats)} + {letShowStats.cont_hp_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (letShowStats.cont_hp[tlvl] / 100) * stats.final_hp + letShowStats.cont_hp_flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{letShowStats.cont_hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.cont_hp_flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (letShowStats.cont_hp[tlvl] / 100) * stats.finalHP + letShowStats.cont_hp_flat[tlvl],
         }, {
           text: "Droplet DMG",
           basicVal: (tlvl, stats, c) => <span>{letShowStats.droplet_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
@@ -147,7 +147,7 @@ let char = {
           sourceKey: "barbara",
           maxStack: 1,
           stats: {
-            stamina_dec_: 12,
+            staminaDec_: 12,
           }
         }
       }, {
@@ -171,8 +171,8 @@ let char = {
         text: <span>Heals nearby allied characters and your characters in the party for a large amount of HP that scales with Barbara's Max HP.</span>,
         fields: [{
           text: "Regeneration",
-          basicVal: (tlvl, stats, c) => <span>{shiningMiracle.hp[tlvl]}% {Stat.printStat("final_hp", stats)} + {shiningMiracle.flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (shiningMiracle.hp[tlvl] / 100) * stats.final_hp + shiningMiracle.flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{shiningMiracle.hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {shiningMiracle.flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (shiningMiracle.hp[tlvl] / 100) * stats.finalHP + shiningMiracle.flat[tlvl],
         }, {
           text: "CD",
           value: "20s",

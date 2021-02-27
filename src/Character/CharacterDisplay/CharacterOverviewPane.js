@@ -20,7 +20,7 @@ export default function CharacterOverviewPane(props) {
   let [editLevel, setEditLevel] = useState(false)
   let elementKey = Character.getElementalKey(characterKey)
   let weaponTypeKey = Character.getWeaponTypeKey(characterKey)
-  let level = Character.getStatValueWithOverride(character, "character_level")
+  let level = Character.getStatValueWithOverride(character, "characterLevel")
   return <Row>
     <Col xs={12} md={3} >
       {/* Image card with star and name and level */}
@@ -38,10 +38,10 @@ export default function CharacterOverviewPane(props) {
                   <InputGroup.Prepend>
                     <InputGroup.Text>Lvl.</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <CustomFormControl onValueChange={(val) => setOverride("character_level", clamp(val, 1, 90))} value={level} />
+                  <CustomFormControl onValueChange={(val) => setOverride("characterLevel", clamp(val, 1, 90))} value={level} />
                   <InputGroup.Append>
                     <Button>
-                      <FontAwesomeIcon icon={faUndo} size="sm" onClick={() => setOverride("character_level", Character.getLevel(character.levelKey))} />
+                      <FontAwesomeIcon icon={faUndo} size="sm" onClick={() => setOverride("characterLevel", Character.getLevel(character.levelKey))} />
                     </Button>
                   </InputGroup.Append>
                   <InputGroup.Append>
@@ -250,18 +250,18 @@ function MainStatsCards(props) {
   let [editing, SetEditing] = useState(false)
   let [editingOther, SetEditingOther] = useState(false)
 
-  let additionalKeys = ["ele_mas", "crit_rate_", "crit_dmg_", "ener_rech_", "heal_"]
-  const displayStatKeys = ["final_hp", "final_atk", "final_def"]
+  let additionalKeys = ["eleMas", "critRate_", "critDMG_", "enerRech_", "heal_"]
+  const displayStatKeys = ["finalHP", "finalATK", "findlDEF"]
   displayStatKeys.push(...additionalKeys)
-  const editStatKeys = ["character_hp", "hp", "hp_", "character_atk", "atk", "atk_", "character_def", "def", "def_"]
+  const editStatKeys = ["characterHP", "hp", "hp_", "characterATK", "atk", "atk_", "characterDEF", "def", "def_"]
   editStatKeys.push(...additionalKeys)
-  const otherStatKeys = ["stamina", "inc_heal_", "pow_shield_", "cd_red_"]
+  const otherStatKeys = ["stamina", "incHeal_", "powShield_", "cdRed_"]
 
   Character.getElementalKeys().forEach(ele => {
     otherStatKeys.push(`${ele}_dmg_`)
     otherStatKeys.push(`${ele}_res_`)
   })
-  const miscStatkeys = ["normal_dmg_", "charged_dmg_", "skill_dmg_", "burst_dmg_", "skill_crit_rate_", "burst_crit_rate_", "dmg_", "move_spd_", "atk_spd_", "weakspot_dmg_"]
+  const miscStatkeys = ["normal_dmg_", "charged_dmg_", "skill_dmg_", "burst_dmg_", "skill_critRate_", "burst_critRate_", "dmg_", "moveSPD_", "atkSPD_", "weakspotDMG_"]
 
   let specializedStatKey = Character.getStatValueWithOverride(character, "specializedStatKey")
   let specializedStatVal = Character.getStatValueWithOverride(character, "specializedStatVal");

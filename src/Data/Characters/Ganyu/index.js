@@ -59,12 +59,12 @@ let char = {
   constellationName: "Sinae Unicornis",
   titles: ["Plenilune Gaze"],
   baseStat: {
-    character_hp: [763, 1978, 2632, 3939, 4403, 5066, 5686, 6355, 6820, 7495, 7960, 8643, 9108, 9797],
-    character_atk: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
-    character_def: [49, 127, 169, 253, 283, 326, 366, 409, 439, 482, 512, 556, 586, 630]
+    characterHP: [763, 1978, 2632, 3939, 4403, 5066, 5686, 6355, 6820, 7495, 7960, 8643, 9108, 9797],
+    characterATK: [26, 68, 90, 135, 151, 173, 194, 217, 233, 256, 272, 295, 311, 335],
+    characterDEF: [49, 127, 169, 253, 283, 326, 366, 409, 439, 482, 512, 556, 586, 630]
   },
   specializeStat: {
-    key: "crit_dmg_",
+    key: "critDMG_",
     value: [0, 0, 0, 0, 9.6, 9.6, 19.2, 19.2, 19.2, 19.2, 28.8, 28.8, 38.4, 38.4]
   },
   talent: {
@@ -103,21 +103,21 @@ let char = {
         }, {
           text: `Frostflake Arrow DMG`,
           basicVal: (tlvl, stats, c) => {
-            if (c.hitMode === "avg_hit") {
+            if (c.hitMode === "avgHit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
-                return <span>{frostflake[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)} + (1 + 20% * {Stat.printStat("crit_dmg_", stats)})</span>
+                return <span>{frostflake[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)} + (1 + 20% * {Stat.printStat("critDMG_", stats)})</span>
             }
             return <span>{frostflake[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)}</span>
           },
           finalVal: (tlvl, stats, c) => {
             let base = (frostflake[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c, true)]
-            if (c.hitMode === "avg_hit") {
+            if (c.hitMode === "avgHit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
-                return base * (1 + 0.2 * stats.crit_dmg_ / 100)
+                return base * (1 + 0.2 * stats.critDMG_ / 100)
             }
             return base
           },
@@ -125,21 +125,21 @@ let char = {
         }, {
           text: `Frostflake Arrow Bloom DMG`,
           basicVal: (tlvl, stats, c) => {
-            if (c.hitMode === "avg_hit") {
+            if (c.hitMode === "avgHit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
-                return <span>{frostflake_bloom[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)} + (1 + 20% * {Stat.printStat("crit_dmg_", stats)})</span>
+                return <span>{frostflake_bloom[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)} + (1 + 20% * {Stat.printStat("critDMG_", stats)})</span>
             }
             return <span>{frostflake_bloom[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)}</span>
           },
           finalVal: (tlvl, stats, c) => {
             let base = (frostflake_bloom[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c, true)]
-            if (c.hitMode === "avg_hit") {
+            if (c.hitMode === "avgHit") {
               let { talentConditionals = [] } = c
               let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
               if (conditionalNum)
-                return base * (1 + 0.2 * stats.crit_dmg_ / 100)
+                return base * (1 + 0.2 * stats.critDMG_ / 100)
             }
             return base
           },
@@ -167,7 +167,7 @@ let char = {
           sourceKey: "ganyu",
           maxStack: 1,
           stats: {
-            cryo_enemy_res_: -15,
+            cryo_enemyRes_: -15,
           },
         }
       }, {
@@ -206,8 +206,8 @@ let char = {
         </span>,
         fields: [{
           text: "Inherited HP",
-          basicVal: (tlvl, stats, c) => <span>{eleSkill.inher_hp[tlvl]}% {Stat.printStat("final_hp", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (eleSkill.inher_hp[tlvl] / 100) * stats.final_hp,
+          basicVal: (tlvl, stats, c) => <span>{eleSkill.inher_hp[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (eleSkill.inher_hp[tlvl] / 100) * stats.finalHP,
           variant: (tlvl, stats, c) => "success",
         }, {
           text: "Skill DMG",

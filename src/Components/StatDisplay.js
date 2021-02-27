@@ -9,12 +9,12 @@ function DisplayStats({ statKey, character, build, editable, ...otherProps }) {
     statVal = <span>{buildVal}</span>
   } else {
     let originalVal = Character.getStatValueWithOverride(character, statKey)
-    if (statKey === "final_hp")
-      originalVal = Character.getStatValueWithOverride(character, "character_hp")
-    else if (statKey === "final_def")
-      originalVal = Character.getStatValueWithOverride(character, "character_def")
-    else if (statKey === "final_atk")
-      originalVal = Character.getStatValueWithOverride(character, "character_atk") + Character.getStatValueWithOverride(character, "weapon_atk")
+    if (statKey === "finalHP")
+      originalVal = Character.getStatValueWithOverride(character, "characterHP")
+    else if (statKey === "findlDEF")
+      originalVal = Character.getStatValueWithOverride(character, "characterDEF")
+    else if (statKey === "finalATK")
+      originalVal = Character.getStatValueWithOverride(character, "characterATK") + Character.getStatValueWithOverride(character, "weaponATK")
 
     let diff = buildVal - originalVal
     let diffText = (diff?.toFixed?.(Stat.fixedUnit(statKey)) || diff) + Stat.getStatUnit(statKey)

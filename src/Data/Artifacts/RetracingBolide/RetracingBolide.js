@@ -22,7 +22,7 @@ let artifact = {
   setEffects: {
     2: {
       text: "Increases the effectiveness of shields by 35%",
-      stats: { pow_shield_: 35 }
+      stats: { powShield_: 35 }
     },
     4: {
       text: "Gain an additional 40% Normal and Charged Attack DMG while under the protection of a shield.",

@@ -55,12 +55,12 @@ let char = {
   constellationName: "Astrolabos",
   titles: ["Astral Reflection", "Enigmatic Astrologer"],
   baseStat: {
-    character_hp: [810, 2102, 2797, 4185, 4678, 5383, 6041, 6752, 7246, 7964, 8458, 9184, 9677, 10409],
-    character_atk: [22, 58, 77, 115, 129, 148, 167, 186, 200, 220, 233, 253, 267, 287],
-    character_def: [51, 132, 176, 263, 294, 338, 379, 424, 455, 500, 531, 576, 607, 653]
+    characterHP: [810, 2102, 2797, 4185, 4678, 5383, 6041, 6752, 7246, 7964, 8458, 9184, 9677, 10409],
+    characterATK: [22, 58, 77, 115, 129, 148, 167, 186, 200, 220, 233, 253, 267, 287],
+    characterDEF: [51, 132, 176, 263, 294, 338, 379, 424, 455, 500, 531, 576, 607, 653]
   },
   specializeStat: {
-    key: "ener_rech_",
+    key: "enerRech_",
     value: [0, 0, 0, 0, 8, 8, 16, 16, 16, 16, 24, 24, 32, 32]
   },
   talent: {
@@ -236,7 +236,7 @@ let char = {
       img: passive2,
       document: [{ text: <span>Increases Mona's <span className="text-hydro">Hydro DMG Bonus</span> by a degree equivalent to 20% of her Energy Recharge rate.</span>, }],
       stats: (c, a) => a >= 4 && {
-        modifiers: { hydro_dmg_: { ener_rech_: 0.2 } },
+        modifiers: { hydro_dmg_: { enerRech_: 0.2 } },
       }
     },
     passive3: {
@@ -282,7 +282,7 @@ let char = {
           sourceKey: "mona",
           maxStack: 1,
           stats: {
-            crit_rate_: 15,
+            critRate_: 15,
           },
         },
       }],

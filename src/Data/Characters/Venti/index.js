@@ -55,12 +55,12 @@ let char = {
   constellationName: "Carmen Dei",
   titles: ["Windborne Bard", "Tone-Deaf Bard"],
   baseStat: {
-    character_hp: [820, 2127, 2830, 4234, 4734, 5446, 6112, 6832, 7331, 8058, 8557, 9292, 9791, 10531],
-    character_atk: [20, 53, 71, 106, 118, 136, 153, 171, 183, 201, 214, 232, 245, 263],
-    character_def: [52, 135, 180, 269, 301, 346, 388, 434, 465, 512, 543, 590, 622, 669]
+    characterHP: [820, 2127, 2830, 4234, 4734, 5446, 6112, 6832, 7331, 8058, 8557, 9292, 9791, 10531],
+    characterATK: [20, 53, 71, 106, 118, 136, 153, 171, 183, 201, 214, 232, 245, 263],
+    characterDEF: [52, 135, 180, 269, 301, 346, 388, 434, 465, 512, 543, 590, 622, 669]
   },
   specializeStat: {
-    key: "ener_rech_",
+    key: "enerRech_",
     value: [0, 0, 0, 0, 8, 8, 16, 16, 16, 16, 24, 24, 32, 32]
   },
   talent: {
@@ -167,7 +167,7 @@ let char = {
           sourceKey: "venti",
           maxStack: 1,
           stats: {
-            anemo_enemy_res_: -12,
+            anemo_enemyRes_: -12,
           },
         }, {
           type: "character",
@@ -176,8 +176,8 @@ let char = {
           sourceKey: "venti",
           maxStack: 1,
           stats: {
-            anemo_enemy_res_: -24,
-            physical_enemy_res_: -12
+            anemo_enemyRes_: -24,
+            physical_enemyRes_: -12
           },
         }]
       }],
@@ -253,7 +253,7 @@ let char = {
       </span>
       }],
       stats: {
-        stamina_gliding_dec_: 20,
+        staminaGlidingDec_: 20,
       }
     },
     constellation1: {
