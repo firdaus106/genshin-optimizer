@@ -115,8 +115,7 @@ export default class Artifact {
   static numberOfSubstatUnlocked = (state) =>
     state.substats.reduce((sum, cur) =>
       sum + (cur && cur.value ? 1 : 0), 0);
-  static getSubstatRollData = (subStatKey, numStars) => (subStatKey && numStars) ?
-    ArtifactSubStatsData[subStatKey][numStars] : []
+  static getSubstatRollData = (subStatKey, numStars) => ArtifactSubStatsData?.[subStatKey]?.[numStars] ?? []
   static getSubstatRolls = (subStatKey, subStatValue, numStars, defVal = []) => {
     if (!numStars || !subStatKey || typeof subStatValue !== "number" || !subStatValue) return defVal
     let rollData = this.getSubstatRollData(subStatKey, numStars)
@@ -264,15 +263,15 @@ export default class Artifact {
   }
 
   //database manipulation
-  static equipArtifactOnChar(artifactId, characterId) {
-    let art = ArtifactDatabase.getArtifact(artifactId);
+  static equipArtifactOnChar(artifactId, characterKey) {
+    let art = ArtifactDatabase.get(artifactId);
     if (!art) return;
     let currentLocation = art.location;
-    let intendedLocation = (characterId || "")
+    let intendedLocation = (characterKey || "")
     if (currentLocation === intendedLocation) return;
     let slotKey = art.slotKey
     let artifactToSwapWithid = CharacterDatabase.getArtifactIDFromSlot(intendedLocation, slotKey)
-    let artifactToSwapWith = ArtifactDatabase.getArtifact(artifactToSwapWithid)
+    let artifactToSwapWith = ArtifactDatabase.get(artifactToSwapWithid)
 
     //update artifact
     if (artifactToSwapWith) ArtifactDatabase.swapLocations(art, artifactToSwapWith)

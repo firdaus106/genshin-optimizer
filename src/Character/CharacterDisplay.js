@@ -24,7 +24,7 @@ export default class CharacterDisplay extends React.Component {
   }
 
   deleteCharacter = (id) => {
-    Character.removeCharacter(id)
+    Character.remove(id)
     this.forceUpdate()
   }
 
@@ -39,13 +39,13 @@ export default class CharacterDisplay extends React.Component {
     this.scrollRef = React.createRef()
   }
   render() {
-    let charIdList = CharacterDatabase.getCharacterIdList()
+    const charKeyList = CharacterDatabase.getCharacterKeyList()
     return (<Container ref={this.scrollRef}>
       {/* editor/character detail display */}
       {this.state.showEditor ? <Row className="mt-2"><Col>
         <React.Suspense fallback={<span>Loading...</span>}>
           <CharacterDisplayCard editable
-            characterId={this.state.charIdToEdit}
+            characterKey={this.state.charIdToEdit}
             onClose={this.cancelEditCharacter}
             footer={<Button variant="danger" onClick={this.cancelEditCharacter}>Close</Button>}
           />
@@ -69,18 +69,17 @@ export default class CharacterDisplay extends React.Component {
             </Card.Body>
           </Card>
         </Col>}
-        {charIdList.map(id =>
-          <Col key={id} lg={4} md={6} className="mb-2">
+        {charKeyList.map(charKey =>
+          <Col key={charKey} lg={4} md={6} className="mb-2">
             <CharacterCard
               cardClassName="h-100"
-              characterId={id}
-              onDelete={() => this.deleteCharacter(id)}
-              onEdit={() => this.editCharacter(id)}
+              characterKey={charKey}
+              onDelete={() => this.deleteCharacter(charKey)}
+              onEdit={() => this.editCharacter(charKey)}
             />
           </Col>
         )}
       </Row>
     </Container>)
-
   }
 }

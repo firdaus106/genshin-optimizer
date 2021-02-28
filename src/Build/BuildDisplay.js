@@ -10,7 +10,7 @@ import ArtifactDatabase from '../Artifact/ArtifactDatabase';
 import Character from '../Character/Character';
 import CharacterCard from '../Character/CharacterCard';
 import CharacterDatabase from '../Character/CharacterDatabase';
-import { CharacterNameDisplay, CharacterSelectionDropdownList } from '../Components/CharacterSelection';
+import { CharacterSelectionDropdownList } from '../Components/CharacterSelection';
 import ConditionalSelector from '../Components/ConditionalSelector';
 import CustomFormControl from '../Components/CustomFormControl';
 import { Stars } from '../Components/StarDisplay';
@@ -34,25 +34,25 @@ export default class BuildDisplay extends React.Component {
     DatabaseInitAndVerify();
     this.state = BuildDisplay.getInitialState();
     if ("BuildsDisplay.state" in localStorage) {
-      const { selectedCharacterId } = loadFromLocalStorage("BuildsDisplay.state")
-      this.state = { ...this.state, selectedCharacterId }
+      const { characterKey = "" } = loadFromLocalStorage("BuildsDisplay.state")
+      this.state = { ...this.state, characterKey }
     }
-    if (props.location.selectedCharacterId) //override the one stored in BuildsDisplay.state
-      this.state.selectedCharacterId = props.location.selectedCharacterId
+    if (props.location.characterKey) //override the one stored in BuildsDisplay.state
+      this.state.characterKey = props.location.characterKey
 
-    if (this.state.selectedCharacterId) {
-      const character = CharacterDatabase.getCharacter(this.state.selectedCharacterId)
+    if (this.state.characterKey) {
+      const character = CharacterDatabase.get(this.state.characterKey)
       if (character)
         this.state = { ...this.state, ...(character?.buildSetting ?? {}) }
       else
-        this.state.selectedCharacterId = ""
+        this.state.characterKey = ""
     }
     ReactGA.pageview('/build')
   }
   static initialState = {
     builds: [],
     generatingBuilds: false,
-    selectedCharacterId: "",
+    characterKey: "",
     setFilters: [{ key: "", num: 0 }, { key: "", num: 0 }, { key: "", num: 0 }],
     statFilters: {},
     artifactConditionals: [],//{ setKey: "", setNumKey: "", conditionalNum: 0 }
@@ -73,22 +73,22 @@ export default class BuildDisplay extends React.Component {
   static artifactsSlotsToSelectMainStats = ["sands", "goblet", "circlet"]
   forceUpdateBuildDisplay = () => this.forceUpdate()
 
-  selectCharacter = (charid = "") => {
-    if (!charid)
-      return this.setState({ ...BuildDisplay.getInitialState(), selectedCharacterId: "" })
-    const character = CharacterDatabase.getCharacter(charid)
+  selectCharacter = (characterKey = "") => {
+    if (!characterKey)
+      return this.setState({ ...BuildDisplay.getInitialState(), characterKey: "" })
+    const character = CharacterDatabase.get(characterKey)
     if (character)
-      return this.setState({ ...BuildDisplay.getInitialState(), selectedCharacterId: charid, ...(character?.buildSetting ?? {}) })
+      return this.setState({ ...BuildDisplay.getInitialState(), characterKey, ...(character?.buildSetting ?? {}) })
   }
   splitArtifacts = () => {
-    if (!this.state.selectedCharacterId) // Make sure we have all slotKeys
+    if (!this.state.characterKey) // Make sure we have all slotKeys
       return Object.fromEntries(Artifact.getSlotKeys().map(slotKey => [slotKey, []]))
     let artifactDatabase = ArtifactDatabase.getArtifactDatabase();
     //do not use artifacts that are locked.
     if (!this.state.useLockedArts)
       Object.entries(artifactDatabase).forEach(([key, val]) => {
         //if its equipped on the selected character, bypass the lock check
-        if (this.state.selectedCharacterId && val.location === this.state.selectedCharacterId) return
+        if (this.state.characterKey && val.location === this.state.characterKey) return
         //if its locked, or equipped, remove from consideration
         if (val.lock || val.location)
           delete artifactDatabase[key]
@@ -141,7 +141,7 @@ export default class BuildDisplay extends React.Component {
     if (!totBuildNumber) return this.setState({ builds: [] })
     this.setState({ generatingBuilds: true, builds: [], generationDuration: 0, generationProgress: 0 })
     let { setFilters, statFilters = {}, ascending, buildFilterKey, maxBuildsToShow, artifactConditionals, artifactsAssumeFull } = this.state
-    let character = CharacterDatabase.getCharacter(this.state.selectedCharacterId)
+    let character = CharacterDatabase.get(this.state.characterKey)
     let initialStats = Character.calculateCharacterWithWeaponStats(character)
     initialStats.artifactsAssumeFull = artifactsAssumeFull
 
@@ -189,10 +189,9 @@ export default class BuildDisplay extends React.Component {
   }
 
   BuildGeneratorEditorCard = (props) => {
-    let { setFilters, statFilters = {}, selectedCharacterId, artifactsAssumeFull, artifactConditionals, useLockedArts, generatingBuilds, generationProgress, generationDuration } = this.state
+    let { setFilters, statFilters = {}, characterKey, artifactsAssumeFull, artifactConditionals, useLockedArts, generatingBuilds, generationProgress, generationDuration } = this.state
     let { statsDisplayKeys } = props
-    let selectedCharacter = CharacterDatabase.getCharacter(selectedCharacterId)
-    let characterName = selectedCharacter ? selectedCharacter.name : "Character Name"
+    let characterName = Character.getName(characterKey, "Character Name")
     let artsAccounted = setFilters.reduce((accu, cur) => cur.key ? accu + cur.num : accu, 0)
     //these variables are used for build generator.
     this.split = this.splitArtifacts();
@@ -221,7 +220,7 @@ export default class BuildDisplay extends React.Component {
           <Alert variant="warning" className="mb-0"><span>Current configuration will generate <b>{totalBuildNumberString}</b> builds for <b>{characterName}</b>. This might take quite awhile to generate...</span></Alert> :
           <Alert variant="success" className="mb-0"><span>Current configuration {totBuildNumber <= this.state.maxBuildsToShow ? "generated" : "will generate"} <b>{totalBuildNumberString}</b> builds for <b>{characterName}</b>.</span></Alert>)
     }
-    let characterDropDown = <DropdownButton title={selectedCharacterId ? <CharacterNameDisplay id={selectedCharacterId} flat /> : "Select Character"} disabled={generatingBuilds}>
+    let characterDropDown = <DropdownButton title={Character.getName(characterKey, "Select Character")} disabled={generatingBuilds}>
       <Dropdown.Item onClick={() => this.selectCharacter("")}>Unselect Character</Dropdown.Item>
       <Dropdown.Divider />
       <CharacterSelectionDropdownList onSelect={cid => this.selectCharacter(cid)} />
@@ -233,8 +232,8 @@ export default class BuildDisplay extends React.Component {
         <Row >
           <Col xs={12} lg={6} className="mb-2">
             {/* character selection */}
-            {selectedCharacterId ?
-              <CharacterCard header={characterDropDown} characterId={selectedCharacterId} bg={"lightcontent"} footer={false} cardClassName="mb-2" onEdit={!generatingBuilds ? () => this.setState({ showCharacterModal: true }) : null} /> :
+            {characterKey ?
+              <CharacterCard header={characterDropDown} characterKey={characterKey} bg={"lightcontent"} footer={false} cardClassName="mb-2" onEdit={!generatingBuilds ? () => this.setState({ showCharacterModal: true }) : null} /> :
               <Card bg="lightcontent" text="lightfont" className="mb-2">
                 <Card.Header>
                   {characterDropDown}
@@ -355,15 +354,15 @@ export default class BuildDisplay extends React.Component {
           </Row></Col>
         </Row>
         <Row className="mb-2">
-          <Col>{selectedCharacterId && buildAlert}</Col>
+          <Col>{characterKey && buildAlert}</Col>
         </Row>
         <Row className="d-flex justify-content-between">
           <Col xs="auto" >
             <ButtonGroup>
               <Button
                 className="h-100"
-                disabled={!selectedCharacterId || generatingBuilds}
-                variant={(selectedCharacterId && totBuildNumber <= warningBuildNumber) ? "success" : "warning"}
+                disabled={!characterKey || generatingBuilds}
+                variant={(characterKey && totBuildNumber <= warningBuildNumber) ? "success" : "warning"}
                 onClick={this.generateBuilds}
               ><span>Generate Builds</span></Button>
               <Button
@@ -383,8 +382,8 @@ export default class BuildDisplay extends React.Component {
           <Col xs="auto">
             {/* Dropdown to select sorting value */}
             <ButtonGroup>
-              <DropdownButton disabled={generatingBuilds || !selectedCharacterId} title={<span>Sort by <b>{Stat.getStatNameWithPercent(this.state.buildFilterKey)}</b></span>} as={ButtonGroup}>
-                {selectedCharacterId && statsDisplayKeys.map(key =>
+              <DropdownButton disabled={generatingBuilds || !characterKey} title={<span>Sort by <b>{Stat.getStatNameWithPercent(this.state.buildFilterKey)}</b></span>} as={ButtonGroup}>
+                {characterKey && statsDisplayKeys.map(key =>
                   <Dropdown.Item key={key} onClick={() => this.setState({ buildFilterKey: key }, this.autoGenerateBuilds)}>
                     {Stat.getStatNamePretty(key)}
                   </Dropdown.Item>
@@ -424,11 +423,11 @@ export default class BuildDisplay extends React.Component {
     </div>)
   }
   closeModal = () => this.setState({ modalBuild: null, showCharacterModal: false })
-  BuildModal = ({ build, characterid }) => {
+  BuildModal = ({ build, characterKey }) => {
     let { showCharacterModal } = this.state
     return <Modal show={Boolean(showCharacterModal || build)} onHide={this.closeModal} size="xl" contentClassName="bg-transparent">
       <React.Suspense fallback={<span>Loading...</span>}>
-        <CharacterDisplayCard characterId={characterid} newBuild={build}
+        <CharacterDisplayCard characterKey={characterKey} newBuild={build}
           onClose={this.closeModal}
           forceUpdate={this.forceUpdateBuildDisplay}
           editable={showCharacterModal}
@@ -528,13 +527,13 @@ export default class BuildDisplay extends React.Component {
     })
   }
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.selectedCharacterId !== this.state.selectedCharacterId) {
-      let { selectedCharacterId } = this.state
-      saveToLocalStorage("BuildsDisplay.state", { selectedCharacterId })
+    if (prevState.characterKey !== this.state.characterKey) {
+      let { characterKey } = this.state
+      saveToLocalStorage("BuildsDisplay.state", { characterKey })
     }
 
-    if (this.state.selectedCharacterId) {
-      let character = CharacterDatabase.getCharacter(this.state.selectedCharacterId)
+    if (this.state.characterKey) {
+      let character = CharacterDatabase.get(this.state.characterKey)
       if (!character) return
       const { setFilters, statFilters, artifactConditionals, mainStat, buildFilterKey, artifactsAssumeFull, useLockedArts, ascending } = deepClone(this.state)
       character.buildSetting = { setFilters, statFilters, artifactConditionals, mainStat, buildFilterKey, artifactsAssumeFull, useLockedArts, ascending }
@@ -546,13 +545,12 @@ export default class BuildDisplay extends React.Component {
     delete this.worker
   }
   render() {
-    let { selectedCharacterId, modalBuild, maxBuildsToShow, builds = [] } = this.state
-    let selectedCharacter = CharacterDatabase.getCharacter(selectedCharacterId)
-    let characterKey = selectedCharacter?.characterKey
+    let { characterKey, modalBuild, maxBuildsToShow, builds = [] } = this.state
+    let selectedCharacter = CharacterDatabase.get(characterKey)
     let characterName = Character.getName(characterKey, "Character Name")
     let statsDisplayKeys = Character.getDisplayStatKeys(characterKey)
     return (<Container>
-      <this.BuildModal build={modalBuild} characterid={selectedCharacterId} />
+      <this.BuildModal build={modalBuild} characterKey={characterKey} />
       <this.ArtConditionalModal />
       <Row className="mt-2 mb-2">
         <Col>
@@ -563,7 +561,7 @@ export default class BuildDisplay extends React.Component {
       <Row className="mb-2">
         <Col>
           <Card bg="darkcontent" text="lightfont">
-            <Card.Header>{selectedCharacterId ? `Showing ${builds.length} Builds generated for ${characterName}` : "Select a character to generate builds."}</Card.Header>
+            <Card.Header>{characterKey ? `Showing ${builds.length} Builds generated for ${characterName}` : "Select a character to generate builds."}</Card.Header>
             {/* Build List */}
             <ListGroup>
               {builds.map((build, index) =>

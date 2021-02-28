@@ -7,7 +7,7 @@ ArtifactDataImport.then(imp => {
   ArtifactDataImport = null
 })
 const ArtifactMainSlotKeys = [
-  "hp", "hp_", "atk", "atk_", "def", "def_", "eleMas", "enerRech_", "critRate_", "critDMG_", "heal_", "physical_dmg_",
+  "hp", "hp_", "atk", "atk_", "def", "def_", "eleMas", "enerRech_", "critRate_", "critDMG_", "heal_",
 ]
 Object.keys(ElementalData).forEach(key => ArtifactMainSlotKeys.push(`${key}_dmg_`))
 

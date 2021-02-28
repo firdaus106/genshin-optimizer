@@ -204,24 +204,24 @@ export default class Character {
   }
 
   //equipment, with consideration on swapping equipped.
-  static equipArtifacts = (characterId, artifactIds) => {
-    let character = CharacterDatabase.getCharacter(characterId)
+  static equipArtifacts = (characterKey, artifactIds) => {
+    let character = CharacterDatabase.get(characterKey)
     if (!character) return;
     let artIdsOnCharacter = character.equippedArtifacts;
     let artIdsNotOnCharacter = artifactIds
 
     //swap, by slot
     Artifact.getSlotKeys().forEach(slotKey => {
-      let artNotOnChar = ArtifactDatabase.getArtifact(artIdsNotOnCharacter?.[slotKey])
-      if (artNotOnChar.location === characterId) return; //it is already equipped
-      let artOnChar = ArtifactDatabase.getArtifact(artIdsOnCharacter?.[slotKey])
+      let artNotOnChar = ArtifactDatabase.get(artIdsNotOnCharacter?.[slotKey])
+      if (artNotOnChar.location === characterKey) return; //it is already equipped
+      let artOnChar = ArtifactDatabase.get(artIdsOnCharacter?.[slotKey])
       let notCharLoc = (artNotOnChar?.location || "")
       //move current art to other char
       if (artOnChar) ArtifactDatabase.moveToNewLocation(artOnChar.id, notCharLoc)
       //move current art to other char
       if (notCharLoc) CharacterDatabase.equipArtifact(notCharLoc, artOnChar)
       //move other art to current char
-      if (artNotOnChar) ArtifactDatabase.moveToNewLocation(artNotOnChar.id, characterId)
+      if (artNotOnChar) ArtifactDatabase.moveToNewLocation(artNotOnChar.id, characterKey)
     })
     //move other art to current char 
     character.equippedArtifacts = {}
@@ -229,16 +229,16 @@ export default class Character {
       character.equippedArtifacts[key] = artid)
     CharacterDatabase.updateCharacter(character);
   }
-  static removeCharacter(characterId) {
-    let character = CharacterDatabase.getCharacter(characterId)
+  static remove(characterKey) {
+    let character = CharacterDatabase.get(characterKey)
     if (character.equippedArtifacts)
       Object.values(character.equippedArtifacts).forEach(artid =>
         ArtifactDatabase.moveToNewLocation(artid, ""))
-    CharacterDatabase.removeCharacterById(characterId)
+    CharacterDatabase.remove(characterKey)
   }
 
   static calculateBuild = (character) => {
-    let artifacts = Object.fromEntries(Object.entries(character.equippedArtifacts).map(([key, artid]) => [key, ArtifactDatabase.getArtifact(artid)]))
+    let artifacts = Object.fromEntries(Object.entries(character.equippedArtifacts).map(([key, artid]) => [key, ArtifactDatabase.get(artid)]))
     let initialStats = Character.calculateCharacterWithWeaponStats(character)
     return this.calculateBuildWithObjs(character.artifactConditionals, initialStats, artifacts)
   }

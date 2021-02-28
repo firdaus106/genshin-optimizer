@@ -4,17 +4,50 @@ import CharacterDatabase from "./Character/CharacterDatabase";
 import { loadFromLocalStorage, saveToLocalStorage } from "./Util/Util";
 
 function DatabaseInitAndVerify() {
+  const dbVersion = getDatabaseVersion()
+  //edit the data before the database is populated
+  if (dbVersion < 2) {
+    //made characters unique, so need to convert character_{NUMBER} to char_{characterKey}. Will only save the 1st instance of a character.
+    Object.keys(localStorage).filter(key => key.startsWith("character_")).forEach(key => {
+      const character = loadFromLocalStorage(key);
+      const { characterKey, equippedArtifacts = {} } = character
+      const dbKey = `char_${characterKey}`
+      if (localStorage.getItem(dbKey) === null) {
+        //if there is no character saved, create a new character
+        const { id, name, ...rest } = character
+        saveToLocalStorage(dbKey, rest)
+        //equip to the new character
+        Object.values(equippedArtifacts).forEach(artid => {
+          const art = loadFromLocalStorage(artid);
+          if (!art) return
+          art.location = characterKey
+          saveToLocalStorage(artid, art)
+        });
+      } else {
+        //if the character does exist, "move" the artifacts equipped to inventory
+        Object.values(equippedArtifacts).forEach(artid => {
+          const art = loadFromLocalStorage(artid);
+          if (!art) return
+          art.location = ""
+          saveToLocalStorage(artid, art)
+        });
+      }
+      //delete the old database
+      localStorage.removeItem(key)
+    })
+  }
+
   //this will only run if neither of the database has been initated.
   const charDBJustPopualted = CharacterDatabase.populateDatebaseFromLocalStorage(),
     artDBJustPopualted = ArtifactDatabase.populateDatebaseFromLocalStorage()
   if (!charDBJustPopualted && !artDBJustPopualted) return
-  const dbVersion = getDatabaseVersion()
-  //since one of the database has been initiated, we verify the linking of artifacts and characters
-  let arts = ArtifactDatabase.getArtifactDatabase();
-  Object.values(arts).forEach(art => {
+
+  Object.values(ArtifactDatabase.getArtifactDatabase()).forEach(art => {
     let valid = true
+
+    //verify the linking of artifacts and characters
     if (art.location) {
-      const locationChar = CharacterDatabase.getCharacter(art.location)
+      const locationChar = CharacterDatabase.get(art.location)
       if (locationChar) {
         let artInSlotId = CharacterDatabase.getArtifactIDFromSlot(art.location, art.slotKey)
         if (!artInSlotId) {//character doesnt seem to show this artifact equipped...
@@ -70,32 +103,34 @@ function DatabaseInitAndVerify() {
         valid = false
       }
       //key names were changed. convert old DB
-      // TODO we change `dmg` to `hit`
       if (art?.mainStatKey?.endsWith?.("ele_dmg")) {
-        art.mainStatKey = art.mainStatKey.replace("ele_dmg", "ele_dmg_")
+        art.mainStatKey = art.mainStatKey.replace("ele_dmg", "ele_dmg_bonus")
         valid = false
       }
       //key names were changed. convert old DB
-      // TODO We remove ele from the naming
-      // TODO we change `dmg` to `hit`
-      if (art?.mainStatKey === "physical_ele_dmg") {
-        art.mainStatKey = "physical_ele_dmg_"
+      if (art?.mainStatKey === "phy_dmg") {
+        art.mainStatKey = "phy_dmg_bonus"
         valid = false
       }
     }
 
-    if (!valid)
-      ArtifactDatabase.updateArtifact(art)
+    if (dbVersion < 2) {
+      //TODO any key changes that effects artifacts made in v4
+    }
+
+    //Update any invalid artifacts in DB
+    if (!valid) ArtifactDatabase.updateArtifact(art)
   })
 
   let chars = CharacterDatabase.getCharacterDatabase();
   Object.values(chars).forEach(character => {
     let valid = true;
+    const { characterKey } = character
     //verify character database equipment validity
     Object.entries(character.equippedArtifacts).forEach(([slotKey, artid]) => {
-      const equippedArt = ArtifactDatabase.getArtifact(artid)
-      if (equippedArt && equippedArt.location !== character.id) //the artifact doesnt have the right location...
-        ArtifactDatabase.moveToNewLocation(artid, character.id)
+      const equippedArt = ArtifactDatabase.get(artid)
+      if (equippedArt && equippedArt.location !== characterKey) //the artifact doesnt have the right location...
+        ArtifactDatabase.moveToNewLocation(artid, characterKey)
       if (!equippedArt) {
         valid = false
         character.equippedArtifacts[slotKey] = ""
@@ -113,17 +148,21 @@ function DatabaseInitAndVerify() {
       }) ?? []
 
       //check for dmgMode
-      // TODO we change this to `hit` and `hitMode`
       if (!character.dmgMode) {
         character.dmgMode = "dmg"
         valid = false
       }
     }
-    if (!valid) {
-      CharacterDatabase.updateCharacter(character)
+
+    if (dbVersion < 2) {
+      //TODO any key changes that effects artifacts made in v4
     }
+
+    //update any invalid characters in DB
+    if (!valid) CharacterDatabase.updateCharacter(character)
   })
   setDatabaseVersion(1)
+  //TODO set DatabaseVersion to 2, once all the changes to v4 is done.
 }
 const getDatabaseVersion = (defVal = 0) =>
   parseInt(loadFromLocalStorage("db_ver") ?? defVal)
@@ -134,4 +173,3 @@ const setDatabaseVersion = (version) =>
 export {
   DatabaseInitAndVerify
 };
-

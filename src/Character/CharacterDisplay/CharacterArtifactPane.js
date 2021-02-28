@@ -64,7 +64,7 @@ function CharacterArtifactPane({ character, character: { characterKey, compareAg
             </Card.Body>
             {newBuild ? <Card.Footer>
               <Button onClick={() => {
-                Character.equipArtifacts(character.id, newBuild.artifactIds)
+                Character.equipArtifacts(characterKey, newBuild.artifactIds)
                 forceUpdate?.()
               }}>Equip All artifacts to current character</Button>
               {artifactsAssumeFull && <Alert className="float-right text-right mb-0 py-2" variant="orange" ><b>Assume Main Stats are Fully Leveled</b></Alert>}
