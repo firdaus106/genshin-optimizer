@@ -148,8 +148,8 @@ function DatabaseInitAndVerify() {
       }) ?? []
 
       //check for dmgMode
-      if (!character.dmgMode) {
-        character.dmgMode = "dmg"
+      if (!character.hitMode) {
+        character.hitMode = "hit"
         valid = false
       }
     }
