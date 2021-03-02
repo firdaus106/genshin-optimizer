@@ -122,14 +122,14 @@ export default class Character {
   }
   static getTalentStatKey = (skillKey, character, elemental = false) => {
     let { hitMode = "", autoInfused = false, characterKey, reactionMode = null } = character
-    if (skillKey === "phy") return `phy_${hitMode}`
+    if (skillKey === "phy") return `physical_${hitMode}`
     let charEleKey = this.getElementalKey(characterKey)
     if (!elemental) elemental = this.isAutoElemental(characterKey) || (autoInfused && (Character.getCDataObj(characterKey)?.talent?.auto?.infusable || false))
-    let eleKey = ""
+    let eleKey = "physical"
     if (skillKey === "ele" || skillKey === "burst" || skillKey === "skill" || elemental)
-      eleKey = (reactionMode ? reactionMode : charEleKey) + "_"
-    //{pyro_}{burst}_{avgHit}
-    return `${eleKey}${skillKey}_${hitMode}`
+      eleKey = (reactionMode ? reactionMode : charEleKey)
+    //{pyro}_{burst}_{avgHit}
+    return `${eleKey}_${skillKey}_${hitMode}`
   }
   static getTalentStatKeyVariant = (skillKey, character, elemental = false) => {
     if (skillKey === "phy") return "physical"
