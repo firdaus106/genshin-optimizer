@@ -176,7 +176,7 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
     })
     Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
     Formulas[`${ele}_${move}_critHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ / 100)
-    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 100)
+    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 10000)
   })
 })
 
