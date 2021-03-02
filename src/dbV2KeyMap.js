@@ -1,3 +1,4 @@
+//for DB v2, we changed a bunch of keys.
 const changes = {
   char_ele_key: "characterEle",
   char_level: "characterLevel",
@@ -247,15 +248,17 @@ const changes = {
   enemy_level_multi: "enemyLevel_multi",
   enemy_level: "enemyLevel"
 }
-
+/*
 const same = [
   hp, hp_, atk, atk_, def, def_, pyro_vaporize_multi, hydro_vaporize_multi, pyro_melt_multi, cryo_melt_multi,
 ]
 
 const removed = [
-  norm_atk_crit_multi, char_atk_crit_multi, norm_atk_bonus_multi, char_atk_bonus_multi, plunge_bonus_multi, skill_crit_multi, burst_crit_multi, skill_bonus_multi, burst_bonus_multi, phy_bonus_multi, anemo_ele_bonus_multi, geo_ele_bonus_multi, electro_ele_bonus_multi, hydro_ele_bonus_multi, pyro_ele_bonus_multi, cryo_ele_bonus_multi, crit_dmg_multi, crit_multi, 
+  norm_atk_crit_multi, char_atk_crit_multi, norm_atk_bonus_multi, char_atk_bonus_multi, plunge_bonus_multi, skill_crit_multi, burst_crit_multi, skill_bonus_multi, burst_bonus_multi, phy_bonus_multi, anemo_ele_bonus_multi, geo_ele_bonus_multi, electro_ele_bonus_multi, hydro_ele_bonus_multi, pyro_ele_bonus_multi, cryo_ele_bonus_multi, crit_dmg_multi, crit_multi,
 ]
 
 const aded = [
   plunging_critRate_, final_normal_critRate_, final_charged_critRate_, final_plunging_critRate_, final_skill_critRate_, final_burst_critRate_,
 ]
+*/
+export { changes }

@@ -11,17 +11,15 @@ describe('Test CharacterDatabase', () => {
     levelKey: "L1",
   }
   beforeEach(() => {
-    Object.keys(localStorage).forEach(key => localStorage.removeItem(key))
-
+    localStorage.clear()
     const invalid = { characterKey: "invalid" }
     localStorage.setItem("char_test1", JSON.stringify(char_test1))
     localStorage.setItem("char_test2", JSON.stringify(char_test2))
     localStorage.setItem("character_invalid", JSON.stringify(invalid))
-  })
-  beforeEach(() => {
     CharacterDatabase.clearDatabase()
     CharacterDatabase.populateDatebaseFromLocalStorage()
   })
+  afterEach(() => localStorage.clear())
   describe("populateDatebaseFromLocalStorage()", () => {
     test(`should populateDatebaseFromLocalStorage()`, () => {
       expect(CharacterDatabase.getCharacterKeyList()).toEqual(["test1", "test2"])

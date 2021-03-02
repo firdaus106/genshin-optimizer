@@ -1,6 +1,7 @@
 import Artifact from "./Artifact/Artifact";
 import ArtifactDatabase from "./Artifact/ArtifactDatabase";
 import CharacterDatabase from "./Character/CharacterDatabase";
+import { changes as v2change } from "./dbV2KeyMap";
 import { loadFromLocalStorage, saveToLocalStorage } from "./Util/Util";
 
 function DatabaseInitAndVerify() {
@@ -115,7 +116,16 @@ function DatabaseInitAndVerify() {
     }
 
     if (dbVersion < 2) {
-      //TODO any key changes that effects artifacts made in v4
+      if (art.mainStatKey in v2change) {
+        art.mainStatKey = v2change[art.mainStatKey]
+        valid = false
+      }
+      art?.substats?.forEach((obj, i) => {
+        if (obj.key in v2change) {
+          art.substats[i].key = v2change[obj.key]
+          valid = false
+        }
+      })
     }
 
     //Update any invalid artifacts in DB

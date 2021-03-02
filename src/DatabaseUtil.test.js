@@ -4,8 +4,9 @@ import { DatabaseInitAndVerify } from "./DatabaseUtil"
 
 describe('DatabaseUtil Tests', () => {
   describe('dbVersion 2', () => {
+    beforeEach(() => localStorage.clear())
+    afterEach(() => localStorage.clear())
     test('should Convert old characters to unique', () => {
-      Object.keys(localStorage).forEach(key => localStorage.removeItem(key))
       const characterKey = "testCharKey"
       const character_1 = {
         id: "character_1",
@@ -44,6 +45,23 @@ describe('DatabaseUtil Tests', () => {
       expect(ArtifactDatabase.get("artifact_1").location).toBe(characterKey)
       expect(ArtifactDatabase.get("artifact_2").location).toBe(characterKey)
       expect(ArtifactDatabase.get("artifact_3").location).toBe("")
+    })
+    test('should Convert old artifacts to new keys', () => {
+      const artCommon = { setKey: "set", numStars: 5, location: "", slotKey: "slot" }
+      const artifact_1 = { id: "artifact_1", mainStatKey: "phy_dmg_bonus", ...artCommon }//phy_dmg_bonus should convert to physical_dmg_
+      const wrongSubstats = [{ key: "ele_mas" }, { key: "crit_rate" }]
+      const exptectSubstats = [{ key: "eleMas" }, { key: "critRate_" }]
+      const artifact_2 = { id: "artifact_2", mainStatKey: "hp_", substats: wrongSubstats, ...artCommon }
+      localStorage.setItem("artifact_1", JSON.stringify(artifact_1))
+      localStorage.setItem("artifact_2", JSON.stringify(artifact_2))
+      localStorage.setItem("db_ver", "1")
+
+      CharacterDatabase.clearDatabase()
+      ArtifactDatabase.clearDatabase()
+
+      DatabaseInitAndVerify()
+      expect(ArtifactDatabase.get("artifact_1")).toEqual({ ...artifact_1, mainStatKey: "physical_dmg_" })
+      expect(ArtifactDatabase.get("artifact_2")).toEqual({ ...artifact_2, substats: exptectSubstats })
     })
   })
 })
