@@ -163,7 +163,7 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 
   Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
   Formulas[`${ele}_critHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ / 100)
-  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 100)
+  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 10000)
 
   Formulas[`${ele}_enemyRes_multi`] = (s) => s[`${ele}_enemyImmunity`] ? 0 : resMultiplier(s[`${ele}_enemyRes_`])
 })
@@ -176,7 +176,7 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
     })
     Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
     Formulas[`${ele}_${move}_critHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ / 100)
-    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 100)
+    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 10000)
   })
 })
 
