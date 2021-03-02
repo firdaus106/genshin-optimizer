@@ -163,7 +163,7 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 
   Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
   Formulas[`${ele}_critHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ / 100)
-  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 100)
+  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 10000)
 
   Formulas[`${ele}_enemyRes_multi`] = (s) => s[`${ele}_enemyImmunity`] ? 0 : resMultiplier(s[`${ele}_enemyRes_`])
 })
