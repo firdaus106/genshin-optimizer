@@ -77,7 +77,7 @@ export default function CharacterTalentPane(props) {
                 <ToggleButtonGroup type="radio" value={hitMode} name="hitOptions" onChange={(hitMode) => setState({ hitMode })}>
                   <ToggleButton value="avgHit">Avg. DMG</ToggleButton>
                   <ToggleButton value="hit">Normal Hit, No Crit</ToggleButton>
-                  <ToggleButton value="critDMG_">Crit Hit DMG</ToggleButton>
+                  <ToggleButton value="critHit">Crit Hit DMG</ToggleButton>
                   {/* TODO  should this be critHit instead */}
                 </ToggleButtonGroup>
               </Col>
