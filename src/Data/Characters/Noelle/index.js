@@ -132,17 +132,17 @@ let char = {
         </span>,
         fields: [{
           text: "Skill DMG",
-          basicVal: (tlvl, stats, c) => <span>{breastplateStats.skill_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)} * {Stat.printStat("findlDEF", stats)} / {Stat.printStat("finalATK", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (breastplateStats.skill_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("skill", c)] * stats.findlDEF / stats.finalATK,
+          basicVal: (tlvl, stats, c) => <span>{breastplateStats.skill_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)} * {Stat.printStat("finalDEF", stats)} / {Stat.printStat("finalATK", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (breastplateStats.skill_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("skill", c)] * stats.finalDEF / stats.finalATK,
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("skill", c),
         }, {
           text: "Shield DMG Absorption",
-          basicVal: (tlvl, stats, c) => <span>{breastplateStats.shield_def[tlvl]}% {Stat.printStat("findlDEF", stats)} + {breastplateStats.shield_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (breastplateStats.shield_def[tlvl] / 100) * stats.findlDEF + breastplateStats.shield_flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{breastplateStats.shield_def[tlvl]}% {Stat.printStat("finalDEF", stats)} + {breastplateStats.shield_flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (breastplateStats.shield_def[tlvl] / 100) * stats.finalDEF + breastplateStats.shield_flat[tlvl],
         }, {
           text: "Healing",
-          basicVal: (tlvl, stats, c) => <span>{breastplateStats.heal_def[tlvl]}% {Stat.printStat("findlDEF", stats)} + {breastplateStats.heal_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (breastplateStats.heal_def[tlvl] / 100) * stats.findlDEF + breastplateStats.heal_flat[tlvl],
+          basicVal: (tlvl, stats, c) => <span>{breastplateStats.heal_def[tlvl]}% {Stat.printStat("finalDEF", stats)} + {breastplateStats.heal_flat[tlvl]}</span>,
+          finalVal: (tlvl, stats, c) => (breastplateStats.heal_def[tlvl] / 100) * stats.finalDEF + breastplateStats.heal_flat[tlvl],
         }, (c) => ({
           text: "Trigger Chance",
           value: (tlvl) => <span>{breastplateStats.heal_trigger[tlvl]}%{c >= 1 ? <span> (100% while <b>Sweeping Time</b> and <b>Breastplate</b> are both in effect)</span> : ""}</span>,
@@ -180,8 +180,8 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, (c) => ({
           text: "ATK Bonus",
-          basicVal: (tlvl, stats) => <span>{sweepingTimeStats.atk_bonu[tlvl]}% {c >= 6 ? "+50% " : ""}{Stat.printStat("findlDEF", stats)}</span>,
-          finalVal: (tlvl, stats) => ((sweepingTimeStats.atk_bonu[tlvl] + (c >= 6 ? 50 : 0)) / 100) * stats.findlDEF,
+          basicVal: (tlvl, stats) => <span>{sweepingTimeStats.atk_bonu[tlvl]}% {c >= 6 ? "+50% " : ""}{Stat.printStat("finalDEF", stats)}</span>,
+          finalVal: (tlvl, stats) => ((sweepingTimeStats.atk_bonu[tlvl] + (c >= 6 ? 50 : 0)) / 100) * stats.finalDEF,
         }), (c) => ({
           text: "Duration",
           value: "15s" + (c >= 6 ? " +1s per kill, up to 10s" : ""),
@@ -199,7 +199,7 @@ let char = {
           sourceKey: "noelle",
           maxStack: 1,
           stats: {
-            modifiers: { finalATK: { findlDEF: (sweepingTimeStats.atk_bonu[tlvl] + (c >= 6 ? 50 : 0)) / 100 } },
+            modifiers: { finalATK: { finalDEF: (sweepingTimeStats.atk_bonu[tlvl] + (c >= 6 ? 50 : 0)) / 100 } },
           },
         })
       }],
@@ -210,7 +210,7 @@ let char = {
       document: [{
         text: (tlvl, stats) => <span>
           When Noelle is in the party but not on the field, this ability triggers automatically when your active character's HP falls below 30%:
-          Creates a shield for your active character that lasts for 20s and absorbs DMG equal to 400% of Noelle's DEF{DisplayPercent(400, stats, "findlDEF")}. This effect can only occur once every 60s.
+          Creates a shield for your active character that lasts for 20s and absorbs DMG equal to 400% of Noelle's DEF{DisplayPercent(400, stats, "finalDEF")}. This effect can only occur once every 60s.
         </span>
       }],
     },
@@ -265,7 +265,7 @@ let char = {
     constellation6: {
       name: "Must Be Spotless",
       img: c6,
-      document: [{ text: (tlvl, stats) => <span><b>Sweeping Time</b> increases ATK by an additional 50% of Noelle's DEF{DisplayPercent(20, stats, "findlDEF")}. For the skill's duration, adds 1s duration time per opponent defeated, up to 10s.</span> }]
+      document: [{ text: (tlvl, stats) => <span><b>Sweeping Time</b> increases ATK by an additional 50% of Noelle's DEF{DisplayPercent(20, stats, "finalDEF")}. For the skill's duration, adds 1s duration time per opponent defeated, up to 10s.</span> }]
     }
   }
 };

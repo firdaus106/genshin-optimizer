@@ -39,7 +39,7 @@ describe('Testing StatDependency', () => {
   })
   describe('GetDependencies()', () => {
     test('should get dependencies from database', () => {
-      expect(GetDependencies({}, ["findlDEF"])).toBeDependent({ findlDEF: ["characterDEF", "def_", "def"] })
+      expect(GetDependencies({}, ["finalDEF"])).toBeDependent({ finalDEF: ["characterDEF", "def_", "def"] })
     })
     test('should recursively get dependencies from database', () => {
       const expected = expect(GetDependencies({}, ["physical_normal_hit"]))
@@ -52,9 +52,9 @@ describe('Testing StatDependency', () => {
       })
     })
     test('should add all dependencies from keys', () => {
-      const expected = expect(GetDependencies({}, ["findlDEF", "enerRech_"]))
+      const expected = expect(GetDependencies({}, ["finalDEF", "enerRech_"]))
       expected.toBeDependent({
-        findlDEF: ["characterDEF", "def_", "def"],
+        finalDEF: ["characterDEF", "def_", "def"],
         enerRech_: []
       })
     })

@@ -27,7 +27,7 @@ const StatData = {
   // Attack-related Character, Weapon & Artifact Stats
   finalHP: { name: "HP", pretty: "HP Final" },
   finalATK: { name: "ATK", pretty: "ATK Final" },
-  findlDEF: { name: "DEF", pretty: "DEF Final" },
+  finalDEF: { name: "DEF", pretty: "DEF Final" },
 
   eleMas: { name: "Elemental Mastery", },
   enerRech_: { name: "Energy Recharge", unit: "%" },
@@ -70,7 +70,7 @@ const Formulas = {
   baseATK: (s) => s.characterATK + s.weaponATK,
   finalATK: (s) => s.baseATK * (1 + s.atk_ / 100) + s.atk,
   finalHP: (s) => s.characterHP * (1 + s.hp_ / 100) + s.hp,
-  findlDEF: (s) => s.characterDEF * (1 + s.def_ / 100) + s.def,
+  finalDEF: (s) => s.characterDEF * (1 + s.def_ / 100) + s.def,
 
   enemyLevel_multi: (s) => (100 + s.characterLevel) / (100 + s.enemyLevel + 100 + s.characterLevel),
 
@@ -161,7 +161,7 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
     StatData[`${ele}_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
   })
 
-  Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+  Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + (s.dmg_ + s[`${ele}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
   Formulas[`${ele}_critHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ / 100)
   Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 10000)
 
@@ -174,7 +174,7 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
     })
-    Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+    Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + (s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
     Formulas[`${ele}_${move}_critHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ / 100)
     Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 10000)
   })

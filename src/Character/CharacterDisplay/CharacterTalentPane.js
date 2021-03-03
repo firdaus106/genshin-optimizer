@@ -41,7 +41,7 @@ export default function CharacterTalentPane(props) {
     );
   }
   const statsDisplayKeys = () => {
-    let keys = ["finalHP", "finalATK", "findlDEF"]
+    let keys = ["finalHP", "finalATK", "finalDEF"]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
     let isAutoElemental = Character.isAutoElemental(characterKey)
     let isAutoInfusable = Character.isAutoInfusable(characterKey)

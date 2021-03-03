@@ -66,7 +66,7 @@ const FormulaText = {
   baseATK: (o) => <span>{f(o, "characterATK")} + {f(o, "weaponATK")} </span>,
   finalATK: (o) => <span>{f(o, "baseATK")} * ( 1 + {f(o, "atk_")} ) + {f(o, "atk")}</span>,
   finalHP: (o) => <span>{f(o, "characterHP")} * ( 1 + {f(o, "hp_")} ) + {f(o, "hp")}</span>,
-  findlDEF: (o) => <span>{f(o, "characterDEF")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
+  finalDEF: (o) => <span>{f(o, "characterDEF")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
 
   enemyLevel_multi: (o) => <span>( 100 + {f(o, "characterLevel")}) / ( 100 + {f(o, "enemyLevel")} + 100 + {f(o, "characterLevel")})</span>,
 

@@ -11,7 +11,7 @@ function DisplayStats({ statKey, character, build, editable, ...otherProps }) {
     let originalVal = Character.getStatValueWithOverride(character, statKey)
     if (statKey === "finalHP")
       originalVal = Character.getStatValueWithOverride(character, "characterHP")
-    else if (statKey === "findlDEF")
+    else if (statKey === "finalDEF")
       originalVal = Character.getStatValueWithOverride(character, "characterDEF")
     else if (statKey === "finalATK")
       originalVal = Character.getStatValueWithOverride(character, "characterATK") + Character.getStatValueWithOverride(character, "weaponATK")

@@ -14,7 +14,7 @@ const StatIcon = {
   atk: faFistRaised,
 
   characterDEF: faShieldAlt,
-  findlDEF: faShieldAlt,
+  finalDEF: faShieldAlt,
   def_: faShieldAlt,
   def: faShieldAlt,
 

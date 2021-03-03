@@ -10,7 +10,7 @@ const changes = {
   atk_final: "finalATK",
   atk_weapon: "weaponATK",
   def_base: "characterDEF",
-  def_final: "findlDEF",
+  def_final: "finalDEF",
   phy_dmg_bonus: "physical_dmg_",
   phy_res: "physical_res_",
   anemo_ele_dmg_bonus: "anemo_dmg_",

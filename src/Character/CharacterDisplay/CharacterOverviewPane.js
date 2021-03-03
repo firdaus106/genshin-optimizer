@@ -252,7 +252,7 @@ function MainStatsCards(props) {
   let [editingOther, SetEditingOther] = useState(false)
 
   let additionalKeys = ["eleMas", "critRate_", "critDMG_", "enerRech_", "heal_"]
-  const displayStatKeys = ["finalHP", "finalATK", "findlDEF"]
+  const displayStatKeys = ["finalHP", "finalATK", "finalDEF"]
   displayStatKeys.push(...additionalKeys)
   const editStatKeys = ["characterHP", "hp", "hp_", "characterATK", "atk", "atk_", "characterDEF", "def", "def_"]
   editStatKeys.push(...additionalKeys)

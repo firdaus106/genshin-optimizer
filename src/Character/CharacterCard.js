@@ -39,7 +39,7 @@ export default function CharacterCard({ characterKey, onEdit, onDelete, cardClas
   const weaponSubVal = Weapon.getWeaponSubStatValWithOverride(weapon)
   const weaponLevelName = Weapon.getLevelName(weapon.levelKey)
   const weaponPassiveName = Weapon.getWeaponPassiveName(weapon.key)
-  const statkeys = ["finalHP", "finalATK", "findlDEF", "eleMas", "critRate_", "critDMG_", "enerRech_",]
+  const statkeys = ["finalHP", "finalATK", "finalDEF", "eleMas", "critRate_", "critDMG_", "enerRech_",]
   return (<Card className={cardClassName} bg={bg ? bg : "darkcontent"} text="lightfont">
     <Card.Header className="pr-2">
       <Row className="no-gutters">
