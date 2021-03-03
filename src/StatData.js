@@ -192,8 +192,8 @@ Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]
 })
 
 Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
+  const opt = { variant: reaction }
   Object.entries(variants).forEach(([ele, reactionName]) => {
-    const opt = { variant: ele }
     StatData[`${ele}_${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt };
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${reaction}_${type}`] = { name: `${reactionName} ${typeName}`, ...opt }
