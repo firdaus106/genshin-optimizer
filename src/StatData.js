@@ -183,6 +183,7 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
 Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]) => {
   let opt = {}
   if (ele) opt.variant = ele
+  StatData[`${reaction}_hit`] = { name: `${reactionName} DMG`, ...opt }
   StatData[`${reaction}_dmg_`] = { name: `${reactionName} DMG Bonus`, unit: "%", ...opt }
   StatData[`${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt }
 

@@ -153,7 +153,7 @@ Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       FormulaText[`${ele}_${reaction}_${type}`] = (o) => <span>{f(o, `${ele}_${reaction}_multi`)} * {f(o, `${ele}_${type}`)}</span>
       Object.entries(hitMoves).forEach(([move, moveName]) => {
-        FormulaText[`${ele}_${reaction}_${type}`] = (o) => <span>{f(o, `${ele}_${reaction}_multi`)} * {f(o, `${ele}_${move}_${type}`)}</span>
+        FormulaText[`${ele}_${reaction}_${move}_${type}`] = (o) => <span>{f(o, `${ele}_${reaction}_multi`)} * {f(o, `${ele}_${move}_${type}`)}</span>
       })
     })
   })
