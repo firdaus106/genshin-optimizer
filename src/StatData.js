@@ -63,7 +63,7 @@ const StatData = {
 
   // Enemy
   enemyLevel: { name: "Enemy Level" },
-  enemyLevel_multi: { name: "Enemy Level Multiplier", unit: "multi" },
+  enemyLevel_multi: { name: "Enemy Level RES Multiplier", unit: "multi" },
 }
 const Formulas = {
   // Basic Stats
@@ -124,7 +124,7 @@ function ampliBase(eleMas) {
 }
 
 const hitTypes = { hit: "DMG", avgHit: "Avg. DMG", critHit: "CRIT Hit DMG" }
-const hitMoves = { normal: "Normal Attack", charged: "Charged Attack", plunging: "Plunging Attack", skill: "Ele. Skill", burst: "Ele. Burst" }
+const hitMoves = { normal: "Normal Att.", charged: "Charged Att.", plunging: "Plunging Att.", skill: "Ele. Skill", burst: "Ele. Burst" }
 const hitElements = ElementalData
 const transformativeReactions = {
   overloaded: [ "pyro", "Overloaded" ],
@@ -135,7 +135,7 @@ const transformativeReactions = {
   burning: [ null, "Burning" ],
   crystalize: [ null, "Crystalize" ],
 }
-const amplifyingReactions = { vaporize: { pyro: "Vaporized (Pyro)", hydro: "Vaporized (Hydro)" }, melt: { pyro: "Melt (Pyro)", cryo: "Melt (Cryo)" } }
+const amplifyingReactions = { vaporize: { pyro: "Vaporized", hydro: "Vaporized" }, melt: { pyro: "Melt", cryo: "Melt" } }
 
 Object.entries(hitMoves).forEach(([move, moveName]) => {
   StatData[`${move}_dmg_`] = { name: `${moveName} DMG Bonus`, unit: "%" }
@@ -175,8 +175,8 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
   Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
     const opt = { variant: ele }
     Object.entries(hitTypes).forEach(([type, typeName]) => {
-      StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
-      StatData[`${ele}_${move}_${type}_multi`] = { name: `${eleName} ${moveName} ${typeName} Multiplier`, unit: "multi", ...opt }
+      StatData[`${ele}_${move}_${type}`] = { name: `${moveName} ${typeName}`, ...opt }
+      StatData[`${ele}_${move}_${type}_multi`] = { name: `${moveName} ${typeName} Multiplier`, unit: "multi", ...opt }
 
       Formulas[`${ele}_${move}_${type}`] = (s) => s.finalATK * s[`${ele}_${move}_${type}_multi`]
     })
