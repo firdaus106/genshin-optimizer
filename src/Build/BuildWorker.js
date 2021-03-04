@@ -3,7 +3,7 @@ import { PreprocessFormulas } from "../StatData";
 import { artifactSetPermutations, artifactPermutations } from "./Build"
 
 onmessage = async (e) => {
-  let { splitArtifacts, setFilters, minFilters = {}, maxFilters = {}, initialStats, artifactSetEffects, maxBuildsToShow, buildFilterKey, ascending, dependencies } = e.data;
+  let { splitArtifacts, setFilters, minFilters = {}, maxFilters = {}, initialStats, artifactSetEffects, maxBuildsToShow, optimizationTarget, ascending, dependencies } = e.data;
   if (process.env.NODE_ENV === "development") console.log(dependencies)
   let t1 = performance.now()
 
@@ -15,13 +15,18 @@ onmessage = async (e) => {
     builds.splice(maxBuildsToShow)
   }
 
+  const target = typeof optimizationTarget === "string" ?
+    (stats) => stats[optimizationTarget] :
+    (stats) => calculateOptimizationTarget(optimizationTarget, stats)
+    console.log(optimizationTarget, typeof optimizationTarget, target)
+
   let buildCount = 0;
   const callback = (accu, stats) => {
     if (!(buildCount++ % 10000)) postMessage({ progress: buildCount, timing: performance.now() - t1 })
     finalizeStats(stats)
     if (Object.entries(minFilters).some(([key, minimum]) => stats[key] < minimum)) return
     if (Object.entries(maxFilters).some(([key, maximum]) => stats[key] > maximum)) return
-    let buildFilterVal = ascending ? -stats[buildFilterKey] : stats[buildFilterKey]
+    let buildFilterVal = ascending ? -target(stats) : target(stats)
     if (buildFilterVal >= threshold) {
       builds.push({ buildFilterVal, artifacts: { ...accu } })
       if (builds.length >= 1000) {
@@ -40,3 +45,6 @@ onmessage = async (e) => {
   if (process.env.NODE_ENV === "development") console.log(builds.map(b => b.buildFilterVal))
   postMessage({ builds, timing: t2 - t1 })
 }
+
+const calculateOptimizationTarget = (target, stats) => typeof target !== "object" ? target :
+    Object.entries(target).reduce((accu, [key, value]) => accu + stats[key] * calculateOptimizationTarget(value, stats))
