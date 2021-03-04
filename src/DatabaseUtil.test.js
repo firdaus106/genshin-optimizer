@@ -1,6 +1,7 @@
 import CharacterDatabase from "./Character/CharacterDatabase"
 import ArtifactDatabase from "./Artifact/ArtifactDatabase"
 import { DatabaseInitAndVerify } from "./DatabaseUtil"
+import { loadFromLocalStorage, saveToLocalStorage } from "./Util/Util"
 
 describe('DatabaseUtil Tests', () => {
   describe('dbVersion 2', () => {
@@ -13,9 +14,18 @@ describe('DatabaseUtil Tests', () => {
         name: "TEST1",
         characterKey,
         levelKey: "L1",
-        buildSetting: { something: "something" },
+        buildSetting: {
+          mainStat: ["ener_rech", "crit_dmg", "hp_"],
+          statFilters: { pyro_ele_res: {}, crit_dmg: {}, hp_final: {} }
+        },
+        dmgMode: "crit_dmg",
         equippedArtifacts: { "slot1": "artifact_1", "slot2": "artifact_2" }//will get equipped to `characterKey`
       }
+      const expectedBuildSetting = {
+        mainStat: ["enerRech_", "critDMG_", "hp_"],
+        statFilters: { pyro_res_: {}, critDMG_: {}, finalHP: {} }
+      }
+
       const character_2 = {
         id: "character_2",
         name: "TEST2",
@@ -40,8 +50,8 @@ describe('DatabaseUtil Tests', () => {
 
       //should generate unique character from character_1
       DatabaseInitAndVerify()
-      const { id, name, ...rest } = character_1
-      expect(CharacterDatabase.get(characterKey)).toEqual(rest)
+      const { id, name, dmgMode, ...rest } = character_1
+      expect(CharacterDatabase.get(characterKey)).toEqual({ ...rest, hitMode: "critHit", buildSetting: expectedBuildSetting })
       expect(ArtifactDatabase.get("artifact_1").location).toBe(characterKey)
       expect(ArtifactDatabase.get("artifact_2").location).toBe(characterKey)
       expect(ArtifactDatabase.get("artifact_3").location).toBe("")
@@ -62,6 +72,21 @@ describe('DatabaseUtil Tests', () => {
       DatabaseInitAndVerify()
       expect(ArtifactDatabase.get("artifact_1")).toEqual({ ...artifact_1, mainStatKey: "physical_dmg_" })
       expect(ArtifactDatabase.get("artifact_2")).toEqual({ ...artifact_2, substats: exptectSubstats })
+    })
+    test('should Update ArtifactDisplay.state', () => {
+      const state = {
+        filterMainStatKey: "geo_ele_dmg_bonus",
+        filterSubstats: ["ener_rech", "crit_dmg", "hp_", ""]
+      }
+      saveToLocalStorage("ArtifactDisplay.state", state)
+      localStorage.setItem("db_ver", "1")
+
+      const expectedState = {
+        filterMainStatKey: "geo_dmg_",
+        filterSubstats: ["enerRech_", "critDMG_", "hp_", ""]
+      }
+      DatabaseInitAndVerify()
+      expect(loadFromLocalStorage("ArtifactDisplay.state")).toEqual(expectedState)
     })
   })
 })

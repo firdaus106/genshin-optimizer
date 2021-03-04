@@ -261,4 +261,11 @@ const aded = [
   plunging_critRate_, final_normal_critRate_, final_charged_critRate_, final_plunging_critRate_, final_skill_critRate_, final_burst_critRate_,
 ]
 */
-export { changes }
+
+//renamed dmgMode to hitMode
+const dmgModeToHitMode = {
+  avg_dmg: "avgHit",
+  dmg: "hit",
+  crit_dmg: "critHit"
+}
+export { changes, dmgModeToHitMode }

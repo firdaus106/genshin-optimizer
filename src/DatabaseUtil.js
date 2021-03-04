@@ -1,7 +1,7 @@
 import Artifact from "./Artifact/Artifact";
 import ArtifactDatabase from "./Artifact/ArtifactDatabase";
 import CharacterDatabase from "./Character/CharacterDatabase";
-import { changes as v2change } from "./dbV2KeyMap";
+import { changes as v2change, dmgModeToHitMode } from "./dbV2KeyMap";
 import { loadFromLocalStorage, saveToLocalStorage } from "./Util/Util";
 
 function DatabaseInitAndVerify() {
@@ -15,7 +15,12 @@ function DatabaseInitAndVerify() {
       const dbKey = `char_${characterKey}`
       if (localStorage.getItem(dbKey) === null) {
         //if there is no character saved, create a new character
-        const { id, name, ...rest } = character
+        const { id, name, dmgMode, ...rest } = character
+        if (Array.isArray(rest?.buildSetting?.mainStat))
+          rest.buildSetting.mainStat = rest.buildSetting.mainStat.map(stat => stat in v2change ? v2change[stat] : stat)
+        if (typeof rest?.buildSetting?.statFilters === "object")
+          rest.buildSetting.statFilters = Object.fromEntries(Object.entries(rest.buildSetting.statFilters).map(([stat, value]) => [stat in v2change ? v2change[stat] : stat, value]))
+        rest.hitMode = dmgModeToHitMode[dmgMode] ?? Object.keys(dmgModeToHitMode)[0]
         saveToLocalStorage(dbKey, rest)
         //equip to the new character
         Object.values(equippedArtifacts).forEach(artid => {
@@ -36,6 +41,14 @@ function DatabaseInitAndVerify() {
       //delete the old database
       localStorage.removeItem(key)
     })
+    //reset the ArtifactDisplay keys
+    const ArtifactDisplayState = loadFromLocalStorage("ArtifactDisplay.state")
+    if (ArtifactDisplayState) {
+      if (ArtifactDisplayState.filterMainStatKey in v2change)
+        ArtifactDisplayState.filterMainStatKey = v2change[ArtifactDisplayState.filterMainStatKey]
+      ArtifactDisplayState.filterSubstats = ArtifactDisplayState.filterSubstats.map(stat => stat in v2change ? v2change[stat] : stat)
+      saveToLocalStorage("ArtifactDisplay.state", ArtifactDisplayState)
+    }
   }
 
   //this will only run if neither of the database has been initated.
@@ -164,15 +177,10 @@ function DatabaseInitAndVerify() {
       }
     }
 
-    if (dbVersion < 2) {
-      //TODO any key changes that effects artifacts made in v4
-    }
-
     //update any invalid characters in DB
     if (!valid) CharacterDatabase.updateCharacter(character)
   })
-  setDatabaseVersion(1)
-  //TODO set DatabaseVersion to 2, once all the changes to v4 is done.
+  setDatabaseVersion(2)
 }
 const getDatabaseVersion = (defVal = 0) =>
   parseInt(loadFromLocalStorage("db_ver") ?? defVal)
