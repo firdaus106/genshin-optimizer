@@ -62,8 +62,8 @@ export default function CharacterCard({ characterKey, onEdit, onDelete, cardClas
     </Card.Header>
     <Card.Body onClick={onEdit} style={{ cursor: onEdit ? "pointer" : "default" }}>
       <Row>
-        <Col xs="auto">
-          <Image src={Character.getThumb(characterKey)} className={`w-100 h-auto grad-${Character.getStar(characterKey)}star p-0`} thumbnail />
+        <Col xs="auto" className="pr-0">
+          <Image src={Character.getThumb(characterKey)} className={`thumb-big grad-${Character.getStar(characterKey)}star p-0`} thumbnail />
         </Col>
         <Col>
           <h3 className="mb-0">{`Lvl. ${Character.getStatValueWithOverride(character, "characterLevel")} C${constellation}`}</h3>

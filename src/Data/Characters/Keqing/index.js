@@ -57,9 +57,9 @@ let char = {
   constellationName: "Trulla Cementarii",
   titles: ["Driving Thunder", "Yuheng of the Liyue Qixing"],
   baseStat: {
-    hp_base: [1020, 2646, 3521, 5268, 5889, 6776, 7604, 8500, 9121, 10025, 10647, 11561, 12182, 13103],
-    atk_character_base: [25, 65, 87, 130, 145, 167, 187, 209, 225, 247, 262, 285, 300, 323],
-    def_base: [62, 161, 215, 321, 359, 413, 464, 519, 556, 612, 649, 705, 743, 799]
+    characterHP: [1020, 2646, 3521, 5268, 5889, 6776, 7604, 8500, 9121, 10025, 10647, 11561, 12182, 13103],
+    characterATK: [25, 65, 87, 130, 145, 167, 187, 209, 225, 247, 262, 285, 300, 323],
+    characterDEF: [62, 161, 215, 321, 359, 413, 464, 519, 556, 612, 649, 705, 743, 799]
   },
   specializeStat: {
     key: "critDMG_",
@@ -75,22 +75,22 @@ let char = {
         fields: hitPercent.map((percentArr, i) =>
         ({
           text: `${i + (i < 4 ? 1 : 0)}-Hit DMG`,
-          basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("norm_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("norm_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("norm_atk", c),
+          basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("normal", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("normal", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("normal", c),
         }))
       }, {
         text: <span><strong>Charged Attack</strong> Consumes a certain amount of Stamina to unleash 2 rapid sword strikes.</span>,
         fields: [{
           text: `1-Hit DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_1[tlvl]}% {Stat.printStat(Character.getTalentStatKey("char_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_1[tlvl] / 100) * stats[Character.getTalentStatKey("char_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("char_atk", c),
+          basicVal: (tlvl, stats, c) => <span>{charged_1[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_1[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `2-Hit DMG`,
-          basicVal: (tlvl, stats, c) => <span>{charged_2[tlvl]}% {Stat.printStat(Character.getTalentStatKey("char_atk", c), stats)}</span>,
-          finalVal: (tlvl, stats, c) => (charged_2[tlvl] / 100) * stats[Character.getTalentStatKey("char_atk", c)],
-          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("char_atk", c),
+          basicVal: (tlvl, stats, c) => <span>{charged_2[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
+          finalVal: (tlvl, stats, c) => (charged_2[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Stamina Cost`,
           value: `25`,
@@ -197,8 +197,8 @@ let char = {
           sourceKey: "keqing",
           maxStack: 1,
           stats: {
-            crit_rate: 15,
-            ener_rech: 15,
+            critRate_: 15,
+            enerRech_: 15,
           },
           fields: [{
             text: "Duration",
@@ -275,7 +275,7 @@ let char = {
           sourceKey: "keqing",
           maxStack: 1,
           stats: {
-            electro_dmg_bonus: 6,
+            electro_dmg_: 6,
           },
           fields: [{
             text: "Duration",
