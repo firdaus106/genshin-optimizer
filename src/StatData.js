@@ -16,18 +16,18 @@ const StatData = {
   baseATK: { name: "ATK", pretty: "ATK Base" }, // characterATK + weaponATK
 
   // Weapon & Artifact Stats
-  hp: { name: "HP", pretty: "HP Flat" },//flat hp
-  hp_: { name: "HP", unit: "%", pretty: "HP Percent" },
-  atk: { name: "ATK", pretty: "ATK Flat" },
-  atk_: { name: "ATK", unit: "%", pretty: "ATK Percent" },
-  def: { name: "DEF", pretty: "DEF Flat" },
-  def_: { name: "DEF", unit: "%", pretty: "DEF Percent" },
+  hp: { name: "HP", pretty: "Flat HP" },//flat hp
+  hp_: { name: "HP", unit: "%", pretty: "HP Bonus" },
+  atk: { name: "ATK", pretty: "Flat ATK" },
+  atk_: { name: "ATK", unit: "%", pretty: "ATK Bonus" },
+  def: { name: "DEF", pretty: "Flat DEF" },
+  def_: { name: "DEF", unit: "%", pretty: "DEF Bonus" },
   dmg_: { name: "All DMG Bonus", unit: "%" },
 
   // Attack-related Character, Weapon & Artifact Stats
-  finalHP: { name: "HP", pretty: "HP Final" },
-  finalATK: { name: "ATK", pretty: "ATK Final" },
-  finalDEF: { name: "DEF", pretty: "DEF Final" },
+  finalHP: { name: "HP", pretty: "HP" },
+  finalATK: { name: "ATK", pretty: "ATK" },
+  finalDEF: { name: "DEF", pretty: "DEF" },
 
   eleMas: { name: "Elemental Mastery", },
   enerRech_: { name: "Energy Recharge", unit: "%" },
@@ -159,11 +159,14 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 
   Object.entries(hitTypes).forEach(([type, typeName]) => {
     StatData[`${ele}_${type}`] = { name: `${eleName} Attack ${typeName}`, ...opt }
+    StatData[`${ele}_${type}_multi`] = { name: `${eleName} Attack ${typeName} Multiplier`, unit: "multi" }
+
+    Formulas[`${ele}_${type}`] = (s) => s.finalATK * s[`${ele}_${type}_multi`]
   })
 
-  Formulas[`${ele}_hit`] = (s) => s.finalATK * (1 + (s.dmg_ + s[`${ele}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
-  Formulas[`${ele}_critHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ / 100)
-  Formulas[`${ele}_avgHit`] = (s) => s[`${ele}_hit`] * (1 + s.critDMG_ * s[`critRate_`] / 10000)
+  Formulas[`${ele}_hit_multi`] = (s) => (1 + (s.dmg_ + s[`${ele}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+  Formulas[`${ele}_critHit_multi`] = (s) => s[`${ele}_hit_multi`] * (1 + s.critDMG_ / 100)
+  Formulas[`${ele}_avgHit_multi`] = (s) => s[`${ele}_hit_multi`] * (1 + s.critDMG_ * s[`critRate_`] / 10000)
 
   Formulas[`${ele}_enemyRes_multi`] = (s) => s[`${ele}_enemyImmunity`] ? 0 : resMultiplier(s[`${ele}_enemyRes_`])
 })
@@ -173,10 +176,14 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
     const opt = { variant: ele }
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${eleName} ${moveName} ${typeName}`, ...opt }
+      StatData[`${ele}_${move}_${type}_multi`] = { name: `${eleName} ${moveName} ${typeName} Multiplier`, unit: "multi", ...opt }
+
+      Formulas[`${ele}_${move}_${type}`] = (s) => s.finalATK * s[`${ele}_${move}_${type}_multi`]
     })
-    Formulas[`${ele}_${move}_hit`] = (s) => s.finalATK * (1 + (s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
-    Formulas[`${ele}_${move}_critHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ / 100)
-    Formulas[`${ele}_${move}_avgHit`] = (s) => s[`${ele}_${move}_hit`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 10000)
+
+    Formulas[`${ele}_${move}_hit_multi`] = (s) => (1 + (s.dmg_ + s[`${ele}_dmg_`] + s[`${move}_dmg_`]) / 100) * s.enemyLevel_multi * s[`${ele}_enemyRes_multi`]
+    Formulas[`${ele}_${move}_critHit_multi`] = (s) => s[`${ele}_${move}_hit_multi`] * (1 + s.critDMG_ / 100)
+    Formulas[`${ele}_${move}_avgHit_multi`] = (s) => s[`${ele}_${move}_hit_multi`] * (1 + s.critDMG_ * s[`final_${move}_critRate_`] / 10000)
   })
 })
 
@@ -197,7 +204,7 @@ Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
     StatData[`${ele}_${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt };
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${reaction}_${type}`] = { name: `${reactionName} ${typeName}`, ...opt }
-      Formulas[`${ele}_${reaction}_${type}`] = (s) => s[`${ele}_${reaction}_multi`] * s[`${ele}_${type}`]
+      Formulas[`${ele}_${reaction}_${type}`] = (s) => s[`${ele}_${type}`] * s[`${ele}_${reaction}_multi`]
       Object.entries(hitMoves).forEach(([move, moveName]) => {
         StatData[`${ele}_${reaction}_${move}_${type}`] = { name: `${reactionName} ${moveName} ${typeName}`, ...opt }
         Formulas[`${ele}_${reaction}_${move}_${type}`] = (s) => s[`${ele}_${reaction}_multi`] * s[`${ele}_${move}_${type}`]
