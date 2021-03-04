@@ -18,7 +18,6 @@ onmessage = async (e) => {
   const target = typeof optimizationTarget === "string" ?
     (stats) => stats[optimizationTarget] :
     (stats) => calculateOptimizationTarget(optimizationTarget, stats)
-    console.log(optimizationTarget, typeof optimizationTarget, target)
 
   let buildCount = 0;
   const callback = (accu, stats) => {
