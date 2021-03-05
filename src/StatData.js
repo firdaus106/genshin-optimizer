@@ -2,6 +2,8 @@ import ElementalData from "./Data/ElementalData";
 import { clamp } from "./Util/Util";
 
 const StatData = {
+  flat: { name: "", default: 1 },
+
   // Character Stats
   characterHP: { name: "HP", pretty: "Character Base HP" },
   characterDEF: { name: "DEF", pretty: "Character Base DEF" },
