@@ -93,7 +93,7 @@ const FormulaText = {
   finalHP: (o) => <span>{f(o, "characterHP")} * ( 1 + {f(o, "hp_")} ) + {f(o, "hp")}</span>,
   finalDEF: (o) => <span>{f(o, "characterDEF")} * ( 1 + {f(o, "def_")} ) + {f(o, "def")}</span>,
 
-  enemyLevel_multi: (o) => <span>( 100 + {f(o, "characterLevel")}) / ( 100 + {f(o, "enemyLevel")} + 100 + {f(o, "characterLevel")})</span>,
+  enemyLevel_multi: (o) => <span>( 100 + {f(o, "characterLevel")} ) / ( 100 + {f(o, "enemyLevel")} + 100 + {f(o, "characterLevel")} )</span>,
 }
 
 // Enemy RES
@@ -118,19 +118,19 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
 // Hit
 
 Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
-  FormulaText[`${ele}_hit_multi`] = (o) => <span>(1 + {f(o, `dmg_`)} * {f(o, `${ele}_dmg_`)}) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
-  FormulaText[`${ele}_hit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_hit_multi`)}</span>
-  FormulaText[`${ele}_critHit_multi`] = (o) => <span>{f(o, `${ele}_hit_multi`)} * (1 + {f(o, `critDMG_`)})</span>
-  FormulaText[`${ele}_critHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_critHit_multi`)}</span>
-  FormulaText[`${ele}_avgHit_multi`] = (o) => <span>{f(o, `${ele}_hit_multi`)} * (1 + {f(o, `critDMG_`)} * {f(o, `critRate_`)})</span>
-  FormulaText[`${ele}_avgHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_avgHit_multi`)}</span>
+  FormulaText[`${ele}_elemental_hit_multi`] = (o) => <span>( 1 + {f(o, `dmg_`)} * {f(o, `${ele}_dmg_`)} ) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
+  FormulaText[`${ele}_elemental_hit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_hit_multi`)}</span>
+  FormulaText[`${ele}_elemental_critHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} ) * {f(o, `${ele}_elemental_hit_multi`)}</span>
+  FormulaText[`${ele}_elemental_critHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_critHit_multi`)}</span>
+  FormulaText[`${ele}_elemental_avgHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} * {f(o, `critRate_`)} ) * {f(o, `${ele}_elemental_hit_multi`)}</span>
+  FormulaText[`${ele}_elemental_avgHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_avgHit_multi`)}</span>
   
   Object.entries(hitMoves).forEach(([move, moveName]) => {
-    FormulaText[`${ele}_${move}_hit_multi`] = (o) => <span>(1 + {f(o, `dmg_`)} + {f(o, `${ele}_dmg_`)} + {f(o, `${move}_dmg_`)}) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)})</span>
+    FormulaText[`${ele}_${move}_hit_multi`] = (o) => <span>( 1 + {f(o, `dmg_`)} + {f(o, `${ele}_dmg_`)} + {f(o, `${move}_dmg_`)} ) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
     FormulaText[`${ele}_${move}_hit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_${move}_hit_multi`)}</span>
-    FormulaText[`${ele}_${move}_critHit_multi`] = (o) => <span>{f(o, `${ele}_${move}_hit_multi`)} * (1 + {f(o, `critDMG_`)})</span>
+    FormulaText[`${ele}_${move}_critHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} ) * {f(o, `${ele}_${move}_hit_multi`)}</span>
     FormulaText[`${ele}_${move}_critHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_${move}_critHit_multi`)}</span>
-    FormulaText[`${ele}_${move}_avgHit_multi`] = (o) => <span>{f(o, `${ele}_${move}_hit_multi`)} * (1 + {f(o, `critDMG_`)} * {f(o, `final_${move}_critRate_`)})</span>
+    FormulaText[`${ele}_${move}_avgHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} * {f(o, `final_${move}_critRate_`)} ) * {f(o, `${ele}_${move}_hit_multi`)}</span>
     FormulaText[`${ele}_${move}_avgHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_${move}_avgHit_multi`)}</span>
   })
 })
@@ -139,16 +139,16 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 
 Object.assign(FormulaText, {
   ampReactionBase_multi: (o) => <span>1 + 0.189266831 * {f(o, "eleMas")} * exp^(-0.000505 * {f(o, "eleMas")}) / 100 </span>,
-  eleMasX: (o) => <span> 1 + (25 / 9 * {f(o, "eleMas")} / (1401 + {f(o, "eleMas")} ))</span>,
-  eleMasY: (o) => <span> 1 + (60 / 9 * {f(o, "eleMas")} / (1401 + {f(o, "eleMas")} ))</span>,
-  eleMasZ: (o) => <span> 1 + (40 / 9 * {f(o, "eleMas")} / (1401 + {f(o, "eleMas")} ))</span>,
+  eleMasX: (o) => <span> 1 + ( 25 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
+  eleMasY: (o) => <span> 1 + ( 60 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
+  eleMasZ: (o) => <span> 1 + ( 40 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
 })
 
 Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
   Object.entries(variants).forEach(([ele, reactionName]) => {
     const baseMultipliers = {
-      pyro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} )* 1.5 * {f(o, "ampReactionBase_multi")}</span>,
-      hydro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} )* 2 * {f(o, "ampReactionBase_multi")}</span>,
+      pyro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} ) * 1.5 * {f(o, "ampReactionBase_multi")}</span>,
+      hydro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} ) * 2 * {f(o, "ampReactionBase_multi")}</span>,
       pyro_melt_multi: (o) => <span>( 1 + {f(o, "melt_dmg_")} ) * 2 * {f(o, "ampReactionBase_multi")}</span>,
       cryo_melt_multi: (o) => <span>( 1 + {f(o, "melt_dmg_")} ) * 1.5 * {f(o, "ampReactionBase_multi")}</span>,
     }
@@ -156,9 +156,9 @@ Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
     FormulaText[`${ele}_${reaction}_multi`] = baseMultipliers[`${ele}_${reaction}_multi`]
 
     Object.entries(hitTypes).forEach(([type, typeName]) => {
-      FormulaText[`${ele}_${reaction}_${type}`] = (o) => <span>{f(o, `${ele}_${reaction}_multi`)} * {f(o, `${ele}_${type}`)}</span>
+      FormulaText[`${ele}_${reaction}_elemental_${type}`] = (o) => <span>{f(o, `${ele}_elemental_${type}`)} * {f(o, `${ele}_${reaction}_multi`)}</span>
       Object.entries(hitMoves).forEach(([move, moveName]) => {
-        FormulaText[`${ele}_${reaction}_${move}_${type}`] = (o) => <span>{f(o, `${ele}_${reaction}_multi`)} * {f(o, `${ele}_${move}_${type}`)}</span>
+        FormulaText[`${ele}_${reaction}_${move}_${type}`] = (o) => <span>{f(o, `${ele}_${move}_${type}`)} * {f(o, `${ele}_${reaction}_multi`)}</span>
       })
     })
   })
