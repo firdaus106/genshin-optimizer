@@ -34,8 +34,8 @@ export default class Stat {
 
   static getPrintableFormulaStatKeyList = (statList = [], modifiers = {}) => {
     let formulaKeys = Object.keys(FormulaText)
-    let modifiersKeys = Object.keys(modifiers)
-    return [...modifiersKeys, ...formulaKeys].filter((key) => statList.includes(key))
+    let newModifiersKeys = Object.keys(modifiers).filter(x => !formulaKeys.includes(x))
+    return [...newModifiersKeys, ...formulaKeys].filter((key) => statList.includes(key))
   }
 
   static printFormula = (statKey, stats, modifiers = {}, expand = true) => {
