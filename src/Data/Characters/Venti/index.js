@@ -75,6 +75,7 @@ let char = {
           text: `${i + 1}-Hit DMG`,
           basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("normal", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("normal", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("normal", c)]: percentArr[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("normal", c),
         }))
       }, {
@@ -83,11 +84,13 @@ let char = {
           text: `Aimed Shot DMG`,
           basicVal: (tlvl, stats, c) => <span>{aimed[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c)]: aimed[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: <span>Fully-Charged Aimed Shot DMG</span>,
           basicVal: (tlvl, stats, c) => <span>{aimed_full[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c, true), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed_full[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c, true)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c, true)]: aimed_full[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c, true),
         },]
       }, (c) => c >= 1 && {
@@ -96,11 +99,13 @@ let char = {
           text: `Additional Aimed Shot DMG`,
           basicVal: (tlvl, stats, c) => <span>{(aimed[tlvl] * 0.33)?.toFixed(2)}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed[tlvl] * 0.33 / 100) * stats[Character.getTalentStatKey("charged", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c)]: aimed[tlvl] * 0.33 / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Additional Full-Charged Aimed Shot DMG`,
           basicVal: (tlvl, stats, c) => <span>{(aimed_full[tlvl] * 0.33)?.toFixed(2)}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed_full[tlvl] * 0.33 / 100) * stats[Character.getTalentStatKey("charged", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c)]: aimed_full[tlvl] * 0.33 / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }]
       }, {
@@ -109,16 +114,19 @@ let char = {
           text: `Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, stats, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `Low Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg_low[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `High Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg_high[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }]
       }],
@@ -144,6 +152,7 @@ let char = {
           text: "Press DMG",
           basicVal: (tlvl, stats, c) => <span>{sonnet.press_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (sonnet.press_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("skill", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("skill", c)]: sonnet.press_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("skill", c),
         }, {
           text: "Press CD",
@@ -152,6 +161,7 @@ let char = {
           text: "Hold DMG",
           basicVal: (tlvl, stats, c) => <span>{sonnet.hold_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (sonnet.hold_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("skill", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("skill", c)]: sonnet.hold_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("skill", c),
         }, {
           text: "Hold CD",
@@ -198,6 +208,7 @@ let char = {
           text: "DoT",
           basicVal: (tlvl, stats, c) => <span>{ode.dot[tlvl]}% {Stat.printStat(Character.getTalentStatKey("burst", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (ode.dot[tlvl] / 100) * stats[Character.getTalentStatKey("burst", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("burst", c)]: ode.dot[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, {
           text: "Duration",
@@ -224,6 +235,7 @@ let char = {
             text: "Dot",
             basicVal: (tlvl, stats, c) => <span>{(ode.dot[tlvl] / 2)?.toFixed(2)}% {Stat.printStat(`${eleKey}_burst_${c.hitMode}`, stats)}</span>,
             finalVal: (tlvl, stats, c) => (ode.dot[tlvl] / 2 / 100) * stats[`${eleKey}_burst_${c.hitMode}`],
+            formula: (tlvl, _, c) => ({ [`${eleKey}_burst_${c.hitMode}`]: ode.dot[tlvl] / 2 / 100 }),
           }, (c, a) => a >= 4 && {
             text: <span>Regen 15 Energy to all <span className={`text-${eleKey}`}>{ElementalData[eleKey].name}</span> characters.</span>,
           }, (c, a) => c >= 6 && {

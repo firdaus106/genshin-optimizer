@@ -79,6 +79,7 @@ let char = {
           text: `${i + 1}-Hit DMG`,
           basicVal: (tlvl, stats, c) => <span>{percentArr[tlvl]}% {Stat.printStat(Character.getTalentStatKey("normal", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (percentArr[tlvl] / 100) * stats[Character.getTalentStatKey("normal", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("normal", c)]: percentArr[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("normal", c),
         }))
       }, {
@@ -94,11 +95,13 @@ let char = {
           text: `Aimed Shot`,
           basicVal: (tlvl, stats, c) => <span>{aimed[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c)]: aimed[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Aimed Shot Charge Level 1`,
           basicVal: (tlvl, stats, c) => <span>{aimed_charg_1[tlvl]}% {Stat.printStat(Character.getTalentStatKey("charged", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (aimed_charg_1[tlvl] / 100) * stats[Character.getTalentStatKey("charged", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("charged", c)]: aimed_charg_1[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c),
         }, {
           text: `Frostflake Arrow DMG`,
@@ -121,6 +124,15 @@ let char = {
             }
             return base
           },
+          formula: (tlvl, _, c) => {
+            if (c.hitMode === "avgHit") {
+              let { talentConditionals = [] } = c
+              let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
+              if (conditionalNum)
+                return { [Character.getTalentStatKey("charged", c, true)]: { flat: frostflake[tlvl] / 100, critDMG_: frostflake[tlvl] / 100 * 0.2 / 100 } }
+            }
+            return { [Character.getTalentStatKey("charged", c, true)]: frostflake[tlvl] / 100 }
+          },
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c, true),
         }, {
           text: `Frostflake Arrow Bloom DMG`,
@@ -142,6 +154,15 @@ let char = {
                 return base * (1 + 0.2 * stats.critDMG_ / 100)
             }
             return base
+          },
+          formula: (tlvl, _, c) => {
+            if (c.hitMode === "avgHit") {
+              let { talentConditionals = [] } = c
+              let conditionalNum = ConditionalsUtil.getConditionalNum(talentConditionals, { srcKey: "auto", srcKey2: "UndividedHeart" })
+              if (conditionalNum)
+                return { [Character.getTalentStatKey("charged", c, true)]: { flat: frostflake_bloom[tlvl] / 100, critDMG_: frostflake_bloom[tlvl] / 100 * 0.2 / 100 } }
+            }
+            return { [Character.getTalentStatKey("charged", c, true)]: frostflake_bloom[tlvl] / 100 }
           },
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("charged", c, true),
         },],
@@ -176,16 +197,19 @@ let char = {
           text: `Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `Low Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg_low[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg_low[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg_low[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }, {
           text: `High Plunge DMG`,
           basicVal: (tlvl, stats, c) => <span>{plunging_dmg_high[tlvl]}% {Stat.printStat(Character.getTalentStatKey("plunging", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (plunging_dmg_high[tlvl] / 100) * stats[Character.getTalentStatKey("plunging", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("plunging", c)]: plunging_dmg_high[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("plunging", c),
         }]
       }],
@@ -208,11 +232,13 @@ let char = {
           text: "Inherited HP",
           basicVal: (tlvl, stats, c) => <span>{eleSkill.inher_hp[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
           finalVal: (tlvl, stats, c) => (eleSkill.inher_hp[tlvl] / 100) * stats.finalHP,
+          formula: (tlvl, _, c) => ({ finalHP: eleSkill.inher_hp[tlvl] / 100 }),
           variant: (tlvl, stats, c) => "success",
         }, {
           text: "Skill DMG",
           basicVal: (tlvl, stats, c) => <span>{eleSkill.skill_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (eleSkill.skill_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("skill", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("skill", c)]: eleSkill.skill_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("skill", c),
         }, {
           text: "Duration",
@@ -242,6 +268,7 @@ let char = {
           text: "Ice Shard DMG",
           basicVal: (tlvl, stats, c) => <span>{eleBurst.burst_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("burst", c), stats)}</span>,
           finalVal: (tlvl, stats, c) => (eleBurst.burst_dmg[tlvl] / 100) * stats[Character.getTalentStatKey("burst", c)],
+          formula: (tlvl, _, c) => ({ [Character.getTalentStatKey("burst", c)]: eleBurst.burst_dmg[tlvl] / 100 }),
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, {
           text: "Duration",
