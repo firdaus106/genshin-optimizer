@@ -87,8 +87,8 @@ describe('Testing StatDependency', () => {
       expect(GetDependencies({}, ["physical_enemyRes_multi"])).toBeDependent({
         physical_enemyRes_multi: ["physical_enemyImmunity", "physical_enemyRes_"]
       })
-      expect(GetDependencies({}, ["ampReactionBase_multi"])).toBeDependent({
-        ampReactionBase_multi: ["eleMas"]
+      expect(GetDependencies({}, ["amplificative_dmg_"])).toBeDependent({
+        amplificative_dmg_: ["eleMas"]
       })
 
       const test_multi = (s) => {

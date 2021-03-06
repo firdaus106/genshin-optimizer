@@ -1,5 +1,5 @@
-import ElementalData from "./Data/ElementalData";
 import { clamp } from "./Util/Util";
+import { ReactionMatrix, hitTypes, hitMoves, hitElements, transformativeReactions, amplifyingReactions } from "./StatConstants"
 
 const StatData = {
   flat: { name: "", default: 1 },
@@ -52,16 +52,13 @@ const StatData = {
   staminaGlidingDec_: { name: "Gliding Stamina Consumption Dec.", unit: "%" },
   staminaChargedDec_: { name: "Charged Attack Stamina Consumption Dec.", unit: "%" },
 
-  // Multi
-  ampReactionBase_multi: { name: "Amplifying Reaction Base Multiplier", unit: "multi" },
-
-  // Elemental interaction
-  melt_dmg_: { name: "Melt DMG Bonus", unit: "%", variant: "melt" },
-  vaporize_dmg_: { name: "Vaporize DMG Bonus", unit: "%", variant: "vaporize" },
-
-  eleMasX: { name: "Elemental Mastery Multiplier X", unit: "multi" },
-  eleMasY: { name: "Elemental Mastery Multiplier Y", unit: "multi" },
-  eleMasZ: { name: "Elemental Mastery Multiplier Z", unit: "multi" },
+  // Reaction
+  amplificative_dmg_: { name: "Amplificative Reaction DMG Bonus", unit: "%" },
+  transformative_dmg_: { name: "Transformative Reaction DMG Bonus", unit: "%" },
+  crystalize_eleMas_: { name: "Crystalize Bonus (Elemental Mastery)", unit: "%", variant: "crystalize" },
+  crystalize_multi: { name: "Crystalize Multiplier", unit: "multi", variant: "crystalize" } ,
+  crystalize_dmg_: { name: "Crystalize Bonus", unit: "%", variant: "crystalize" },
+  crystalize_hit: { name: "Crystalize Shield HP", variant: "crystalize" },
 
   // Enemy
   enemyLevel: { name: "Enemy Level" },
@@ -76,25 +73,12 @@ const Formulas = {
 
   enemyLevel_multi: (s) => (100 + s.characterLevel) / (100 + s.enemyLevel + 100 + s.characterLevel),
 
-  // Elemental Reactions
-  overloaded_hit: (s) => (1 + s.overloaded_dmg_ / 100) * s.eleMasY * s.overloaded_multi * s.pyro_enemyRes_multi,
-  electrocharged_hit: (s) => (1 + s.electrocharged_dmg_ / 100) * s.eleMasY * s.electrocharged_multi * s.electro_enemyRes_multi,
-  superconduct_hit: (s) => (1 + s.superconduct_dmg_ / 100) * s.eleMasY * s.superconduct_multi * s.cryo_enemyRes_multi,
-  // burning_hit: (s) => "NO_FORMULA",//(1 + s.burning_dmg_ / 100)
-  swirl_hit: (s) => (1 + s.swirl_dmg_ / 100) * s.eleMasY * s.swirl_multi * s.anemo_enemyRes_multi,
-  shattered_hit: (s) => (1 + s.shattered_dmg_ / 100) * s.eleMasY * s.shattered_multi * s.physical_enemyRes_multi,
-  crystalize_hit: (s) => (1 + s.crystalize_dmg_ / 100) * s.eleMasZ * s.crystalize_multi,
-
-  // Elemental DMG multipliers
-  pyro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 1.5 * s.ampReactionBase_multi,
-  hydro_vaporize_multi: (s) => (1 + s.vaporize_dmg_ / 100) * 2 * s.ampReactionBase_multi,
-  pyro_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 2 * s.ampReactionBase_multi,
-  cryo_melt_multi: (s) => (1 + s.melt_dmg_ / 100) * 1.5 * s.ampReactionBase_multi,
-  ampReactionBase_multi: (s) => ampliBase(s.eleMas),
-
-  eleMasX: (s) => (1 + (25 / 9 * s.eleMas / (1401 + s.eleMas))),
-  eleMasY: (s) => (1 + (60 / 9 * s.eleMas / (1401 + s.eleMas))),
-  eleMasZ: (s) => (1 + (40 / 9 * s.eleMas / (1401 + s.eleMas))),
+  // Reactions
+  amplificative_dmg_: (s) => 0.189266831 * s.eleMas * Math.exp(-0.000505 * s.eleMas),
+  transformative_dmg_: (s) => 6000 / 9 * s.eleMas / (1401 + s.eleMas),
+  crystalize_eleMas_: (s) => 4000 / 9 * s.eleMas / (1401 + s.eleMas),
+  crystalize_multi: (s) => ReactionMatrix["crystalize"].reduce((accu, val, i) => accu + val * Math.pow(s.characterLevel, i), 0),
+  crystalize_hit: (s) => (100 + s.crystalize_dmg_ + s.crystalize_eleMas_) / 100 * s.crystalize_multi,
 }
 
 const ElementToReactionKeys = {
@@ -113,31 +97,6 @@ function resMultiplier(res) {
   else if (res >= 0.75) return 1 / (res * 4 + 1)
   return 1 - res
 }
-const ReactionMatrix = {
-  overloaded: [37.4371542286, -4.3991155718, 0.9268181504, -0.0314790536, 0.0005189440, -0.0000027646],
-  superconduct: [7.4972486411, -0.4750909512, 0.1836799174, -0.0064237710, 0.0001110078, -0.0000006038],
-  electrocharged: [20.8340255487, -1.6987232790, 0.4742385201, -0.0162160738, 0.0002746679, -0.0000014798],
-  shattered: [31.2160750111, -3.7397755267, 0.7174530144, -0.0239673351, 0.0003895953, -0.0000020555],
-  swirl: [13.5157684329, -1.7733381829, 0.3097567417, -0.0103922088, 0.0001679502, -0.0000008854],
-  crystalize: [83.06561, -4.42541, 0.5568372, -0.01637168, 0.0002253889, -0.000001088197]
-}
-function ampliBase(eleMas) {
-  return 1 + 0.189266831 * eleMas * Math.exp(-0.000505 * eleMas) / 100
-}
-
-const hitTypes = { hit: "DMG", avgHit: "Avg. DMG", critHit: "CRIT Hit DMG" }
-const hitMoves = { normal: "Normal Att.", charged: "Charged Att.", plunging: "Plunging Att.", skill: "Ele. Skill", burst: "Ele. Burst" }
-const hitElements = ElementalData
-const transformativeReactions = {
-  overloaded: [ "pyro", "Overloaded" ],
-  shattered: [ "physical", "Shattered" ],
-  electrocharged: [ "electro", "Electro-Charged" ],
-  superconduct: [ "cryo", "Superconduct" ],
-  swirl: [ "anemo", "Swirl" ],
-  burning: [ null, "Burning" ],
-  crystalize: [ null, "Crystalize" ],
-}
-const amplifyingReactions = { vaporize: { pyro: "Vaporized", hydro: "Vaporized" }, melt: { pyro: "Melt", cryo: "Melt" } }
 
 Object.entries(hitMoves).forEach(([move, moveName]) => {
   StatData[`${move}_dmg_`] = { name: `${moveName} DMG Bonus`, unit: "%" }
@@ -189,26 +148,28 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
   })
 })
 
-Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]) => {
+Object.entries(transformativeReactions).forEach(([reaction, [reactionName, ele, baseMulti]]) => {
   let opt = {}
-  if (ele) opt.variant = ele
+  if (ele) opt.variant = reaction
   StatData[`${reaction}_hit`] = { name: `${reactionName} DMG`, ...opt }
   StatData[`${reaction}_dmg_`] = { name: `${reactionName} DMG Bonus`, unit: "%", ...opt }
   StatData[`${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt }
 
-  if (ReactionMatrix[reaction])
-    Formulas[`${reaction}_multi`] = (s) => ReactionMatrix[reaction].reduce((accu, val, i) => accu + val * Math.pow(s.characterLevel, i), 0)
+  Formulas[`${reaction}_multi`] = (s) => ReactionMatrix[reaction].reduce((accu, val, i) => accu + val * Math.pow(s.characterLevel, i), 0)
+  Formulas[`${reaction}_hit`] = (s) => (100 + s.transformative_dmg_ + s[`${reaction}_dmg_`]) / 100 * s[`${reaction}_multi`] * s[`${ele}_enemyRes_multi`]
 })
 
-Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
+Object.entries(amplifyingReactions).forEach(([reaction, [name, variants]]) => {
   const opt = { variant: reaction }
-  Object.entries(variants).forEach(([ele, reactionName]) => {
-    StatData[`${ele}_${reaction}_multi`] = { name: `${reactionName} Multiplier`, unit: "multi", ...opt };
+  StatData[`${reaction}_dmg_`] = { name: `${name} DMG Bonus`, unit: "%" }
+  Object.entries(variants).forEach(([ele, baseMulti]) => {
+    StatData[`${ele}_${reaction}_multi`] = { name: `${name} Multiplier`, unit: "multi", ...opt }
+    Formulas[`${ele}_${reaction}_multi`] = (s) => baseMulti * (100 + s.amplificative_dmg_ + s[`${reaction}_dmg_`]) / 100
     Object.entries(hitTypes).forEach(([type, typeName]) => {
-      StatData[`${ele}_${reaction}_elemental_${type}`] = { name: `${reactionName} ${typeName}`, ...opt }
+      StatData[`${ele}_${reaction}_elemental_${type}`] = { name: `${name} ${typeName}`, ...opt }
       Formulas[`${ele}_${reaction}_elemental_${type}`] = (s) => s[`${ele}_elemental_${type}`] * s[`${ele}_${reaction}_multi`]
       Object.entries(hitMoves).forEach(([move, moveName]) => {
-        StatData[`${ele}_${reaction}_${move}_${type}`] = { name: `${reactionName} ${moveName} ${typeName}`, ...opt }
+        StatData[`${ele}_${reaction}_${move}_${type}`] = { name: `${name} ${moveName} ${typeName}`, ...opt }
         Formulas[`${ele}_${reaction}_${move}_${type}`] = (s) => s[`${ele}_${move}_${type}`] * s[`${ele}_${reaction}_multi`]
       })
     })
@@ -236,6 +197,5 @@ export {
   Formulas,
   StatData,
   ElementToReactionKeys,
-  ReactionMatrix,
   PreprocessFormulas,
 }

@@ -1,5 +1,6 @@
-import ElementalData from "./Data/ElementalData";
-import { ReactionMatrix, Formulas, StatData } from "./StatData";
+import ElementalData from "./Data/ElementalData"
+import { Formulas, StatData } from "./StatData"
+import { ReactionMatrix, hitTypes, hitMoves, hitElements, transformativeReactions, amplifyingReactions } from "./StatConstants"
 
 export default class Stat {
   //do not instantiate.
@@ -71,20 +72,6 @@ function reactionMatrixElementRenderer(o, val, i) {
   return <span key={i}>{sign}{disVal}{powerText}</span>
 }
 
-const hitTypes = { hit: "DMG", avgHit: "Avg. DMG", critHit: "CRIT Hit DMG" }
-const hitMoves = { normal: "Normal Att.", charged: "Charged Att.", plunging: "Plunging Att.", skill: "Ele. Skill", burst: "Ele. Burst" }
-const hitElements = ElementalData
-const transformativeReactions = {
-  overloaded: [ "pyro", "Overloaded" ],
-  shattered: [ "physical", "Shattered" ],
-  electrocharged: [ "electro", "Electro-Charged" ],
-  superconduct: [ "cryo", "Superconduct" ],
-  swirl: [ "anemo", "Swirl" ],
-  burning: [ null, "Burning" ],
-  crystalize: [ null, "Crystalize" ],
-}
-const amplifyingReactions = { vaporize: { pyro: "Vaporized", hydro: "Vaporized" }, melt: { pyro: "Melt", cryo: "Melt" } }
-
 // Base Formula
 
 const FormulaText = {
@@ -138,22 +125,12 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 // Reaction
 
 Object.assign(FormulaText, {
-  ampReactionBase_multi: (o) => <span>1 + 0.189266831 * {f(o, "eleMas")} * exp^(-0.000505 * {f(o, "eleMas")}) / 100 </span>,
-  eleMasX: (o) => <span> 1 + ( 25 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
-  eleMasY: (o) => <span> 1 + ( 60 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
-  eleMasZ: (o) => <span> 1 + ( 40 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) )</span>,
+  amplificative_dmg_: (o) => <span>0.189266831 * {f(o, "eleMas")} * exp^(-0.000505 * {f(o, "eleMas")}) * 100% </span>,
 })
-
-Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
-  Object.entries(variants).forEach(([ele, reactionName]) => {
-    const baseMultipliers = {
-      pyro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} ) * 1.5 * {f(o, "ampReactionBase_multi")}</span>,
-      hydro_vaporize_multi: (o) => <span>( 1 + {f(o, "vaporize_dmg_")} ) * 2 * {f(o, "ampReactionBase_multi")}</span>,
-      pyro_melt_multi: (o) => <span>( 1 + {f(o, "melt_dmg_")} ) * 2 * {f(o, "ampReactionBase_multi")}</span>,
-      cryo_melt_multi: (o) => <span>( 1 + {f(o, "melt_dmg_")} ) * 1.5 * {f(o, "ampReactionBase_multi")}</span>,
-    }
+Object.entries(amplifyingReactions).forEach(([reaction, [name, variants]]) => {
+  Object.entries(variants).forEach(([ele, baseMulti]) => {
     // Move them to the right position
-    FormulaText[`${ele}_${reaction}_multi`] = baseMultipliers[`${ele}_${reaction}_multi`]
+    FormulaText[`${ele}_${reaction}_multi`] = (o) => <span>{baseMulti} * ( 100% + {f(o, "amplificative_dmg_")} + {f(o, `${reaction}_dmg_`)} )</span>
 
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       FormulaText[`${ele}_${reaction}_elemental_${type}`] = (o) => <span>{f(o, `${ele}_elemental_${type}`)} * {f(o, `${ele}_${reaction}_multi`)}</span>
@@ -164,22 +141,17 @@ Object.entries(amplifyingReactions).forEach(([reaction, variants]) => {
   })
 })
 
-Object.entries(transformativeReactions).forEach(([reaction, [ele, reactionName]]) => {
-  const reactionHits = {
-    overloaded_hit: (o) => <span>( 1 + {f(o, "overloaded_dmg_")} ) * {f(o, "eleMasY")} * {f(o, "overloaded_multi")} * {f(o, "pyro_enemyRes_multi")}</span>,
-    electrocharged_hit: (o) => <span>( 1 + {f(o, "electrocharged_dmg_")} ) * {f(o, "eleMasY")} * {f(o, "electrocharged_multi")} * {f(o, "electro_enemyRes_multi")}</span>,
-    
-    superconduct_hit: (o) => <span>( 1 + {f(o, "superconduct_dmg_")} ) * {f(o, "eleMasY")} * {f(o, "superconduct_multi")} * {f(o, "cryo_enemyRes_multi")}</span>,
-    // burning_hit:
-    swirl_hit: (o) => <span>( 1 + {f(o, "swirl_dmg_")} ) * {f(o, "eleMasY")} * {f(o, "swirl_multi")} * {f(o, "anemo_enemyRes_multi")}</span>,
-    shattered_hit: (o) => <span>( 1 + {f(o, "shattered_dmg_")} ) * {f(o, "eleMasY")} * {f(o, "shattered_multi")} * {f(o, "physical_enemyRes_multi")}</span>,
-    crystalize_hit: (o) => <span>( 1 + {f(o, "crystalize_dmg_")} ) * {f(o, "eleMasZ")} * {f(o, "crystalize_multi")}</span>,  
-  }
-
-  if (ReactionMatrix[reaction])
-    FormulaText[`${reaction}_multi`] = (o) => ReactionMatrix[reaction].map((val, i) => reactionMatrixElementRenderer(o, val, i))
-  if (`${reaction}_hit` in reactionHits)
-    FormulaText[`${reaction}_hit`] = reactionHits[`${reaction}_hit`]
+Object.assign(FormulaText, {
+  transformative_dmg_: (o) => <span>60 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) * 100%</span>,
+})
+Object.entries(transformativeReactions).forEach(([reaction, [reactionName, ele, baseMulti]]) => {
+  FormulaText[`${reaction}_multi`] = (o) => ReactionMatrix[reaction].map((val, i) => reactionMatrixElementRenderer(o, val, i))
+  FormulaText[`${reaction}_hit`] = (o) => <span>( 100% + {f(o, `transformative_dmg_`)} + {f(o, `${reaction}_dmg_`)} ) * {f(o, `${reaction}_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
+})
+Object.assign(FormulaText, {
+  crystalize_eleMas_: (o) => <span>40 / 9 * {f(o, "eleMas")} / ( 1401 + {f(o, "eleMas")} ) * 100%</span>,
+  crystalize_multi: (o) => ReactionMatrix["crystalize"].map((val, i) => reactionMatrixElementRenderer(o, val, i)),
+  crystalize_hit: (o) => <span>( 100% + {f(o, "crystalize_dmg_")} + {f(o, "crystalize_eleMas_")} ) * {f(o, "crystalize_multi")}</span>,  
 })
 
 //checks for development
