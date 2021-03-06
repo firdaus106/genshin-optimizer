@@ -84,7 +84,7 @@ const FormulaText = {
 
 // Enemy RES
 
-Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
+Object.entries(hitElements).forEach(([ele, { name: eleName }]) => {
   FormulaText[`${ele}_enemyRes_multi`] = (o) => {
     if (o.stats[`${ele}_enemyImmunity`])
       return <span>0 (immune)</span>
@@ -103,14 +103,14 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
 
 // Hit
 
-Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
+Object.entries(hitElements).forEach(([ele, { name: eleName }]) => {
   FormulaText[`${ele}_elemental_hit_multi`] = (o) => <span>( 1 + {f(o, `dmg_`)} * {f(o, `${ele}_dmg_`)} ) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
   FormulaText[`${ele}_elemental_hit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_hit_multi`)}</span>
   FormulaText[`${ele}_elemental_critHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} ) * {f(o, `${ele}_elemental_hit_multi`)}</span>
   FormulaText[`${ele}_elemental_critHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_critHit_multi`)}</span>
   FormulaText[`${ele}_elemental_avgHit_multi`] = (o) => <span>( 1 + {f(o, `critDMG_`)} * {f(o, `critRate_`)} ) * {f(o, `${ele}_elemental_hit_multi`)}</span>
   FormulaText[`${ele}_elemental_avgHit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_elemental_avgHit_multi`)}</span>
-  
+
   Object.entries(hitMoves).forEach(([move, moveName]) => {
     FormulaText[`${ele}_${move}_hit_multi`] = (o) => <span>( 1 + {f(o, `dmg_`)} + {f(o, `${ele}_dmg_`)} + {f(o, `${move}_dmg_`)} ) * {f(o, `enemyLevel_multi`)} * {f(o, `${ele}_enemyRes_multi`)}</span>
     FormulaText[`${ele}_${move}_hit`] = (o) => <span>{f(o, `finalATK`)} * {f(o, `${ele}_${move}_hit_multi`)}</span>
@@ -150,7 +150,7 @@ Object.entries(transformativeReactions).forEach(([reaction, [reactionName, ele, 
 Object.assign(FormulaText, {
   crystalize_eleMas_: (o) => <span>40 / 9 * {f(o, "eleMas")} / ( 1400 + {f(o, "eleMas")} ) * 100%</span>,
   crystalize_multi: (o) => ReactionMatrix["crystalize"].map((val, i) => reactionMatrixElementRenderer(o, val, i)),
-  crystalize_hit: (o) => <span>( 100% + {f(o, "crystalize_dmg_")} + {f(o, "crystalize_eleMas_")} ) * {f(o, "crystalize_multi")}</span>,  
+  crystalize_hit: (o) => <span>( 100% + {f(o, "crystalize_dmg_")} + {f(o, "crystalize_eleMas_")} ) * {f(o, "crystalize_multi")}</span>,
 })
 
 //checks for development

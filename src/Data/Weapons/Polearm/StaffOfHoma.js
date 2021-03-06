@@ -9,10 +9,8 @@ const weapon = {
   img,
   rarity: 5,
   passiveName: "Eagle Spear of Justice",
-  passiveDescription: (refineIndex, charFinalStats) => {
-    console.log(charFinalStats.modifiers)
-    return <span>HP increased by {refinementVals_hp[refineIndex]}%. Additionally, provides an ATK Bonus based on {refinementVals_hp_atk[refineIndex]}% of the wielder's Max HP{DisplayPercent(refinementVals_hp_atk[refineIndex], charFinalStats, "finalHP")}. When the wielder's HP is less than 50%, this ATK bonus is increased by an additional {refinementVals_hp_atk_add[refineIndex]}% of Max HP{DisplayPercent(refinementVals_hp_atk_add[refineIndex], charFinalStats, "finalHP")}.</span>
-  },
+  passiveDescription: (refineIndex, charFinalStats) => <span>HP increased by {refinementVals_hp[refineIndex]}%. Additionally, provides an ATK Bonus based on {refinementVals_hp_atk[refineIndex]}% of the wielder's Max HP{DisplayPercent(refinementVals_hp_atk[refineIndex], charFinalStats, "finalHP")}. When the wielder's HP is less than 50%, this ATK bonus is increased by an additional {refinementVals_hp_atk_add[refineIndex]}% of Max HP{DisplayPercent(refinementVals_hp_atk_add[refineIndex], charFinalStats, "finalHP")}.</span>
+  ,
 
   baseStats: {
     main: [46, 62, 82, 102, 122, 153, 173, 194, 214, 235, 266, 287, 308, 340, 361, 382, 414, 435, 457, 488, 510, 532, 563, 586, 608],

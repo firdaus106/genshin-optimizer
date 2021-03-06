@@ -46,4 +46,4 @@ onmessage = async (e) => {
 }
 
 const calculateOptimizationTarget = (target, stats) => typeof target !== "object" ? target :
-    Object.entries(target).reduce((accu, [key, value]) => accu + stats[key] * calculateOptimizationTarget(value, stats), 0)
+  Object.entries(target).reduce((accu, [key, value]) => accu + stats[key] * calculateOptimizationTarget(value, stats), 0)

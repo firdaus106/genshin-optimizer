@@ -70,16 +70,39 @@ export default class Character {
     }
     return defVal
   }
-  static getTalentLevelKey = (character, talentKey, constellation, withBoost = false) => {
+  static getTalentLevelKey = (character, talentKey, withBoost = false) => {
     if (talentKey === "auto" || talentKey === "skill" || talentKey === "burst") {
+      const { constellation = 0 } = character
       let talentLvlKey = character?.talentLevelKeys?.[talentKey] || 0;
-      let levelBoost = this.getTalentLevelBoost(character?.characterKey, talentKey, constellation)
+      const levelBoost = this.getTalentLevelBoost(character?.characterKey, talentKey, constellation)
       talentLvlKey = clamp(talentLvlKey + levelBoost, 0, 14)
       return withBoost ? { talentLvlKey, levelBoost } : talentLvlKey
     } else return withBoost ? {} : null
   }
   static getTalentDocument = (charKey, talentKey, defVal = []) => this.getTalent(charKey, talentKey)?.document || defVal
-  static getTalentFields = (charKey, talentKey, defVal = []) => this.getTalent(charKey, talentKey)?.fields || defVal
+  static getTalentDocumentSections = (charKey, talentKey, defVal = []) => {
+    const character = CharacterDatabase.get(charKey);
+    if (!character) return defVal
+    const { constellation = 0, levelKey = Object.keys(LevelsData)[0] } = character
+    const ascension = Character.getAscension(levelKey)
+    return this.getTalentDocument(charKey, talentKey).map(section => typeof section === "function" ? section(constellation, ascension) : section)
+  }
+  static getTalentField = (charKey, talentKey, sectionIndex, fieldIndex, defVal = {}) => {
+    const character = CharacterDatabase.get(charKey);
+    if (!character) return defVal
+    const { constellation = 0, levelKey = Object.keys(LevelsData)[0] } = character
+    const ascension = Character.getAscension(levelKey)
+    const field = this.getTalentDocumentSections(charKey, talentKey)?.[sectionIndex]?.fields?.[fieldIndex]
+    if (!field) return defVal
+    return typeof field === "function" ? field(constellation, ascension) : field
+  }
+  static getTalentFieldValue = (field, key, talentKey, characterKey, stats = {}, defVal = "") => {
+    if (!field?.[key]) return defVal
+    const character = CharacterDatabase.get(characterKey)
+    if (!character) return defVal
+    return typeof field?.[key] === "function" ? field[key](this.getTalentLevelKey(character, talentKey), stats, character) : field[key]
+  }
+
   static getTalentStats = (charKey, talentKey, constellation, ascension, defVal = null) => {
     let stats = this.getTalent(charKey, talentKey)?.stats
     if (typeof stats === "function")
@@ -96,9 +119,9 @@ export default class Character {
     return statsArr
   }
   static getTalentConditional = (charKey, talentKey, conditionalKey, talentLvlKey, constellation, ascension, defVal = null) => {
-    let doc = this.getTalentDocument(charKey, talentKey)
+    const sections = this.getTalentDocumentSections(charKey, talentKey)
     let cond = null
-    for (const section of doc) {
+    for (const section of sections) {
       let tempCond = section.conditional
       if (typeof tempCond === "function")
         tempCond = tempCond(talentLvlKey, constellation, ascension)
@@ -120,19 +143,25 @@ export default class Character {
     let fields = ConditionalsUtil.getConditionalProp(conditional, "fields", conditionalNum)[0]
     return fields || defVal
   }
+  /**
+   * Create statKey in the form of ${ele}_elemental_${type} for elemental DMG, ${ele}_${src}_${type} for talent DMG.
+   * @param {string} skillKey - The DMG src. Can be "norm","skill". Use an elemental to specify a lemental hit "physical" -> physical_elemental_{type}. Use "elemental" here to specify a elemental hit of character's element/reactionMode
+   * @param {*} character - The character. Will extract hitMode, autoInfused...
+   * @param {*} elemental - Override the hit to be the character's elemental, that is not part of infusion.
+   */
   static getTalentStatKey = (skillKey, character, elemental = false) => {
-    let { hitMode = "", autoInfused = false, characterKey, reactionMode = null } = character
-    if (skillKey === "phy") return `physical_${hitMode}`
+    const { hitMode = "", autoInfused = false, characterKey, reactionMode = null } = character
+    if (this.getElementalKeys().includes(skillKey)) return `${skillKey}_elemental_${hitMode}`//elemental DMG
     let charEleKey = this.getElementalKey(characterKey)
-    if (!elemental) elemental = this.isAutoElemental(characterKey) || (autoInfused && (Character.getCDataObj(characterKey)?.talent?.auto?.infusable || false))
+    if (!elemental) elemental = this.isAutoElemental(characterKey) || (autoInfused && Character.getCDataObj(characterKey)?.talent?.auto?.infusable)
     let eleKey = "physical"
-    if (skillKey === "ele" || skillKey === "burst" || skillKey === "skill" || elemental)
+    if (skillKey === "elemental" || skillKey === "burst" || skillKey === "skill" || elemental)
       eleKey = (reactionMode ? reactionMode : charEleKey)
     //{pyro}_{burst}_{avgHit}
     return `${eleKey}_${skillKey}_${hitMode}`
   }
   static getTalentStatKeyVariant = (skillKey, character, elemental = false) => {
-    if (skillKey === "phy") return "physical"
+    if (this.getElementalKeys().includes(skillKey)) return skillKey
     let { autoInfused = false, characterKey, reactionMode = null } = character
     let charEleKey = this.getElementalKey(characterKey)
     //reactionMode can be one of pyro_vaporize, pyro_melt, hydro_vaporize,cryo_melt
@@ -142,7 +171,7 @@ export default class Character {
       reactionMode = "melt"
     if (!elemental) elemental = this.isAutoElemental(characterKey) || (autoInfused && (Character.getCDataObj(characterKey)?.talent?.auto?.infusable || false))
     let eleKey = "physical"
-    if (skillKey === "ele" || skillKey === "burst" || skillKey === "skill" || elemental)
+    if (skillKey === "elemental" || skillKey === "burst" || skillKey === "skill" || elemental)
       eleKey = (reactionMode ? reactionMode : charEleKey)
     return eleKey
   }
@@ -150,42 +179,61 @@ export default class Character {
   static isAutoElemental = (charKey, defVal = false) => this.getWeaponTypeKey(charKey) === "catalyst" || defVal
   static isAutoInfusable = (charKey, defVal = false) => this.getCDataObj(charKey)?.talent?.auto?.infusable || defVal
 
-  static getDisplayStatKeys = (characterKey, defVal = []) => {
+  static hasTalentPage = (characterKey) => (Character.getCDataObj(characterKey)?.talent?.skill?.name || "TEMPLATE") !== "TEMPLATE"
+
+  static getDisplayStatKeys = (characterKey, defVal = { basicKeys: [] }) => {
     if (!characterKey) return defVal
     let eleKey = Character.getElementalKey(characterKey)
     if (!eleKey) return defVal //usually means the character has not been lazy loaded yet
-    let keys = ["finalHP", "finalATK", "finalDEF", "eleMas", "critRate_", "critDMG_", "heal_", "enerRech_", `${eleKey}_dmg_`]
+    const basicKeys = ["finalHP", "finalATK", "finalDEF", "eleMas", "critRate_", "critDMG_", "heal_", "enerRech_", `${eleKey}_dmg_`]
     //we need to figure out if the character has: normal phy auto, elemental auto, infusable auto(both normal and phy)
-    let isAutoElemental = Character.isAutoElemental(characterKey)
-    let isAutoInfusable = Character.isAutoInfusable(characterKey)
-    let atkKeys = []
+    const isAutoElemental = Character.isAutoElemental(characterKey)
+    const isAutoInfusable = Character.isAutoInfusable(characterKey)
     if (!isAutoElemental)
-      atkKeys.push("physical_dmg_")
-
-    if (!isAutoElemental) //add phy auto + charged + physical 
-      atkKeys.push("physical_normal_avgHit", "physical_charged_avgHit")
-
-    if (isAutoElemental || isAutoInfusable) //add elemental auto + charged
-      atkKeys.push(`${eleKey}_normal_avgHit`, `${eleKey}_charged_avgHit`)
-    else if (Character.getWeaponTypeKey(characterKey) === "bow") {//bow charged atk does elemental dmg on charge
-      atkKeys.push(`${eleKey}_charged_avgHit`)
-    }
-    //show skill/burst 
-    atkKeys.push(`${eleKey}_skill_avgHit`, `${eleKey}_burst_avgHit`)
-    keys.push(...atkKeys)
-    if (eleKey === "pyro") {
-      keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
-      keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_melt_`)))
-    } else if (eleKey === "cryo")
-      keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_melt_`)))
-    else if (eleKey === "hydro")
-      keys.push(...atkKeys.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
+      basicKeys.push("physical_dmg_")
 
     //show elemental interactions
-    keys.push(...ElementToReactionKeys[eleKey])
-    let weaponTypeKey = this.getWeaponTypeKey(characterKey)
-    if (!keys.includes("shattered_hit") && weaponTypeKey === "claymore") keys.push("shattered_hit")
-    return keys
+    const transReactions = ElementToReactionKeys[eleKey]
+    const weaponTypeKey = this.getWeaponTypeKey(characterKey)
+    if (!transReactions.includes("shattered_hit") && weaponTypeKey === "claymore") transReactions.push("shattered_hit")
+    if (this.hasTalentPage(characterKey)) {
+      const charFormulas = {}
+      Object.keys(Character.getCDataObj(characterKey)?.talent ?? {}).forEach(talentKey =>
+        Character.getTalentDocumentSections(characterKey, talentKey)?.forEach((section, sectionIndex) =>
+          section?.fields?.forEach((field, fieldIndex) =>
+            (field?.formula || this.getTalentField(characterKey, talentKey, sectionIndex, fieldIndex).formula) && (charFormulas[talentKey] = [...(charFormulas[talentKey] ?? []), {
+              talentKey,
+              sectionIndex,
+              fieldIndex
+            }]))))
+      return { basicKeys, ...charFormulas, transReactions }
+    } else {
+      //generic average hit parameters.
+      const genericAvgHit = []
+      if (!isAutoElemental) //add phy auto + charged + physical 
+        genericAvgHit.push("physical_normal_avgHit", "physical_charged_avgHit")
+
+      if (isAutoElemental || isAutoInfusable) //add elemental auto + charged
+        genericAvgHit.push(`${eleKey}_normal_avgHit`, `${eleKey}_charged_avgHit`)
+      else if (Character.getWeaponTypeKey(characterKey) === "bow") {//bow charged atk does elemental dmg on charge
+        genericAvgHit.push(`${eleKey}_charged_avgHit`)
+      }
+      //show skill/burst 
+      genericAvgHit.push(`${eleKey}_skill_avgHit`, `${eleKey}_burst_avgHit`)
+
+      //add reactions.
+      if (eleKey === "pyro") {
+        const reactions = []
+        reactions.push(...genericAvgHit.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
+        reactions.push(...genericAvgHit.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_melt_`)))
+        genericAvgHit.push(...reactions)
+      } else if (eleKey === "cryo")
+        genericAvgHit.push(...genericAvgHit.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_melt_`)))
+      else if (eleKey === "hydro")
+        genericAvgHit.push(...genericAvgHit.filter(key => key.startsWith(`${eleKey}_`)).map(key => key.replace(`${eleKey}_`, `${eleKey}_vaporize_`)))
+
+      return { basicKeys, genericAvgHit, transReactions }
+    }
   }
 
   static hasOverride = (character, statKey) => {
@@ -199,7 +247,7 @@ export default class Character {
   }
 
   static getStatValueWithOverride = (character, statKey, defVal = 0) => {
-    if (this.hasOverride(character, statKey)) return character?.baseStatOverrides?.[statKey]
+    if (this.hasOverride(character, statKey)) return character?.baseStatOverrides?.[statKey] ?? defVal
     else return this.getBaseStatValue(character, statKey, defVal)
   }
 
@@ -318,14 +366,14 @@ export default class Character {
     //add stats from talentconditionals
     talentConditionals.forEach(cond => {
       let { srcKey: talentKey, srcKey2: conditionalKey, conditionalNum } = cond
-      let talentLvlKey = Character.getTalentLevelKey(character, talentKey, constellation)
+      let talentLvlKey = Character.getTalentLevelKey(character, talentKey)
       let conditional = Character.getTalentConditional(characterKey, talentKey, conditionalKey, talentLvlKey, constellation, ascension)
       this.mergeStats(initialStats, Character.getTalentConditionalStats(conditional, conditionalNum, {}))
     })
 
     //add stats from all talents
     Character.getTalentStatsAll(characterKey, constellation, ascension).forEach(s => this.mergeStats(initialStats, s))
-    
+
     //add stats from weapons
     const weaponSubKey = Weapon.getWeaponSubStatKey(character?.weapon?.key)
     if (weaponSubKey) this.mergeStats(initialStats, { [weaponSubKey]: Weapon.getWeaponSubStatValWithOverride(character?.weapon) })

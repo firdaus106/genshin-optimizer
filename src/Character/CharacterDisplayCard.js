@@ -86,8 +86,8 @@ export default class CharacterDisplayCard extends React.Component {
       this.setState(CharacterDatabase.get(this.state.characterKey))
     this.props.forceUpdate ? this.props.forceUpdate() : this.forceUpdate();
   }
-  setSetState = (val) => this.setState(val)
   setCharacterKey = (characterKey) => {
+    this.props?.setCharacterKey?.(characterKey)
     let state = CharacterDisplayCard.getInitialState()
     let char = CharacterDatabase.get(characterKey)
     if (char) state = { ...state, ...char }
@@ -137,6 +137,7 @@ export default class CharacterDisplayCard extends React.Component {
       <Image src={Character.getThumb(characterKey)} className="thumb-small my-n1 ml-n2" roundedCircle />
       <h6 className="d-inline"> {Character.getName(characterKey)} </h6>
     </span> : <span>Select a Character</span>
+    const commonPaneProps = { character, newBuild, equippedBuild: !newBuild || compareAgainstEquipped ? equippedBuild : undefined, editable, setState: u => this.setState(u), setOverride: this.setOverride, forceUpdate: this.forceUpdateComponent }
     // main CharacterDisplayCard
     return (<Card bg="darkcontent" text="lightfont" >
       <Card.Header>
@@ -201,7 +202,7 @@ export default class CharacterDisplayCard extends React.Component {
               <Nav.Link eventKey="artifacts">{newBuild ? "Current Artifacts" : "Artifacts"}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="talent" disabled={process.env.NODE_ENV !== "development" && (Character.getCDataObj(characterKey)?.talent?.skill?.name || "TEMPLATE") === "TEMPLATE"}>Talents {(Character.getCDataObj(characterKey)?.talent?.skill?.name || "TEMPLATE") === "TEMPLATE" && <Badge variant="warning">WIP</Badge>}</Nav.Link>
+              <Nav.Link eventKey="talent" disabled={process.env.NODE_ENV !== "development" && !Character.hasTalentPage(characterKey)}>Talents {!Character.hasTalentPage(characterKey) && <Badge variant="warning">WIP</Badge>}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="team" disabled>Team <Badge variant="warning">WIP</Badge></Nav.Link>
@@ -210,20 +211,18 @@ export default class CharacterDisplayCard extends React.Component {
           <Tab.Content>
             <Tab.Pane eventKey="character">
               <CharacterOverviewPane
-                setState={this.setSetState}
-                setOverride={this.setOverride}
                 setConstellation={this.setConstellation}
-                {...{ character, editable, equippedBuild, newBuild }}
+                {...commonPaneProps}
               />
             </Tab.Pane>
             <Tab.Pane eventKey="artifacts" >
-              <CharacterArtifactPane {...{ character, equippedBuild, editable, forceUpdate: this.forceUpdateComponent }} setState={this.setSetState} />
+              <CharacterArtifactPane {...{ ...commonPaneProps, newBuild: undefined, equippedBuild, }} />
             </Tab.Pane>
             {newBuild ? <Tab.Pane eventKey="newartifacts" >
-              <CharacterArtifactPane {...{ character, newBuild, equippedBuild, editable, forceUpdate: this.forceUpdateComponent }} />
+              <CharacterArtifactPane {...commonPaneProps} />
             </Tab.Pane> : null}
             <Tab.Pane eventKey="talent">
-              <CharacterTalentPane {...{ character, newBuild, equippedBuild, editable }} setState={this.setSetState} setOverride={this.setOverride} />
+              <CharacterTalentPane {...commonPaneProps} />
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>

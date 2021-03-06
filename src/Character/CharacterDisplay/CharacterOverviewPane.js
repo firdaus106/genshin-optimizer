@@ -6,7 +6,7 @@ import Assets from "../../Assets/Assets"
 import ConditionalSelector from "../../Components/ConditionalSelector"
 import CustomFormControl from "../../Components/CustomFormControl"
 import { Stars } from "../../Components/StarDisplay"
-import { DisplayNewBuildDiff, DisplayStats } from "../../Components/StatDisplay"
+import StatDisplay from "../../Components/StatDisplay"
 import { StatIconEle } from "../../Components/StatIcon"
 import { CharacterSpecializedStatKey } from "../../Data/CharacterData"
 import { LevelNameData } from "../../Data/WeaponData"
@@ -232,7 +232,7 @@ function WeaponStatsEditorCard(props) {
               <Col>{conditionalEle}</Col>
             </Row>
 
-            <p>{weaponPassiveName && Weapon.getWeaponPassiveDescription(weapon.key, weapon.refineIndex, build.finalStats, character)}</p>
+            <p>{weaponPassiveName && Weapon.getWeaponPassiveDescription(weapon.key, weapon.refineIndex, build?.finalStats, character)}</p>
             <WeaponStatsCard title={"Main Stats"} stats={{ atk: weaponDisplayMainVal, [subStatKey]: weaponDisplaySubVal }} finalStats={build?.finalStats} />
             <WeaponStatsCard title={"Bonus Stats"} stats={weaponBonusStats} finalStats={build?.finalStats} />
             <WeaponStatsCard title={"Conditional Stats"} stats={conditionalStats} finalStats={build?.finalStats} />
@@ -244,9 +244,7 @@ function WeaponStatsEditorCard(props) {
 }
 
 function MainStatsCards(props) {
-  let { editable, character, character: { compareAgainstEquipped }, setOverride, equippedBuild, newBuild } = props
-  //choose which one to display stats for
-  let build = newBuild ? newBuild : equippedBuild
+  let { editable, character, setOverride, equippedBuild, newBuild } = props
 
   let [editing, SetEditing] = useState(false)
   let [editingOther, SetEditingOther] = useState(false)
@@ -270,7 +268,6 @@ function MainStatsCards(props) {
 
   const isPercentSpecialStatSelect = Stat.getStatUnit(specializedStatKey) === "%"
 
-  let displayStatProps = { character, build, editable }
   let displayNewBuildProps = { character, equippedBuild, newBuild, editable }
   return <>
     <Card bg="lightcontent" text="lightfont" className="mb-2">
@@ -327,9 +324,7 @@ function MainStatsCards(props) {
         </Card.Body> :
         <Card.Body>
           <Row className="mb-2">
-            {(newBuild && compareAgainstEquipped) ?
-              displayStatKeys.map(statKey => <DisplayNewBuildDiff xs={12} lg={6} key={statKey} {...{ ...displayNewBuildProps, statKey }} />) :
-              displayStatKeys.map(statKey => <DisplayStats xs={12} lg={6} key={statKey} {...{ ...displayStatProps, statKey }} />)}
+            {displayStatKeys.map(statKey => <Col xs={12} lg={6} key={statKey} ><StatDisplay statKey={statKey} {...displayNewBuildProps} /></Col>)}
             {specializedStatVal ? <Col lg={6} xs={12}>
               <span><b>Specialized:</b> <span className={Character.hasOverride(character, "specializedStatKey") ? "text-warning" : ""}>{Stat.getStatName(specializedStatKey)}</span></span>
               <span className={`float-right ${Character.hasOverride(character, "specializedStatVal") ? "text-warning" : ""}`}>{`${specializedStatVal}${specializedStatUnit}`}</span>
@@ -369,11 +364,7 @@ function MainStatsCards(props) {
           </Row>
         </Card.Body> :
         <Card.Body>
-          <Row className="mb-2">
-            {(newBuild && compareAgainstEquipped) ?
-              otherStatKeys.map(statKey => <DisplayNewBuildDiff xs={12} lg={6} key={statKey} {...{ ...displayNewBuildProps, statKey }} />) :
-              otherStatKeys.map(statKey => <DisplayStats xs={12} lg={6} key={statKey} {...{ ...displayStatProps, statKey }} />)}
-          </Row>
+          <Row className="mb-2">{otherStatKeys.map(statKey => <Col xs={12} lg={6} key={statKey} ><StatDisplay statKey={statKey} {...displayNewBuildProps} /></Col>)}</Row>
         </Card.Body>
       }
     </Card>
@@ -386,11 +377,7 @@ function MainStatsCards(props) {
         </Row>
       </Card.Header>
       <Card.Body>
-        <Row className="mb-2">
-          {(newBuild && compareAgainstEquipped) ?
-            miscStatkeys.map(statKey => <DisplayNewBuildDiff xs={12} lg={6} key={statKey} {...{ ...displayNewBuildProps, statKey }} />) :
-            miscStatkeys.map(statKey => <DisplayStats xs={12} lg={6} key={statKey} {...{ ...displayStatProps, statKey }} />)}
-        </Row>
+        <Row className="mb-2">{miscStatkeys.map(statKey => <Col xs={12} lg={6} key={statKey} ><StatDisplay statKey={statKey} {...displayNewBuildProps} /></Col>)}</Row>
       </Card.Body>
     </Card>
   </>

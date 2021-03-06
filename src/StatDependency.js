@@ -32,7 +32,13 @@ function InsertDependencies(key, modifiers, dependencies) {
   dependencies.add(key)
 }
 
+//if the optimizationTarget is in the form of {dmg:0.6}, it can be reduced to "dmg" for the purpose to build generation.
+const reduceOptimizationTarget = (optimizationTarget) =>
+  (typeof optimizationTarget === "object" && Object.keys(optimizationTarget).length === 1 && typeof optimizationTarget[Object.keys(optimizationTarget)[0]] === "number") ? Object.keys(optimizationTarget)[0] : optimizationTarget
+
+
 export {
   GetFormulaDependency,
   GetDependencies,
+  reduceOptimizationTarget,
 }

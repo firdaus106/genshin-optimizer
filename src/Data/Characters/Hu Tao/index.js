@@ -294,7 +294,7 @@ let char = {
           condition: "Butterfly's Embrace",
           sourceKey: "hutao",
           maxStack: 1,
-          stats: {//TODO use a loop for the elemental data after v4
+          stats: {
             physical_res_: 200,
             anemo_res__: 200,
             geo_res__: 200,
