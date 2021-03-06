@@ -74,9 +74,9 @@ const Formulas = {
   enemyLevel_multi: (s) => (100 + s.characterLevel) / (100 + s.enemyLevel + 100 + s.characterLevel),
 
   // Reactions
-  amplificative_dmg_: (s) => 0.189266831 * s.eleMas * Math.exp(-0.000505 * s.eleMas),
-  transformative_dmg_: (s) => 6000 / 9 * s.eleMas / (1401 + s.eleMas),
-  crystalize_eleMas_: (s) => 4000 / 9 * s.eleMas / (1401 + s.eleMas),
+  amplificative_dmg_: (s) => 2500 / 9 * s.eleMas / (1400 + s.eleMas),
+  transformative_dmg_: (s) => 6000 / 9 * s.eleMas / (1400 + s.eleMas),
+  crystalize_eleMas_: (s) => 4000 / 9 * s.eleMas / (1400 + s.eleMas),
   crystalize_multi: (s) => ReactionMatrix["crystalize"].reduce((accu, val, i) => accu + val * Math.pow(s.characterLevel, i), 0),
   crystalize_hit: (s) => (100 + s.crystalize_dmg_ + s.crystalize_eleMas_) / 100 * s.crystalize_multi,
 }
