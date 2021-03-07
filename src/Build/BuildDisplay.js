@@ -250,7 +250,7 @@ export default class BuildDisplay extends React.Component {
                 </Card.Header>
               </Card>}
             {/* Hit mode options */}
-            <HitModeCard characterKey={characterKey} forceUpdate={this.forceUpdateBuildDisplay} />
+            <HitModeCard characterKey={characterKey} forceUpdate={() => { this.forceUpdateBuildDisplay(); this.autoGenerateBuilds() }} />
             {/* Final Stat Filter */}
             <StatFilterCard statFilters={statFilters} statsDisplayKeys={statsDisplayKeys} setStatFilters={sFs => this.setState({ statFilters: sFs })} />
           </Col>
