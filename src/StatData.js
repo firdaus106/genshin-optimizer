@@ -13,7 +13,7 @@ const StatData = {
 
   // Weapon Stats
   weaponATK: { name: "Weapon ATK", pretty: "ATK Weapon", const: true },
-  
+
   // Character & Weapon Stats
   baseATK: { name: "ATK", pretty: "ATK Base", const: true }, // characterATK + weaponATK
 
@@ -52,11 +52,13 @@ const StatData = {
   staminaGlidingDec_: { name: "Gliding Stamina Consumption Dec.", unit: "%" },
   staminaChargedDec_: { name: "Charged Attack Stamina Consumption Dec.", unit: "%" },
 
+  heal_multi: { name: "Heal multiplier", unit: "multi" },
+
   // Reaction
   amplificative_dmg_: { name: "Amplificative Reaction DMG Bonus", unit: "%" },
   transformative_dmg_: { name: "Transformative Reaction DMG Bonus", unit: "%" },
   crystalize_eleMas_: { name: "Crystalize Bonus (Elemental Mastery)", unit: "%", variant: "crystalize" },
-  crystalize_multi: { name: "Crystalize Multiplier", unit: "multi", const: true, variant: "crystalize" } ,
+  crystalize_multi: { name: "Crystalize Multiplier", unit: "multi", const: true, variant: "crystalize" },
   crystalize_dmg_: { name: "Crystalize Bonus", unit: "%", variant: "crystalize" },
   crystalize_hit: { name: "Crystalize Shield HP", variant: "crystalize" },
 
@@ -72,6 +74,8 @@ const Formulas = {
   finalDEF: (s, c) => c.characterDEF * (1 + s.def_ / 100) + s.def,
 
   enemyLevel_multi: (s, c) => (100 + c.characterLevel) / (100 + c.enemyLevel + 100 + c.characterLevel),
+
+  heal_multi: (s) => (1 + s.heal_ / 100 + s.incHeal_ / 100),
 
   // Reactions
   amplificative_dmg_: (s) => 2500 / 9 * s.eleMas / (1400 + s.eleMas),
@@ -106,7 +110,7 @@ Object.entries(hitMoves).forEach(([move, moveName]) => {
   Formulas[`final_${move}_critRate_`] = (s) => clamp(s.critRate_ + s[`${move}_critRate_`], 0, 100)
 })
 
-Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
+Object.entries(hitElements).forEach(([ele, { name: eleName }]) => {
   const opt = { variant: ele }
   // DONT CHANGE. needed for screenshot parsing
   StatData[`${ele}_dmg_`] = { name: `${eleName} DMG Bonus`, unit: "%", ...opt }
@@ -133,7 +137,7 @@ Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
 })
 
 Object.entries(hitMoves).forEach(([move, moveName]) => {
-  Object.entries(hitElements).forEach(([ele, {name: eleName}]) => {
+  Object.entries(hitElements).forEach(([ele, { name: eleName }]) => {
     const opt = { variant: ele }
     Object.entries(hitTypes).forEach(([type, typeName]) => {
       StatData[`${ele}_${move}_${type}`] = { name: `${moveName} ${typeName}`, ...opt }
@@ -179,7 +183,7 @@ if (process.env.NODE_ENV === "development") console.log(StatData)
 
 //assume all the dependency for the modifiers are part of the dependencyKeys as well
 function PreprocessFormulas(dependencyKeys, stats, debug = false) {
-  const { modifiers = {} } = stats, initialStats = {}, constData = { }
+  const { modifiers = {} } = stats, initialStats = {}, constData = {}
   const formulaList = dependencyKeys.map(key => {
     const modifier = modifiers[key] ?? {}
     const constModifier = Object.entries(modifier).filter(([k]) => StatData[k]?.const)
@@ -194,18 +198,18 @@ function PreprocessFormulas(dependencyKeys, stats, debug = false) {
 
     let tmp
     switch (funcIndicator) {
-    case 0: tmp = Formulas[key]; break
-    case 1: tmp = (s, c) => Formulas[key](s, c) + constFunc(s, c); break
-    case 2: tmp = (s, c) => Formulas[key](s, c) + dynamicFunc(s, c); break
-    case 3: tmp = (s, c) => Formulas[key](s, c) + constFunc(s, c) + dynamicFunc(s, c); break
-    case 4: tmp = (s, c) => c[key]; break
-    case 5: tmp = (s, c) => c[key] + constFunc(s, c); break
-    case 6: tmp = (s, c) => c[key] + dynamicFunc(s, c); break
-    case 7: tmp = (s, c) => c[key] + constFunc(s, c) + dynamicFunc(s, c); break
-    case 8: tmp = (s, c) => s[key]; break
-    case 9: tmp = (s, c) => s[key] + constFunc(s, c); break
-    case 10: tmp = (s, c) => s[key] + dynamicFunc(s, c); break
-    default: tmp = (s, c) => s[key] + constFunc(s, c) + dynamicFunc(s, c); break
+      case 0: tmp = Formulas[key]; break
+      case 1: tmp = (s, c) => Formulas[key](s, c) + constFunc(s, c); break
+      case 2: tmp = (s, c) => Formulas[key](s, c) + dynamicFunc(s, c); break
+      case 3: tmp = (s, c) => Formulas[key](s, c) + constFunc(s, c) + dynamicFunc(s, c); break
+      case 4: tmp = (s, c) => c[key]; break
+      case 5: tmp = (s, c) => c[key] + constFunc(s, c); break
+      case 6: tmp = (s, c) => c[key] + dynamicFunc(s, c); break
+      case 7: tmp = (s, c) => c[key] + constFunc(s, c) + dynamicFunc(s, c); break
+      case 8: tmp = (s, c) => s[key]; break
+      case 9: tmp = (s, c) => s[key] + constFunc(s, c); break
+      case 10: tmp = (s, c) => s[key] + dynamicFunc(s, c); break
+      default: tmp = (s, c) => s[key] + constFunc(s, c) + dynamicFunc(s, c); break
     }
     const func = tmp
 

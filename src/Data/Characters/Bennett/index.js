@@ -203,10 +203,10 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, {
           text: "Continuous Regeneration Per Sec",
-          basicVal: (tlvl, stats, c) => <span>{eleBurst.heal_hp[tlvl]}% Max HP + {eleBurst.heal_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (eleBurst.heal_hp[tlvl] / 100) * stats.finalHP + eleBurst.heal_flat[tlvl],
-          formula: (tlvl) => ({ finalHP: eleBurst.heal_hp[tlvl] / 100, flat: eleBurst.heal_flat[tlvl] }),
-          variant: (tlvl, stats, c) => "success",
+          basicVal: (tlvl, stats, c) => <span>( {eleBurst.heal_hp[tlvl]}% Max HP + {eleBurst.heal_flat[tlvl]} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => ((eleBurst.heal_hp[tlvl] / 100) * stats.finalHP + eleBurst.heal_flat[tlvl]) * stats.heal_multi,
+          formula: (tlvl) => ({ heal_multi: { finalHP: eleBurst.heal_hp[tlvl] / 100, flat: eleBurst.heal_flat[tlvl] } }),
+          variant: "success",
         }, (con, a) => ({
           text: "ATK Bonus Ratio",
           basicVal: (tlvl, stats, c) => <span>{con < 1 ? eleBurst.atk_ratio[tlvl] : `(${eleBurst.atk_ratio[tlvl]} + 20)`}% {Stat.printStat("baseATK", stats)}</span>,

@@ -191,10 +191,10 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, (con, a) => con >= 4 && {
           text: "HP Recovered",
-          basicVal: (tlvl, stats, c) => <span>20% {Stat.printStat("finalHP", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (20 / 100) * stats.finalHP,
-          formula: () => ({ finalHP: 20 / 100 }),
-          variant: (tlvl, stats, c) => "success",
+          basicVal: (tlvl, stats, c) => <span>( 20% {Stat.printStat("finalHP", stats)} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => 0.2 * stats.finalHP * stats.heal_multi,
+          formula: () => ({ heal_multi: { finalHP: 0.2 } }),
+          variant: "success"
         }, {
           text: "CD",
           value: "15s",

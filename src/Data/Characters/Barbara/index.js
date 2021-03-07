@@ -114,8 +114,8 @@ let char = {
       img: skill,
       document: [{
         text: <span>
-          Summons water droplets resembling musical notes that form a Melody Loop, dealing <span className="text-hydro">Hydro DMG</span> to surrounding enemies and afflicting them with the <span className="text-hydro">Wet</span> status.
-        <h6>Melody Loop:</h6>
+          <p className="mb-2">Summons water droplets resembling musical notes that form a Melody Loop, dealing <span className="text-hydro">Hydro DMG</span> to surrounding enemies and afflicting them with the <span className="text-hydro">Wet</span> status.</p>
+          <h6>Melody Loop:</h6>
           <ul className="mb-0">
             <li>Barbara's Normal Attacks heal your characters in the party and nearby allied characters for a certain amount of HP, which scales with Barbara's Max HP.</li>
             <li>Her Charged Attack generates 4 times the amount of healing.</li>
@@ -125,14 +125,16 @@ let char = {
         </span>,
         fields: [{
           text: "HP Regeneration Per Hit",
-          basicVal: (tlvl, stats, c) => <span>{letShowStats.hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.hp_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (letShowStats.hp[tlvl] / 100) * stats.finalHP + letShowStats.hp_flat[tlvl],
-          formula: (tlvl) => ({ finalHP: letShowStats.hp[tlvl] / 100, flat: letShowStats.hp_flat[tlvl] }),
+          basicVal: (tlvl, stats, c) => <span>( {letShowStats.hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.hp_flat[tlvl]} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => ((letShowStats.hp[tlvl] / 100) * stats.finalHP + letShowStats.hp_flat[tlvl]) * stats.heal_multi,
+          formula: (tlvl) => ({ heal_multi: { finalHP: letShowStats.hp[tlvl] / 100, flat: letShowStats.hp_flat[tlvl] } }),
+          variant: "success"
         }, {
           text: "Continuous Regeneration",
-          basicVal: (tlvl, stats, c) => <span>{letShowStats.cont_hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.cont_hp_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (letShowStats.cont_hp[tlvl] / 100) * stats.finalHP + letShowStats.cont_hp_flat[tlvl],
-          formula: (tlvl) => ({ finalHP: letShowStats.cont_hp[tlvl] / 100, flat: letShowStats.cont_hp_flat[tlvl] }),
+          basicVal: (tlvl, stats, c) => <span>( {letShowStats.cont_hp[tlvl]}% {Stat.printStat("finalHP", stats)} + {letShowStats.cont_hp_flat[tlvl]} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => ((letShowStats.cont_hp[tlvl] / 100) * stats.finalHP + letShowStats.cont_hp_flat[tlvl]) * stats.heal_multi,
+          formula: (tlvl) => ({ heal_multi: { finalHP: letShowStats.cont_hp[tlvl] / 100, flat: letShowStats.cont_hp_flat[tlvl] } }),
+          variant: "success"
         }, {
           text: "Droplet DMG",
           basicVal: (tlvl, stats, c) => <span>{letShowStats.droplet_dmg[tlvl]}% {Stat.printStat(Character.getTalentStatKey("skill", c), stats)}</span>,

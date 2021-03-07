@@ -149,9 +149,9 @@ const char = {
           formula: (tlvl, stats, c) => ({ finalDEF: breastplateStats.shield_def[tlvl] / 100, flat: breastplateStats.shield_flat[tlvl] }),
         }, {
           text: "Healing",
-          basicVal: (tlvl, stats, c) => <span>{breastplateStats.heal_def[tlvl]}% {Stat.printStat("finalDEF", stats)} + {breastplateStats.heal_flat[tlvl]}</span>,
-          finalVal: (tlvl, stats, c) => (breastplateStats.heal_def[tlvl] / 100) * stats.finalDEF + breastplateStats.heal_flat[tlvl],
-          formula: (tlvl, stats, c) => ({ finalDEF: breastplateStats.heal_def[tlvl] / 100, flat: breastplateStats.heal_flat[tlvl] }),
+          basicVal: (tlvl, stats, c) => <span>( {breastplateStats.heal_def[tlvl]}% {Stat.printStat("finalDEF", stats)} + {breastplateStats.heal_flat[tlvl]} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => ((breastplateStats.heal_def[tlvl] / 100) * stats.finalDEF + breastplateStats.heal_flat[tlvl]) * stats.heal_multi,
+          formula: (tlvl, stats, c) => ({ heal_multi: { finalDEF: breastplateStats.heal_def[tlvl] / 100, flat: breastplateStats.heal_flat[tlvl] } }),
           variant: "success"
         }, (c) => ({
           text: "Trigger Chance",

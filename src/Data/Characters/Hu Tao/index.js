@@ -195,15 +195,15 @@ let char = {
           variant: (tlvl, stats, c) => Character.getTalentStatKeyVariant("burst", c),
         }, {
           text: "Skill HP Regeneration",
-          basicVal: (tlvl, stats, c) => <span>{eleBurst.regen[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (eleBurst.regen[tlvl] / 100) * stats.finalHP,
-          formula: (tlvl) => ({ finalHP: eleBurst.regen[tlvl] / 100 }),
+          basicVal: (tlvl, stats, c) => <span>( {eleBurst.regen[tlvl]}% {Stat.printStat("finalHP", stats)} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (eleBurst.regen[tlvl] / 100) * stats.finalHP * stats.heal_multi,
+          formula: (tlvl) => ({ heal_multi: { finalHP: eleBurst.regen[tlvl] / 100 } }),
           variant: "success",
         }, {
           text: "Low HP Skill Regeneration",
-          basicVal: (tlvl, stats, c) => <span>{eleBurst.regen_low[tlvl]}% {Stat.printStat("finalHP", stats)}</span>,
-          finalVal: (tlvl, stats, c) => (eleBurst.regen_low[tlvl] / 100) * stats.finalHP,
-          formula: (tlvl) => ({ finalHP: eleBurst.regen_low[tlvl] / 100 }),
+          basicVal: (tlvl, stats, c) => <span>( {eleBurst.regen_low[tlvl]}% {Stat.printStat("finalHP", stats)} ) * {Stat.printStat("heal_multi", stats)}</span>,
+          finalVal: (tlvl, stats, c) => (eleBurst.regen_low[tlvl] / 100) * stats.finalHP * stats.heal_multi,
+          formula: (tlvl) => ({ heal_multi: { finalHP: eleBurst.regen_low[tlvl] / 100 } }),
           variant: "success",
         }, {
           text: "CD",
