@@ -4,7 +4,6 @@ import { artifactSetPermutations, artifactPermutations } from "./Build"
 
 onmessage = async (e) => {
   let { splitArtifacts, setFilters, minFilters = {}, maxFilters = {}, initialStats, artifactSetEffects, maxBuildsToShow, optimizationTarget, ascending, dependencies } = e.data;
-  if (process.env.NODE_ENV === "development") console.log(dependencies)
   let t1 = performance.now()
 
   let finalizeStats = PreprocessFormulas(dependencies, initialStats.modifiers)
@@ -41,7 +40,6 @@ onmessage = async (e) => {
 
   let t2 = performance.now()
   postMessage({ progress: buildCount, timing: t2 - t1 })
-  if (process.env.NODE_ENV === "development") console.log(builds.map(b => b.buildFilterVal))
   postMessage({ builds, timing: t2 - t1 })
 }
 

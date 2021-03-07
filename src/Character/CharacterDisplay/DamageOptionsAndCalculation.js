@@ -1,14 +1,44 @@
 import { faCheckSquare, faSquare, faWindowMaximize, faWindowMinimize } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from 'react';
-import { Accordion, AccordionContext, Button, Card, Col, Row, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { Accordion, AccordionContext, Button, Card, Col, Image, Row, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
+import Assets from "../../Assets/Assets";
 import Stat from "../../Stat";
 import { ElementToReactionKeys } from "../../StatData";
 import { GetDependencies } from "../../StatDependency";
 import Character from "../Character";
 import StatInput from "../StatInput";
 
+function ReactionToggle({ character: { characterKey, reactionMode = "none" }, setReactionMode, className }) {
+  reactionMode === null && (reactionMode = "none")
+  let charEleKey = Character.getElementalKey(characterKey)
+  let eleInterArr = [...(ElementToReactionKeys[charEleKey] || [])]
+  if (!eleInterArr.includes("shattered_hit") && Character.getWeaponTypeKey(characterKey) === "claymore") eleInterArr.push("shattered_hit")
+  return ["pyro", "hydro", "cryo"].includes(charEleKey) && <ToggleButtonGroup className={className}
+    type="radio" name="reactionMode" defaultValue={reactionMode} onChange={(val) => setReactionMode(val === "none" ? null : val)}>
+    <ToggleButton value={"none"} variant={reactionMode === "none" ? "success" : "primary"}>No Reactions</ToggleButton >
+    {charEleKey === "pyro" && <ToggleButton value={"pyro_vaporize"} variant={reactionMode === "pyro_vaporize" ? "success" : "primary"}>
+      <span className="text-vaporize">Vaporize(Pyro) <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" /></span>
+    </ToggleButton >}
+    {charEleKey === "pyro" && <ToggleButton value={"pyro_melt"} variant={reactionMode === "pyro_melt" ? "success" : "primary"}>
+      <span className="text-melt">Melt(Pyro) <Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" /></span>
+    </ToggleButton >}
+    {charEleKey === "hydro" && <ToggleButton value={"hydro_vaporize"} variant={reactionMode === "hydro_vaporize" ? "success" : "primary"}>
+      <span className="text-vaporize">Vaporize(Hydro) <Image src={Assets.elements.pyro} className="inline-icon" />+<Image src={Assets.elements.hydro} className="inline-icon" /></span>
+    </ToggleButton >}
+    {charEleKey === "cryo" && <ToggleButton value={"cryo_melt"} variant={reactionMode === "cryo_melt" ? "success" : "primary"}>
+      <span className="text-melt">Melt(Cryo) <Image src={Assets.elements.pyro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" /></span>
+    </ToggleButton >}
+  </ToggleButtonGroup>
+}
+function HitModeToggle({ hitMode, setHitMode, className }) {
+  return <ToggleButtonGroup type="radio" value={hitMode} name="hitOptions" onChange={setHitMode} className={className}>
+    <ToggleButton value="avgHit" variant={hitMode === "avgHit" ? "success" : "primary"}>Avg. DMG</ToggleButton>
+    <ToggleButton value="hit" variant={hitMode === "hit" ? "success" : "primary"}>Normal Hit, No Crit</ToggleButton>
+    <ToggleButton value="critHit" variant={hitMode === "critHit" ? "success" : "primary"}>Crit Hit DMG</ToggleButton>
+  </ToggleButtonGroup>
+}
 
 export default function DamageOptionsAndCalculation({ character, character: { characterKey, hitMode }, setState, setOverride, newBuild, equippedBuild }) {
   //choose which one to display stats for
@@ -22,10 +52,7 @@ export default function DamageOptionsAndCalculation({ character, character: { ch
     );
     const expanded = currentEventKey === eventKey;
     return (
-      <Button
-        // style={{ backgroundColor: isCurrentEventKey ? 'pink' : 'lavender' }}
-        onClick={decoratedOnClick}
-      >
+      <Button onClick={decoratedOnClick} >
         <FontAwesomeIcon icon={expanded ? faWindowMinimize : faWindowMaximize} className={`fa-fw ${expanded ? "fa-rotate-180" : ""}`} />
         <span> </span>{expanded ? "Retract" : "Expand"}
       </Button>
@@ -63,12 +90,8 @@ export default function DamageOptionsAndCalculation({ character, character: { ch
             <small>Expand below to edit enemy details.</small>
           </Col>
           <Col xs="auto">
-            <ToggleButtonGroup type="radio" value={hitMode} name="hitOptions" onChange={(hitMode) => setState?.({ hitMode })}>
-              <ToggleButton value="avgHit" variant={hitMode === "avgHit" ? "success" : "primary"}>Avg. DMG</ToggleButton>
-              <ToggleButton value="hit" variant={hitMode === "hit" ? "success" : "primary"}>Normal Hit, No Crit</ToggleButton>
-              <ToggleButton value="critHit" variant={hitMode === "critHit" ? "success" : "primary"}>Crit Hit DMG</ToggleButton>
-              {/* TODO  should this be critHit instead */}
-            </ToggleButtonGroup>
+            {/* TODO reaction interaction UI */}
+            <ReactionToggle {...{ character, setReactionMode: r => setState({ reactionMode: r }) }} />
           </Col>
           <Col xs="auto">
             <ContextAwareToggle as={Button} eventKey="1" />
@@ -125,6 +148,9 @@ export default function DamageOptionsAndCalculation({ character, character: { ch
             <small>Expand below to see calculation details.</small>
           </Col>
           <Col xs="auto">
+            <HitModeToggle {...{ hitMode, setHitMode: m => setState({ hitMode: m }) }} />
+          </Col>
+          <Col xs="auto">
             <ContextAwareToggle as={Button} eventKey="2" />
           </Col>
         </Row>
@@ -148,4 +174,8 @@ export default function DamageOptionsAndCalculation({ character, character: { ch
       </Accordion.Collapse>
     </Card>
   </Accordion>
+}
+export {
+  HitModeToggle,
+  ReactionToggle,
 }

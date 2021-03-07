@@ -10,6 +10,7 @@ import ArtifactDatabase from '../Artifact/ArtifactDatabase';
 import Character from '../Character/Character';
 import CharacterCard from '../Character/CharacterCard';
 import CharacterDatabase from '../Character/CharacterDatabase';
+import { HitModeToggle, ReactionToggle } from '../Character/CharacterDisplay/DamageOptionsAndCalculation';
 import StatDisplayComponent from '../Character/CharacterDisplay/StatDisplayComponent';
 import { CharacterSelectionDropdownList } from '../Components/CharacterSelection';
 import ConditionalSelector from '../Components/ConditionalSelector';
@@ -189,7 +190,6 @@ export default class BuildDisplay extends React.Component {
       })
       let builds = e.data.builds.map(obj =>
         Character.calculateBuildWithObjs(artifactConditionals, initialStats, obj.artifacts))
-      if (process.env.NODE_ENV === "development") console.log(builds.map(build => build?.finalStats?.[this.state.optimizationTarget]))
       this.setState({ builds, generatingBuilds: false })
       // worker.terminate()
       this.worker.terminate()
@@ -249,6 +249,8 @@ export default class BuildDisplay extends React.Component {
                   {characterDropDown}
                 </Card.Header>
               </Card>}
+            {/* Hit mode options */}
+            <HitModeCard characterKey={characterKey} forceUpdate={this.forceUpdateBuildDisplay} />
             {/* Final Stat Filter */}
             <StatFilterCard statFilters={statFilters} statsDisplayKeys={statsDisplayKeys} setStatFilters={sFs => this.setState({ statFilters: sFs })} />
           </Col>
@@ -591,7 +593,7 @@ function SortByStatDropdown({ characterKey, statsDisplayKeys, disabled, optimiza
                   return <Dropdown.Item key={i} onClick={() => setState({ optimizationTarget: field })}>{Stat.getStatNamePretty(field)}</Dropdown.Item>
                 const talentField = Character.getTalentField(characterKey, field.talentKey, field.sectionIndex, field.fieldIndex)
                 return <Dropdown.Item key={i} onClick={() => setState({ optimizationTarget: field })}>
-                  <span className={`text-${Character.getTalentFieldValue(talentField, "variant", talentKey, characterKey, {})}`}>{Character.getTalentFieldValue(talentField, "text", talentKey, characterKey, {})}</span>
+                  <span className={`text-${Character.getTalentFieldValue(talentField, "variant", talentKey, character, {})}`}>{Character.getTalentFieldValue(talentField, "text", talentKey, character, {})}</span>
                 </Dropdown.Item>
               })}
             </Col>
@@ -637,6 +639,30 @@ function StatFilterItem({ statKey, statKeys = [], min, max, close, setFilter }) 
       <Button variant="danger" onClick={close}><FontAwesomeIcon icon={faTrash} /></Button>
     </InputGroup.Append>}
   </InputGroup>
+}
+
+function HitModeCard({ characterKey, forceUpdate }) {
+  const character = CharacterDatabase.get(characterKey)
+  const { hitMode } = character
+  const setHitmode = v => {
+    const char = CharacterDatabase.get(characterKey)
+    char.hitMode = v;
+    CharacterDatabase.updateCharacter(char)
+    forceUpdate()
+  }
+  const setReactionMode = r => {
+    const char = CharacterDatabase.get(characterKey)
+    char.reactionMode = r;
+    CharacterDatabase.updateCharacter(char)
+    forceUpdate()
+  }
+  return <Card bg="lightcontent" text="lightfont">
+    <Card.Header>Hit Mode Options</Card.Header>
+    <Card.Body>
+      <HitModeToggle hitMode={hitMode} setHitMode={setHitmode} className="w-100" />
+      <ReactionToggle character={character} setReactionMode={setReactionMode} className="w-100 mt-2" />
+    </Card.Body>
+  </Card >
 }
 
 function StatFilterCard({ statsDisplayKeys = { basicKeys: [] }, statFilters = {}, setStatFilters }) {

@@ -11,7 +11,6 @@ const formulaKeyDependency = Object.freeze(Object.fromEntries(
 ))
 
 if (process.env.NODE_ENV === "development") {
-  console.log(formulaKeyDependency)
   let statKeys = Object.keys(StatData)
   Object.entries(formulaKeyDependency).forEach(([formulaKey, dependencies]) =>
     dependencies.forEach(key =>

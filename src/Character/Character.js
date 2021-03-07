@@ -96,10 +96,8 @@ export default class Character {
     if (!field) return defVal
     return typeof field === "function" ? field(constellation, ascension) : field
   }
-  static getTalentFieldValue = (field, key, talentKey, characterKey, stats = {}, defVal = "") => {
+  static getTalentFieldValue = (field, key, talentKey, character, stats = {}, defVal = "") => {
     if (!field?.[key]) return defVal
-    const character = CharacterDatabase.get(characterKey)
-    if (!character) return defVal
     return typeof field?.[key] === "function" ? field[key](this.getTalentLevelKey(character, talentKey), stats, character) : field[key]
   }
 
@@ -201,7 +199,7 @@ export default class Character {
       Object.keys(Character.getCDataObj(characterKey)?.talent ?? {}).forEach(talentKey =>
         Character.getTalentDocumentSections(characterKey, talentKey)?.forEach((section, sectionIndex) =>
           section?.fields?.forEach((field, fieldIndex) =>
-            (field?.formula || this.getTalentField(characterKey, talentKey, sectionIndex, fieldIndex).formula) && (charFormulas[talentKey] = [...(charFormulas[talentKey] ?? []), {
+            (field?.formula || this.getTalentField(characterKey, talentKey, sectionIndex, fieldIndex)?.formula) && (charFormulas[talentKey] = [...(charFormulas[talentKey] ?? []), {
               talentKey,
               sectionIndex,
               fieldIndex

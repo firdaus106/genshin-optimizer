@@ -1,7 +1,7 @@
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';
-import { Button, Card, Col, Dropdown, DropdownButton, Image, ListGroup, OverlayTrigger, Row, ToggleButton, ToggleButtonGroup, Tooltip } from "react-bootstrap";
+import { Button, Card, Col, Dropdown, DropdownButton, Image, ListGroup, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import Assets from "../../Assets/Assets";
 import ConditionalSelector from "../../Components/ConditionalSelector";
 import Stat from "../../Stat";
@@ -104,36 +104,6 @@ function ReactionDisplay({ character: { characterKey, reactionMode = "none" }, n
             return <Col xs="auto" className="mb-2" key={key}><Ele value={val} /></Col>
           })}
         </Row></Col>
-        <Col xs="auto">
-          {["pyro", "hydro", "cryo"].includes(charEleKey) && <ToggleButtonGroup
-            type="radio" name="reactionMode" defaultValue={reactionMode} onChange={(val) => setState({ reactionMode: val === "none" ? null : val })}>
-            <ToggleButton className="p-2" value={"none"}> <h6>No Elemental</h6> <h6>Interactions</h6></ToggleButton >
-            {charEleKey === "pyro" && <ToggleButton className="p-2" value={"pyro_vaporize"}>
-              <h5 className="text-vaporize">Vaporize(Pyro)</h5>
-              <h4 className="text-vaporize mb-0">
-                <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" />
-              </h4>
-            </ToggleButton >}
-            {charEleKey === "pyro" && <ToggleButton className="p-2" value={"pyro_melt"}>
-              <h5 className="text-melt">Melt(Pyro)</h5>
-              <h4 className="text-melt mb-0">
-                <Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" />
-              </h4>
-            </ToggleButton >}
-            {charEleKey === "hydro" && <ToggleButton className="p-2" value={"hydro_vaporize"}>
-              <h5 className="text-vaporize">Vaporize(Hydro)</h5>
-              <h4 className="text-vaporize mb-0">
-                <Image src={Assets.elements.pyro} className="inline-icon" />+<Image src={Assets.elements.hydro} className="inline-icon" />
-              </h4>
-            </ToggleButton >}
-            {charEleKey === "cryo" && <ToggleButton className="p-2" value={"cryo_melt"}>
-              <h5 className="text-melt">Melt(Cryo)</h5>
-              <h4 className="text-melt mb-0">
-                <Image src={Assets.elements.pyro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" />
-              </h4>
-            </ToggleButton >}
-          </ToggleButtonGroup>}
-        </Col>
       </Row>
 
     </Card.Body>
@@ -141,56 +111,38 @@ function ReactionDisplay({ character: { characterKey, reactionMode = "none" }, n
 }
 function SuperConductCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("superconduct_hit")}</h5>
-    <h4 className="text-superconduct mb-0">
-      <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" /> {value}
-    </h4>
+    <span className="text-superconduct">{Stat.getStatName("superconduct_hit")} <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" /> {value}</span>
   </Card.Body></Card>
 }
 function ElectroChargedCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("electrocharged_hit")}</h5>
-    <h4 className="text-electrocharged mb-0">
-      <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.hydro} className="inline-icon" /> {value}
-    </h4>
+    <span className="text-electrocharged">{Stat.getStatName("electrocharged_hit")} <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.hydro} className="inline-icon" /> {value}</span>
   </Card.Body></Card>
 }
 function OverloadedCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("overloaded_hit")}</h5>
-    <h4 className="text-overloaded mb-0">
-      <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" /> {value}
-    </h4>
+    <span className="text-overloaded">{Stat.getStatName("overloaded_hit")} <Image src={Assets.elements.electro} className="inline-icon" />+<Image src={Assets.elements.pyro} className="inline-icon" /> {value}</span>
   </Card.Body></Card>
 }
 function SwirlCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("swirl_hit")}</h5>
-    <h4 className="text-swirl mb-0">
-      <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.anemo} className="inline-icon" /> {value}
-    </h4>
+    <span className="text-swirl">{Stat.getStatName("swirl_hit")} <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.anemo} className="inline-icon" /> {value}</span>
   </Card.Body></Card>
 }
 function ShatteredCard({ value }) {
-  let information = <OverlayTrigger
+  const information = <OverlayTrigger
     placement="top"
     overlay={<Tooltip>Claymores, Plunging Attacks and <span className="text-geo">Geo DMG</span></Tooltip>}
   >
     <FontAwesomeIcon icon={faQuestionCircle} className="ml-2" style={{ cursor: "help" }} />
   </OverlayTrigger>
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("shattered_hit")}</h5>
-    <h4 className="text-shattered mb-0">
-      <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" />+ <small className="text-physical">Heavy Attack{information} </small> {value}
-    </h4>
+    <span className="text-shattered">{Stat.getStatName("shattered_hit")} <Image src={Assets.elements.hydro} className="inline-icon" />+<Image src={Assets.elements.cryo} className="inline-icon" />+ <small className="text-physical">Heavy Attack{information} </small> {value}</span>
   </Card.Body></Card>
 }
 function CrystalizeCard({ value }) {
   return <Card bg="darkcontent" text="lightfont"><Card.Body className="p-2">
-    <h5>{Stat.getStatName("crystalize_hit")}</h5>
-    <h4 className="text-crystalize mb-0">
-      <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.geo} className="inline-icon" /> {value}
-    </h4>
+    <span className="text-crystalize">{Stat.getStatName("crystalize_hit")} <Image src={Assets.elements.electro} className="inline-icon" />/<Image src={Assets.elements.hydro} className="inline-icon" />/<Image src={Assets.elements.pyro} className="inline-icon" />/<Image src={Assets.elements.cryo} className="inline-icon" />+<Image src={Assets.elements.geo} className="inline-icon" /> {value}</span>
   </Card.Body></Card>
 }
 
