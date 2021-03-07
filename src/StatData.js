@@ -217,6 +217,7 @@ function PreprocessFormulas(dependencyKeys, stats, debug = false) {
     if (StatData[key]?.const) {
       constData[key] = stats[key]
       constData[key] = func(stats, constData)
+      stats[key] = constData[key]
       if (dynamicModifier.length)
         console.error(`Constant key ${key} depends on a dynamic modifer ${dynamicModifier}. The result will be incorrect.`)
       return null
