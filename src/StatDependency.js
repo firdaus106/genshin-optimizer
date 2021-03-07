@@ -3,7 +3,9 @@ import { Formulas, StatData } from "./StatData"
 //generate a statKey dependency, to reduce build generation calculation on a single stat.
 function GetFormulaDependency(formula) {
   const dependency = new Set()
-  formula(new Proxy({}, { get: (target, prop, receiver) => { dependency.add(prop) } }))
+  formula(
+    new Proxy({}, { get: (target, prop, receiver) => { dependency.add(prop) } }),
+    new Proxy({}, { get: (target, prop, receiver) => { dependency.add(prop) } }))
   return [...dependency]
 }
 const formulaKeyDependency = Object.freeze(Object.fromEntries(
@@ -15,7 +17,13 @@ if (process.env.NODE_ENV === "development") {
   Object.entries(formulaKeyDependency).forEach(([formulaKey, dependencies]) =>
     dependencies.forEach(key =>
       !statKeys.includes(key) &&
-      console.error("Formula", `"${formulaKey}"`, "has dependency with key", `"${key}"`, "that does not Exist in StatData."))
+        console.error(`Formula ${formulaKey} depends key ${key} that does not Exist in StatData.`))
+  )
+  Object.entries(formulaKeyDependency).forEach(([formulaKey, dependencies]) =>
+    StatData[formulaKey]?.const && dependencies.forEach(key => 
+      !StatData[key]?.const &&
+        console.error(`Constant formula ${formulaKey} depends on dynamic key ${key}.`)
+    )
   )
 }
 

@@ -313,7 +313,7 @@ export default class Character {
     })
 
     let dependencies = GetDependencies(stats?.modifiers)
-    PreprocessFormulas(dependencies, stats.modifiers)(stats)
+    PreprocessFormulas(dependencies, stats).formula(stats)
     return {
       artifactIds: Object.fromEntries(Object.entries(artifacts).map(([key, val]) => [key, val?.id])),
       setToSlots,

@@ -3,10 +3,11 @@ import { PreprocessFormulas } from "../StatData";
 import { artifactSetPermutations, artifactPermutations } from "./Build"
 
 onmessage = async (e) => {
-  let { splitArtifacts, setFilters, minFilters = {}, maxFilters = {}, initialStats, artifactSetEffects, maxBuildsToShow, optimizationTarget, ascending, dependencies } = e.data;
+  let { splitArtifacts, setFilters, minFilters = {}, maxFilters = {}, initialStats: stats, artifactSetEffects, maxBuildsToShow, optimizationTarget, ascending, dependencies } = e.data;
+  if (process.env.NODE_ENV === "development") console.log(dependencies)
   let t1 = performance.now()
 
-  let finalizeStats = PreprocessFormulas(dependencies, initialStats.modifiers)
+  let {initialStats, formula} = PreprocessFormulas(dependencies, stats)
   let builds = [], threshold = -Infinity
 
   let prune = () => {
@@ -21,7 +22,7 @@ onmessage = async (e) => {
   let buildCount = 0;
   const callback = (accu, stats) => {
     if (!(buildCount++ % 10000)) postMessage({ progress: buildCount, timing: performance.now() - t1 })
-    finalizeStats(stats)
+    formula(stats)
     if (Object.entries(minFilters).some(([key, minimum]) => stats[key] < minimum)) return
     if (Object.entries(maxFilters).some(([key, maximum]) => stats[key] > maximum)) return
     let buildFilterVal = ascending ? -target(stats) : target(stats)

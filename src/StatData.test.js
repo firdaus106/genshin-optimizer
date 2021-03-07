@@ -8,37 +8,42 @@ describe(`Testing StatData`, () => {
         characterDEF: 10,
         def_: 100,
         def: 15
-      }, dependencyKeys = ["finalDEF", "characterDEF", "def_", "def"]
-      PreprocessFormulas(dependencyKeys)(stat)
-      expect(stat).toHaveProperty("finalDEF", 10 * 2 + 15);
+      }, dependencyKeys = ["characterDEF", "def_", "def", "finalDEF"]
+      const { initialStats, formula } = PreprocessFormulas(dependencyKeys, stat)
+      formula(initialStats)
+      expect(initialStats).toHaveProperty("finalDEF", 10 * 2 + 15);
     })
     test(`modifiers`, () => {
       const stat = {
         testVal: 10,
         depVal1: 15,
         depval2: 20,
-      }, modifiers = {
-        testVal: {
-          depVal1: 2,
-          depval2: 3
-        }
+        modifiers: {
+          testVal: {
+            depVal1: 2,
+            depval2: 3,
+          },
+        },
       }
-      PreprocessFormulas(["depVal1", "depval2", "testVal"], modifiers)(stat)
-      expect(stat).toHaveProperty("testVal", 10 + 15 * 2 + 20 * 3);
+      const { initialStats, formula } = PreprocessFormulas(["depVal1", "depval2", "testVal"], stat)
+      formula(initialStats)
+      expect(initialStats).toHaveProperty("testVal", 10 + 15 * 2 + 20 * 3);
     })
-    test('should not add modifier if its not part of the dependency list', () => {
+    test("should add modifier if it's part of the dependency list", () => {
       const stat = {
         testVal: 10,
         depVal1: 15,
         depval2: 20,
-      }, modifiers = {
-        testVal: {
-          depVal1: 2,
-          depval2: 3
-        }
+        modifiers: {
+          testVal: {
+            depVal1: 2,
+            depval2: 3,
+          },
+        },
       }
-      PreprocessFormulas(["depVal1", "depval2"], modifiers)(stat)
-      expect(stat).toHaveProperty("testVal", 10);
+      const { initialStats, formula } = PreprocessFormulas(["depVal1", "depval2", "testVal"], stat)
+      formula(initialStats)
+      expect(initialStats).toHaveProperty("testVal", 10 + 15 * 2 + 20 * 3);
     })
     test('should compute correct result', () => {
       const stat = {
@@ -52,11 +57,12 @@ describe(`Testing StatData`, () => {
         hydro_dmg_: 0,
 
         // C1
-        electrocharged_dmg_: 15, vaporized_dmg_: 15, hydro_swirl_dmg_: 15
-      }, modifiers = {
-        hydro_dmg_: { enerRech_: 0.2 }
+        electrocharged_dmg_: 15, vaporized_dmg_: 15, hydro_swirl_dmg_: 15,
+        modifiers: {
+          hydro_dmg_: { enerRech_: 0.2 },
+        },
       }, targets = [
-        "finalHP", "finalATK", "finalDEF",
+        "finalHP", "finalATK", "finalDEF", "critRate_",
         "transformative_dmg_", "amplificative_dmg_",
         "hydro_normal_hit", "hydro_charged_hit",
         "hydro_skill_hit", "hydro_skill_critHit",
@@ -99,7 +105,7 @@ describe(`Testing StatData`, () => {
       // Set
       stat.hydro_dmg_ += 15
 
-      PreprocessFormulas(GetDependencies(modifiers, targets), modifiers)(stat)
+      PreprocessFormulas(GetDependencies(stat.modifiers, targets), stat).formula(stat)
 
       function test(calculated, experiment, percentMargin = 0.38) {
         expect((calculated / experiment - 1) / percentMargin / 2).toBeCloseTo(0)
