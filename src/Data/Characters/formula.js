@@ -4,7 +4,7 @@ import barbara from './Barbara/data'
 import beidou from './Beidou/data'
 import bennett from './Bennett/data'
 // import chongyun from './Chongyun/data'
-// import diluc from './Diluc/data'
+import diluc from './Diluc/data'
 // import diona from './Diona/data'
 // import fischl from './Fischl/data'
 // import ganyu from './Ganyu/data'
@@ -36,7 +36,7 @@ const formula = {
   beidou,
   bennett,
   // chongyun,
-  // diluc,
+  diluc,
   // diona,
   // fischl,
   // ganyu,
