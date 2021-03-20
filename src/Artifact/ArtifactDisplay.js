@@ -19,7 +19,8 @@ import Artifact from './Artifact';
 import ArtifactCard from './ArtifactCard';
 import ArtifactDatabase from './ArtifactDatabase';
 import ArtifactDisplayInfo from './ArtifactDisplayInfo/ArtifactDisplayInfo';
-import ArtifactEditor from './ArtifactEditor';
+// import ArtifactEditor from './ArtifactEditor';
+import ArtifactEditor from './ArtifactEditor2';
 
 const sortMap = {
   quality: "Quality",
